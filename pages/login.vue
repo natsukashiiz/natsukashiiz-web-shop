@@ -1,8 +1,30 @@
+<script setup lang="ts">
+import { useAuthStore } from "~/stores/authStore";
+import { login } from "~/api/auth";
+
+const authStore = useAuthStore();
+
+const form = reactive({
+  email: "",
+  password: "",
+});
+
+const handleLogin = async (e: MouseEvent) => {
+  e.preventDefault();
+  const res = await login(form);
+
+  if (res.status === 200 && res.data) {
+    authStore.setToken(res.data.token);
+    const router = useRouter();
+    router.push("/");
+  } else {
+    window.alert("Login failed");
+  }
+};
+</script>
 <template>
   <section class="bg-gray-50 dark:bg-gray-900">
-    <div
-      class="flex flex-col items-center justify-center mx-auto md:h-screen lg:py-0"
-    >
+    <div class="flex flex-col items-center justify-center md:h-screen lg:py-0">
       <div
         class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
       >
@@ -12,7 +34,7 @@
           >
             Login to your account
           </h1>
-          <form class="space-y-4 md:space-y-6" action="#">
+          <form class="space-y-4 md:space-y-6" action="#" @submit="handleLogin">
             <div>
               <label
                 for="email"
@@ -25,6 +47,7 @@
                 id="email"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="name@company.com"
+                v-model="form.email"
               />
             </div>
             <div>
@@ -39,24 +62,11 @@
                 id="password"
                 placeholder="••••••••"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                v-model="form.password"
               />
             </div>
             <div class="flex items-center justify-between">
-              <div class="flex items-start">
-                <div class="flex items-center h-5">
-                  <input
-                    id="remember"
-                    aria-describedby="remember"
-                    type="checkbox"
-                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                  />
-                </div>
-                <div class="ml-3 text-sm">
-                  <label for="remember" class="text-gray-500 dark:text-gray-300"
-                    >Remember me</label
-                  >
-                </div>
-              </div>
+              <div class="flex items-start"></div>
               <a
                 href="#"
                 class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"

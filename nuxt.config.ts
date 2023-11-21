@@ -4,7 +4,11 @@ export default defineNuxtConfig({
   devServer: {
     port: 4200,
   },
+  runtimeConfig: {
+    API_BASE_URL: process.env.API_BASE_URL,
+  },
   modules: [
+    "@pinia/nuxt",
     "@nuxt/ui",
     "nuxt-icon",
     "@nuxtjs/device",
@@ -21,4 +25,10 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  ui: {
+    notifications: {
+      // Show toasts at the top right of the screen
+      position: "top-0 bottom-auto",
+    },
+  },
 });
