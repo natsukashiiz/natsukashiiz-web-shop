@@ -46,10 +46,11 @@ defineProps({
         </div>
       </div>
     </div>
-    <a
-      :href="`/orders/detail/${item.orderId}`"
+    <NuxtLink
+      :to="`/orders/detail/${item.orderId}`"
       class="absolute bottom-2 right-0 text-sm text-gray-400 hover:text-blue-500"
-      >ดูรายละเอียดเพิ่มเติม</a
     >
+      ดูรายละเอียดเพิ่มเติม
+    </NuxtLink>
   </li>
 </template>

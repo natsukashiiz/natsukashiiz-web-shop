@@ -80,8 +80,10 @@ onMounted(async () => {
         <div class="flex items-center gap-2 mt-2">
           <template v-for="option in productDatil?.options" :key="option.id">
             <button
-              :class="`text-black bg-rose-${
-                option.id === currentOption?.id ? '400' : '100'
+              :class="`${
+                option.id === currentOption?.id
+                  ? 'text-white bg-rose-400'
+                  : 'text-black'
               } p-1 font-medium rounded-lg text-sm text-center`"
               @click="changePrice(option)"
             >

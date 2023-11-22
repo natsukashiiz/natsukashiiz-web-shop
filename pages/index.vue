@@ -44,10 +44,10 @@ onMounted(async () => {
               <span class="text-3xl font-bold text-gray-900 dark:text-white"
                 >฿{{ item.options[0].price }}</span
               >
-              <a
-                :href="`/products/${item.id}`"
+              <NuxtLink
+                :to="`/products/${item.id}`"
                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                >รายละเอียด</a
+                >รายละเอียด</NuxtLink
               >
             </div>
           </div>

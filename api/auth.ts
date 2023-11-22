@@ -1,4 +1,9 @@
-import type { ServerResponse, LoginRequest, TokenResponse } from "~/types";
+import type {
+  ServerResponse,
+  LoginRequest,
+  GoogleLoginRequest,
+  TokenResponse,
+} from "~/types";
 import { create } from "~/api/request";
 
 const client = create();
@@ -6,4 +11,7 @@ const client = create();
 const login = (body: LoginRequest): ServerResponse<TokenResponse> =>
   client.post("/v1/auth/login", body);
 
-export { login };
+const google = (body: GoogleLoginRequest): ServerResponse<TokenResponse> =>
+  client.post("/v1/auth/google", body);
+
+export { login, google };

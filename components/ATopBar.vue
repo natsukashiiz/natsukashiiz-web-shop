@@ -1,11 +1,11 @@
 <script setup lang="ts">
 const menus = [
   {
-    label: "Home",
+    label: "หน้าหลัก",
     to: "/",
   },
   {
-    label: "Login",
+    label: "เข้าสู่ระบบ",
     to: "/login",
   },
 ];

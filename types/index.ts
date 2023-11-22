@@ -9,6 +9,10 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface GoogleLoginRequest {
+  idToken: string;
+}
+
 export interface CartRequest {
   productId: number;
   optionId: number;

@@ -1,15 +1,19 @@
 <script setup lang="ts">
+import { useAuthStore } from "~/stores/authStore";
+
+const { logout } = useAuthStore();
+
 const menus = [
   {
-    label: "Home",
+    label: "หน้าหลัก",
     to: "/",
   },
   {
-    label: "Cart",
+    label: "ตะกร้าสินค้า",
     to: "/cart",
   },
   {
-    label: "Orders",
+    label: "รายการสั่งซื้อ",
     to: "/orders/history",
   },
 ];
@@ -38,6 +42,12 @@ const navClass = isMobile
             >{{ menu.label }}</ULink
           >
         </template>
+        <button
+          class="text-black bg-white hover:bg-rose-100 focus:ring-2 focus:outline-none focus:ring-rose-300 font-medium rounded-lg text-sm px-2 py-2 text-center"
+          @click="logout"
+        >
+          ออกจากระบบ
+        </button>
       </div>
     </nav>
   </div>
