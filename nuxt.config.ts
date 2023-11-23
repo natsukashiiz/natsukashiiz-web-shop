@@ -4,9 +4,6 @@ export default defineNuxtConfig({
   devServer: {
     port: 4200,
   },
-  runtimeConfig: {
-    API_BASE_URL: process.env.API_BASE_URL,
-  },
   modules: [
     "@pinia/nuxt",
     "@nuxt/ui",
@@ -26,6 +23,15 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  runtimeConfig: {
+    public: {
+      apiUrl: process.env.API_BASE_URL,
+    },
+  },
+  app: {
+    baseURL: process.env.WEB_BASE_URL || "/",
+    pageTransition: { name: "page", mode: "out-in" },
+  },
   ui: {
     notifications: {
       // Show toasts at the top right of the screen
@@ -34,6 +40,6 @@ export default defineNuxtConfig({
   },
   googleSignIn: {
     clientId:
-      "708294166920-f8h11nj3qp5hssd90uipe6r94i6mm96j.apps.googleusercontent.com",
+      "213921102049-buchqc6diom118vnsidm9fito3cr51dd.apps.googleusercontent.com",
   },
 });

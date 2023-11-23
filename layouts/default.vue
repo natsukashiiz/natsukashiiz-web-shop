@@ -20,8 +20,8 @@ const subscribeServer = () => {
     if (event.data === "ORDER") {
       toast.add({
         id: "NOTIFY-ORDER",
-        title: "สินค้าถูกสั่งซื้อ",
-        description: "มีสินค้าถูกสั่งซื้อ",
+        title: "รายการสั่งซื้อมีการเปลี่ยนแปลง",
+        description: "รายการสั่งซื้อมีการเปลี่ยนแปลง",
         click: () => {
           router.push("/orders/history");
           toast.remove("NOTIFY-ORDER");
@@ -33,12 +33,13 @@ const subscribeServer = () => {
 
 onBeforeMount(() => {
   authStore.loadAuth();
-  subscribeServer();
+  if (authStore.isAuth) {
+    subscribeServer();
+  }
 });
 </script>
 <template>
-  <a-top-bar-auth v-if="authStore.isAuth" />
-  <a-top-bar v-else />
+  <a-top-bar />
   <div :class="divClass">
     <slot />
   </div>
@@ -47,5 +48,14 @@ onBeforeMount(() => {
 <style>
 body {
   font-family: Mitr, sans-serif;
+}
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.3s;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  filter: blur(1rem);
 }
 </style>

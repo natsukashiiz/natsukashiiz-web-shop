@@ -19,7 +19,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <section class="min-h-screen bg-gray-100 py-2">
+  <section class="py-2">
     <div class="mx-auto px-4 sm:px-6 lg:px-8">
       <div class="mx-auto mt-8 max-w-2xl md:mt-12">
         <div class="bg-white shadow">
@@ -40,7 +40,7 @@ onMounted(async () => {
               </p>
               <router-link
                 to="/"
-                class="mt-4 inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-900 hover:bg-gray-800"
+                class="mt-4 inline-flex items-center justify-center px-3 py-1.5 border border-transparent text-base font-medium rounded-md text-white bg-gray-900 hover:bg-gray-800"
               >
                 กลับไปหน้าแรก
               </router-link>
