@@ -10,6 +10,8 @@ export default defineNuxtConfig({
     "nuxt-icon",
     "@nuxtjs/device",
     "nuxt-vue3-google-signin",
+    "nuxt-typed-router",
+    "@stefanobartoletti/nuxt-social-share",
     [
       "@nuxtjs/google-fonts",
       {

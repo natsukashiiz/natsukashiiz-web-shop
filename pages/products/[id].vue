@@ -60,7 +60,7 @@ onMounted(async () => {
 <template>
   <div class="flex justify-center mt-10" v-if="productDatil && currentOption">
     <div
-      class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+      class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 pb-4"
     >
       <img
         class="p-8 rounded-t-lg w-full h-72 object-cover"
@@ -164,6 +164,15 @@ onMounted(async () => {
             สินค้าหมด
           </span>
         </div>
+      </div>
+      <UDivider label="แชร์สินค้านี้" color="gray" />
+      <div class="flex justify-center flex-row gap-10 mt-4">
+        <SocialShare
+          v-for="network in ['facebook', 'twitter', 'telegram']"
+          :key="network"
+          :network="network"
+          class="hover:text-rose-500"
+        />
       </div>
     </div>
   </div>
