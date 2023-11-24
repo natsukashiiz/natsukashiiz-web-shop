@@ -40,7 +40,7 @@ defineProps({
           <p
             class="shrink-0 text-base font-semibold text-gray-900 sm:order-2 sm:ml-8 sm:text-right"
           >
-            สถานะ : {{ item.status }}
+            สถานะ : <a-order-status :status="item.status" />
           </p>
         </div>
       </div>

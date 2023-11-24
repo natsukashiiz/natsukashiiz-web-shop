@@ -2,6 +2,15 @@ import type { AxiosResponse } from "axios";
 
 export type ServerResponse<T> = Promise<AxiosResponse<T>>;
 
+export interface TokenPayload {
+  sub: string;
+  iss: string;
+  exp: number;
+  iat: number;
+  jti: string;
+  email: string;
+}
+
 // request
 
 export interface LoginRequest {
@@ -28,6 +37,13 @@ export interface CreateOrderRequest {
   productId: number;
   optionId: number;
   quantity: number;
+}
+
+export interface CreateAddressRequest {
+  firstName: string;
+  lastName: string;
+  mobile: string;
+  address: string;
 }
 
 // response

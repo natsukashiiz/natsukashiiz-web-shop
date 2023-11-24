@@ -4,6 +4,7 @@ import { getAllCart, deleteCart, addCart } from "~/api/cart";
 import { createOrder } from "~/api/order";
 
 const cart = ref<CartResponse[]>([]);
+const selected = ref<CartResponse[]>([]);
 
 const loadData = async () => {
   const res = await getAllCart();
@@ -40,6 +41,8 @@ const handleUpdateCart = async (
 };
 
 const removeItem = async (id: number) => {
+  selected.value = selected.value.filter((item) => item.id !== id);
+
   const res = await deleteCart(id);
   if (res.status === 200) {
     await loadData();
@@ -49,13 +52,13 @@ const removeItem = async (id: number) => {
 };
 
 const totalPrice = computed(() => {
-  return cart.value.reduce((acc, item) => {
+  return selected.value.reduce((acc, item) => {
     return acc + item.price * item.quantity;
   }, 0);
 });
 
 const handleCreateOrder = async () => {
-  const data = cart.value.map((item) => {
+  const data = selected.value.map((item) => {
     return {
       productId: item.id,
       optionId: item.optionId,
@@ -72,6 +75,27 @@ const handleCreateOrder = async () => {
   }
 };
 
+const handleSelectAll = () => {
+  if (selected.value.length === cart.value.length) {
+    selected.value = [];
+  } else {
+    selected.value = cart.value;
+  }
+};
+
+const handleSelect = (item: CartResponse) => {
+  const index = selected.value.findIndex((i) => i.id === item.id);
+  if (index === -1) {
+    selected.value.push(item);
+  } else {
+    selected.value.splice(index, 1);
+  }
+};
+
+const isSelectedAll = computed(() => {
+  return selected.value.length === cart.value.length;
+});
+
 onMounted(async () => {
   await loadData();
 });
@@ -82,11 +106,37 @@ onMounted(async () => {
       <div class="mx-auto mt-8 max-w-2xl md:mt-12">
         <div class="bg-white shadow">
           <div class="px-4 py-6 sm:px-8 sm:py-10" v-if="cart.length > 0">
+            <div class="flex justify-between">
+              <div>จำนวนที่เลือก {{ selected.length }} รายการ</div>
+              <div>
+                <UButton
+                  color="primary"
+                  variant="outline"
+                  @click="handleSelectAll"
+                  v-if="!isSelectedAll"
+                >
+                  เลือกทั้งหมด
+                </UButton>
+                <UButton
+                  color="red"
+                  variant="outline"
+                  @click="handleSelectAll"
+                  v-else
+                >
+                  ยกเลิก
+                </UButton>
+              </div>
+            </div>
+            <UDivider class="mb-10 mt-4" />
             <div class="flow-root">
               <ul class="-my-8">
                 <template v-for="item in cart" :key="item.id">
                   <a-cart-item
                     :item="item"
+                    :selected="
+                      selected.findIndex((i) => i.id === item.id) !== -1
+                    "
+                    @selected="handleSelect(item)"
                     @update="
                       (quantity) =>
                         handleUpdateCart(
@@ -124,8 +174,9 @@ onMounted(async () => {
             <div class="mt-6 text-center">
               <button
                 type="button"
-                class="group inline-flex w-full items-center justify-center rounded-md bg-gray-900 px-6 py-4 text-lg font-semibold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800"
+                class="group inline-flex w-full items-center justify-center rounded-md bg-gray-900 px-6 py-4 text-lg font-semibold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800 disabled:transform-none disabled:transition-none disabled:bg-gray-300 disabled:cursor-not-allowed disabled:text-white"
                 @click="handleCreateOrder"
+                :disabled="selected.length === 0"
               >
                 ชำระเงิน
                 <svg

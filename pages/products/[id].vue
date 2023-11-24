@@ -29,6 +29,11 @@ const changePrice = (option: OptionResponse) => {
 };
 
 const handleAddCart = async () => {
+  if (!authStore.isAuth) {
+    router.push(`/login?redirect=${router.currentRoute.value.fullPath}`);
+    return;
+  }
+
   if (!productDatil.value || !currentOption.value) return;
 
   const res = await addCart({
@@ -78,9 +83,9 @@ onMounted(async () => {
             <button
               :class="`${
                 option.id === currentOption?.id
-                  ? 'text-white bg-rose-400'
+                  ? 'text-white bg-rose-400 px-2'
                   : 'text-black'
-              } p-1 font-medium rounded-lg text-sm text-center`"
+              } font-medium rounded-lg text-sm text-center`"
               @click="changePrice(option)"
             >
               {{ option.name }}
@@ -139,30 +144,23 @@ onMounted(async () => {
           </div>
         </div>
         <div class="flex items-center justify-between">
-          <span class="text-3xl font-bold text-gray-900 dark:text-white">
+          <span class="text-2xl font-bold text-gray-900 dark:text-white">
             ฿{{ currentOption.price }}</span
           >
-          <NuxtLink
-            class="text-black bg-gray-300 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"
-            :to="`/login?redirect=${$route.fullPath}`"
-            v-if="!authStore.isAuth"
+          <span
+            class="text-white bg-red-600 font-medium rounded-lg text-sm px-3 py-1.5 text-center"
+            @click="handleAddCart"
+            v-if="currentOption.quantity <= 0"
           >
-            เข้าสู่ระบบ
-          </NuxtLink>
-          <button
-            class="text-white bg-blue-700 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"
+            สินค้าหมด
+          </span>
+          <UButton
+            color="blue"
             @click="handleAddCart"
             v-else-if="currentOption.quantity > 0"
           >
             เพิ่มลงตะกร้า
-          </button>
-          <span
-            class="text-white bg-red-600 font-medium rounded-lg text-sm px-3 py-1.5 text-center"
-            @click="handleAddCart"
-            v-else
-          >
-            สินค้าหมด
-          </span>
+          </UButton>
         </div>
       </div>
       <UDivider label="แชร์สินค้านี้" color="gray" />

@@ -45,7 +45,7 @@ onMounted(async () => {
           <div class="absolute top-6 right-5">
             <h4 class="sr-only">สถานะ</h4>
             <p class="text-sm font-medium text-gray-900">
-              สถานะ: {{ order?.status }}
+              สถานะ: <a-order-status :status="order?.status" />
             </p>
           </div>
 
@@ -75,12 +75,14 @@ onMounted(async () => {
                   ราคา ฿{{ item.price }}
                 </p>
                 <p class="mt-2 text-sm font-medium text-gray-900">
-                  จำนวน {{ item.quantity }}
+                  จำนวน {{ item.quantity }} ชิ้น
+                </p>
+                <p class="mt-2 text-sm font-medium text-gray-900">
+                  ราคารวม ฿{{ item.price * item.quantity }}
                 </p>
               </div>
             </div>
           </div>
-
           <div
             class="border-t border-gray-200 px-4 py-6 sm:px-6 lg:p-8 flex justify-between"
           >
@@ -95,6 +97,9 @@ onMounted(async () => {
                 <span class="block">ที่อยู่ {{ order?.address.address }}</span>
               </dd>
             </div>
+            <span class="font-medium text-gray-900"
+              >ราคาที่ชำระ {{ order?.totalPay }} บาท</span
+            >
           </div>
         </div>
       </div>

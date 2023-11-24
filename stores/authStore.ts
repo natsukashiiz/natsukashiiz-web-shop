@@ -1,6 +1,7 @@
 // stores/counter.js
 import { defineStore } from "pinia";
 import client from "~/api/request";
+import type { TokenPayload } from "~/types";
 
 const store = {
   get: () => localStorage.getItem("token"),
@@ -10,6 +11,7 @@ const store = {
 
 export const useAuthStore = defineStore("auth", () => {
   const token = ref<null | string>(null);
+  const payload = ref<TokenPayload>();
   const isAuth = computed(() => !!token.value);
 
   const setToken = (value: string) => {
@@ -27,6 +29,14 @@ export const useAuthStore = defineStore("auth", () => {
     const str = store.get();
     if (str) {
       token.value = str;
+
+      payload.value = JSON.parse(atob(str.split(".")[1]));
+
+      // check expiration
+      if (payload.value && payload.value.exp < Date.now() / 1000) {
+        logout();
+        return;
+      }
 
       client.interceptors.request.use(
         (config) => {

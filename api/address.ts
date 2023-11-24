@@ -1,4 +1,8 @@
-import type { ServerResponse, AddressResponse } from "~/types";
+import type {
+  ServerResponse,
+  AddressResponse,
+  CreateAddressRequest,
+} from "~/types";
 import client from "~/api/request";
 
 const getAllAddress = (): ServerResponse<AddressResponse[]> =>
@@ -7,4 +11,8 @@ const getAllAddress = (): ServerResponse<AddressResponse[]> =>
 const setMainAddress = (id: number): ServerResponse<AddressResponse> =>
   client.patch(`/v1/addresses/main/${id}`);
 
-export { getAllAddress, setMainAddress };
+const createAddress = (
+  data: CreateAddressRequest
+): ServerResponse<AddressResponse> => client.post("/v1/addresses", data);
+
+export { getAllAddress, setMainAddress, createAddress };

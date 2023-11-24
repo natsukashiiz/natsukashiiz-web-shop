@@ -17,6 +17,11 @@ const menus = [
     to: "/orders/history",
     isAuth: true,
   },
+  {
+    label: "ที่อยู่จัดส่ง",
+    to: "/address",
+    isAuth: true,
+  },
 ];
 
 const menuItems = computed(() => {
@@ -106,20 +111,17 @@ const handleLogout = () => {
             {{ menu.label }}
           </ULink>
         </template>
-        <button
+        <UButton
+          color="white"
+          variant="solid"
           v-if="authStore.isAuth"
           @click="modalLogout = true"
-          class="text-black bg-white hover:bg-rose-100 focus:ring-2 focus:outline-none focus:ring-rose-300 font-medium rounded-lg text-sm px-2 py-2 text-center"
         >
           ออกจากระบบ
-        </button>
-        <NuxtLink
-          v-else
-          to="/login"
-          class="text-black bg-white hover:bg-rose-100 focus:ring-2 focus:outline-none focus:ring-rose-300 font-medium rounded-lg text-sm px-2 py-2 text-center"
-        >
+        </UButton>
+        <UButton color="white" variant="solid" to="/login" v-else>
           เข้าสู่ระบบ
-        </NuxtLink>
+        </UButton>
       </div>
     </nav>
   </div>

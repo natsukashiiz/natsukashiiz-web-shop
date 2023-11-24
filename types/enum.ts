@@ -1,0 +1,8 @@
+export enum OrderStatus {
+  PENDING = "PENDING",
+  PAID = "PAID",
+  SUCCESS = "SUCCESS",
+  FAIL = "FAIL",
+  SELF_CANCEL = "SELF_CANCEL",
+  SYSTEM_CANCEL = "SYSTEM_CANCEL",
+}

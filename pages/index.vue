@@ -39,12 +39,9 @@ onMounted(async () => {
               <span class="text-3xl font-bold text-gray-900"
                 >฿{{ item.options[0].price }}</span
               >
-              <NuxtLink
-                :to="`/products/${item.id}`"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center"
-              >
+              <UButton color="blue" :to="`/products/${item.id}`">
                 รายละเอียด
-              </NuxtLink>
+              </UButton>
             </div>
           </div>
         </div>
