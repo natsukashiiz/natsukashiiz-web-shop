@@ -1,4 +1,3 @@
-// stores/counter.js
 import { defineStore } from "pinia";
 import client from "~/api/request";
 import type { TokenPayload } from "~/types";

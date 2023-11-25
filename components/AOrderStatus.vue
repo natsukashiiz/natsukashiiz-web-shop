@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { OrderStatus } from "~/types/enum";
+
 defineProps({
   status: {
     type: String,
-    required: true,
+    required: false,
+    default: OrderStatus.PENDING,
   },
 });
 

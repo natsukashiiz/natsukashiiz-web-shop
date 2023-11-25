@@ -2,6 +2,10 @@
 import type { ProductResponse } from "~/types";
 import { getAllProduct } from "~/api/product";
 
+definePageMeta({
+  layout: "auth",
+});
+
 const products = ref<ProductResponse[]>([]);
 
 const loadData = async () => {
@@ -13,10 +17,8 @@ const loadData = async () => {
     window.alert("เกิดข้อผิดพลาด");
   }
 };
-onMounted(async () => {
-  await loadData();
-  useAPIFetch("/v1/products");
-});
+
+await loadData();
 </script>
 <template>
   <UContainer class="flex flex-col gap-y-2 p-5">

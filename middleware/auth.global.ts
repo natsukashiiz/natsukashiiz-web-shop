@@ -1,10 +1,8 @@
-const requireAuth = ["/cart", "/orders/history"];
-
 export default defineNuxtRouteMiddleware((to, from) => {
-  const authStore = useAuthStore();
-  if (requireAuth.includes(to.path)) {
-    if (!authStore.isAuth) {
-      return navigateTo("/login");
-    }
-  }
+  //   const authStore = useAuthStore();
+  //   if (to.meta.layout === "auth") {
+  //     if (!authStore.isAuth) {
+  //       return navigateTo("/login");
+  //     }
+  //   }
 });

@@ -2,6 +2,10 @@
 import type { OrderResponse } from "~/types";
 import { getOneOrder } from "~/api/order";
 
+definePageMeta({
+  layout: "auth",
+});
+
 const route = useRoute();
 
 const order = ref<OrderResponse>();

@@ -3,6 +3,10 @@ import type { CartResponse } from "~/types";
 import { getAllCart, deleteCart, addCart } from "~/api/cart";
 import { createOrder } from "~/api/order";
 
+definePageMeta({
+  layout: "auth",
+});
+
 const cart = ref<CartResponse[]>([]);
 const selected = ref<CartResponse[]>([]);
 

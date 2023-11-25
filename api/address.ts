@@ -2,6 +2,7 @@ import type {
   ServerResponse,
   AddressResponse,
   CreateAddressRequest,
+  UpdateAddressRequest,
 } from "~/types";
 import client from "~/api/request";
 
@@ -15,4 +16,17 @@ const createAddress = (
   data: CreateAddressRequest
 ): ServerResponse<AddressResponse> => client.post("/v1/addresses", data);
 
-export { getAllAddress, setMainAddress, createAddress };
+const updateAddress = (
+  data: UpdateAddressRequest
+): ServerResponse<AddressResponse> => client.put(`/v1/addresses`, data);
+
+const deleteAddress = (id: number): ServerResponse<void> =>
+  client.delete(`/v1/addresses/${id}`);
+
+export {
+  getAllAddress,
+  setMainAddress,
+  createAddress,
+  updateAddress,
+  deleteAddress,
+};

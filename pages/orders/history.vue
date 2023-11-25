@@ -2,6 +2,10 @@
 import type { OrderResponse } from "~/types";
 import { getAllOrder } from "~/api/order";
 
+definePageMeta({
+  layout: "auth",
+});
+
 const orders = ref<OrderResponse[]>([]);
 
 const loadData = async () => {
@@ -14,9 +18,7 @@ const loadData = async () => {
   }
 };
 
-onMounted(async () => {
-  await loadData();
-});
+await loadData();
 </script>
 <template>
   <section class="py-2">

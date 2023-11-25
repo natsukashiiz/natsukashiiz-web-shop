@@ -46,6 +46,14 @@ export interface CreateAddressRequest {
   address: string;
 }
 
+export interface UpdateAddressRequest {
+  id: number;
+  firstName: string;
+  lastName: string;
+  mobile: string;
+  address: string;
+}
+
 // response
 
 export interface TokenResponse {
@@ -83,6 +91,7 @@ export interface OrderResponse {
   totalPay: number;
   status: string;
   time: string;
+  payExpire: number;
 }
 
 export interface AddressResponse {
