@@ -65,7 +65,7 @@ const disabled = computed(() => {
 });
 
 onMounted(() => {
-  if (authStore.token) {
+  if (authStore.isAuth) {
     redirect();
   }
 });

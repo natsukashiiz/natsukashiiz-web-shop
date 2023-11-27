@@ -2,30 +2,32 @@ import { defineStore } from "pinia";
 import client from "~/api/request";
 import type { TokenPayload } from "~/types";
 
-const store = {
-  get: () => localStorage.getItem("token"),
-  set: (value: string) => localStorage.setItem("token", value),
-  remove: () => localStorage.removeItem("token"),
-};
+// const store = {
+//   get: () => localStorage.getItem("token"),
+//   set: (value: string) => localStorage.setItem("token", value),
+//   remove: () => localStorage.removeItem("token"),
+// };
 
 export const useAuthStore = defineStore("auth", () => {
   const token = ref<null | string>(null);
   const payload = ref<TokenPayload>();
   const isAuth = computed(() => !!token.value);
 
+  const cookie = useCookie<string | null>("token");
+
   const setToken = (value: string) => {
     token.value = value;
-    store.set(value);
+    cookie.value = value;
     loadAuth();
   };
 
   const removeToken = () => {
     token.value = null;
-    store.remove();
+    cookie.value = null;
   };
 
-  const loadAuth = () => {
-    const str = store.get();
+  const loadAuth = (): boolean => {
+    const str = cookie.value;
     if (str) {
       token.value = str;
 
@@ -33,8 +35,7 @@ export const useAuthStore = defineStore("auth", () => {
 
       // check expiration
       if (payload.value && payload.value.exp < Date.now() / 1000) {
-        logout();
-        return;
+        return false;
       }
 
       client.interceptors.request.use(
@@ -48,8 +49,10 @@ export const useAuthStore = defineStore("auth", () => {
           return Promise.reject(error);
         }
       );
+
+      return true;
     } else {
-      logout();
+      return false;
     }
   };
 

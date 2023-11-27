@@ -6,16 +6,13 @@ import type {
 } from "~/types";
 import {
   getAllAddress,
-  setMainAddress,
   createAddress,
   updateAddress,
   deleteAddress,
 } from "~/api/address";
 import type { FormError, FormSubmitEvent } from "#ui/types";
 
-definePageMeta({
-  layout: "auth",
-});
+const tost = useToast();
 
 const addresses = ref<AddressResponse[]>([]);
 const modalForm = ref(false);
@@ -79,15 +76,6 @@ const loadData = async () => {
   }
 };
 
-const handleSetMainAddress = async (addressId: number) => {
-  const res = await setMainAddress(addressId);
-  if (res.status === 200 && res.data) {
-    await loadData();
-  } else {
-    window.alert("Error");
-  }
-};
-
 const currentId = ref<number | null>(null);
 const formState = reactive<CreateAddressRequest>({
   firstName: "",
@@ -132,6 +120,13 @@ const resetForm = () => {
   formState.address = "";
 };
 
+const handleSetMainAddress = async (address: AddressResponse) => {
+  await handleEditAddress({
+    ...address,
+    main: true,
+  });
+};
+
 const handleSubmitForm = async (event: FormSubmitEvent<any>) => {
   if (formMode.value === "add") {
     await handleAddAddress(event.data);
@@ -148,6 +143,11 @@ const handleAddAddress = async (data: CreateAddressRequest) => {
   if (res.status === 200 && res.data) {
     await loadData();
     modalForm.value = false;
+    tost.add({
+      id: "create-address",
+      title: "เพิ่มที่อยู่สำเร็จ",
+      description: "ที่อยู่ของคุณถูกเพิ่มสำเร็จ",
+    });
   } else {
     window.alert("Error");
   }
@@ -158,6 +158,11 @@ const handleEditAddress = async (data: UpdateAddressRequest) => {
   if (res.status === 200 && res.data) {
     await loadData();
     modalForm.value = false;
+    tost.add({
+      id: "update-address",
+      title: "แก้ไขที่อยู่สำเร็จ",
+      description: "ที่อยู่ของคุณถูกแก้ไขสำเร็จ",
+    });
   } else {
     window.alert("Error");
   }
@@ -167,14 +172,17 @@ const handleDeleteAddress = async (addressId: number) => {
   const res = await deleteAddress(addressId);
   if (res.status === 200) {
     await loadData();
+    tost.add({
+      id: "delete-address",
+      title: "ลบที่อยู่สำเร็จ",
+      description: "ที่อยู่ของคุณถูกลบสำเร็จ",
+    });
   } else {
     window.alert("Error");
   }
 };
 
-onMounted(async () => {
-  await loadData();
-});
+await loadData();
 </script>
 <template>
   <div class="flex justify-center mt-10">
@@ -244,7 +252,7 @@ onMounted(async () => {
         </div>
       </template>
 
-      <UTable :columns="columns" :rows="addresses" class="max-w-full">
+      <UTable :columns="columns" :rows="addresses" class="min-w-[700px]">
         <template #main-data="{ row }">
           <UButton
             color="pink"
@@ -258,7 +266,7 @@ onMounted(async () => {
               color="gray"
               variant="ghost"
               icon="i-heroicons-home-20-solid"
-              @click="() => handleSetMainAddress(row.id)"
+              @click="() => handleSetMainAddress(row)"
             />
           </UTooltip>
         </template>

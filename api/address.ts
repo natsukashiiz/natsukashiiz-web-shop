@@ -9,8 +9,8 @@ import client from "~/api/request";
 const getAllAddress = (): ServerResponse<AddressResponse[]> =>
   client.get("/v1/addresses");
 
-const setMainAddress = (id: number): ServerResponse<AddressResponse> =>
-  client.patch(`/v1/addresses/main/${id}`);
+const getMainAddress = (): ServerResponse<AddressResponse> =>
+  client.get("/v1/addresses/main");
 
 const createAddress = (
   data: CreateAddressRequest
@@ -25,7 +25,7 @@ const deleteAddress = (id: number): ServerResponse<void> =>
 
 export {
   getAllAddress,
-  setMainAddress,
+  getMainAddress,
   createAddress,
   updateAddress,
   deleteAddress,

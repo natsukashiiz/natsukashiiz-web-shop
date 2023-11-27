@@ -17,11 +17,7 @@ defineProps({
     class="flex flex-col space-y-3 py-6 text-left sm:flex-row sm:space-x-5 sm:space-y-0"
   >
     <div class="flex items-center">
-      <UCheckbox
-        :value="item.id"
-        :checked="selected"
-        @change="$emit('selected', item)"
-      />
+      <UCheckbox :model-value="selected" @change="$emit('selected', item)" />
     </div>
     <div class="shrink-0">
       <img
@@ -48,7 +44,7 @@ defineProps({
           <p
             class="shrink-0 w-20 text-base font-semibold text-gray-900 sm:order-2 sm:ml-8 sm:text-right"
           >
-            ฿{{ item.price * item.quantity }}
+            ฿<ACurrency :amount="item.price * item.quantity" />
           </p>
 
           <div class="sm:order-1">
@@ -56,7 +52,7 @@ defineProps({
               <button
                 class="flex items-center justify-center rounded-l-md bg-gray-200 px-4 transition hover:bg-black hover:text-white"
                 @click="
-                  item.quantity > 1 ? $emit('update', item.quantity--) : null
+                  item.quantity > 1 ? $emit('update', --item.quantity) : null
                 "
               >
                 -
@@ -68,7 +64,7 @@ defineProps({
               </div>
               <button
                 class="flex items-center justify-center rounded-r-md bg-gray-200 px-4 transition hover:bg-black hover:text-white"
-                @click="$emit('update', item.quantity++)"
+                @click="$emit('update', ++item.quantity)"
               >
                 +
               </button>

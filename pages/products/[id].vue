@@ -58,9 +58,7 @@ const handleAddCart = async () => {
   }
 };
 
-onMounted(async () => {
-  await loadData();
-});
+await loadData();
 </script>
 <template>
   <div class="flex justify-center mt-10" v-if="productDatil && currentOption">
@@ -145,8 +143,8 @@ onMounted(async () => {
         </div>
         <div class="flex items-center justify-between">
           <span class="text-2xl font-bold text-gray-900 dark:text-white">
-            ฿{{ currentOption.price }}</span
-          >
+            ฿<ACurrency :amount="currentOption.price" />
+          </span>
           <span
             class="text-white bg-red-600 font-medium rounded-lg text-sm px-3 py-1.5 text-center"
             @click="handleAddCart"

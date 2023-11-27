@@ -3,6 +3,7 @@ import type {
   CreateOrderRequest,
   OrderResponse,
   PayOrderRequest,
+  PayOrderResponse,
 } from "~/types";
 import client from "~/api/request";
 
@@ -18,7 +19,7 @@ const createOrder = (
 const cancelOrder = (id: number): ServerResponse<void> =>
   client.put(`/v1/orders/cancel/${id}`);
 
-const payOrder = (body: PayOrderRequest): ServerResponse<void> =>
+const payOrder = (body: PayOrderRequest): ServerResponse<PayOrderResponse> =>
   client.put(`/v1/orders/pay`, body);
 
 export { getAllOrder, getOneOrder, createOrder, cancelOrder, payOrder };

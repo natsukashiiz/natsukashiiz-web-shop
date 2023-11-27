@@ -2,16 +2,12 @@
 import type { OrderResponse } from "~/types";
 import { getOneOrder } from "~/api/order";
 
-definePageMeta({
-  layout: "auth",
-});
-
 const route = useRoute();
 
 const order = ref<OrderResponse>();
 
 const loadData = async () => {
-  const res = await getOneOrder(route.params.orderId as string);
+  const res = await getOneOrder(route.params.id as string);
 
   if (res.status === 200 && res.data) {
     order.value = res.data;
@@ -20,24 +16,23 @@ const loadData = async () => {
   }
 };
 
-onMounted(async () => {
-  await loadData();
-});
+await loadData();
 </script>
 
 <template>
   <main
     class="mx-auto max-w-2xl pb-24 pt-8 sm:px-6 sm:pt-16 lg:max-w-7xl lg:px-8"
+    v-if="order"
   >
     <div
       class="space-y-2 px-4 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 sm:px-0"
     >
       <div class="flex sm:items-baseline sm:space-x-4">
         <h1 class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-          ออเดอร์ #{{ order?.orderId }}
+          ออเดอร์ #{{ order.orderId }}
         </h1>
       </div>
-      <p class="text-sm text-gray-600">วันที่สั่งซื้อ {{ order?.time }}</p>
+      <p class="text-sm text-gray-600">วันที่สั่งซื้อ {{ order.createdAt }}</p>
     </div>
 
     <!-- Products -->
@@ -49,7 +44,7 @@ onMounted(async () => {
           <div class="absolute top-6 right-5">
             <h4 class="sr-only">สถานะ</h4>
             <p class="text-sm font-medium text-gray-900">
-              สถานะ: <a-order-status :status="order?.status" />
+              สถานะ: <a-order-status :status="order.status" />
             </p>
           </div>
 
@@ -58,7 +53,7 @@ onMounted(async () => {
           >
             <div
               class="sm:flex lg:col-span-7 my-1"
-              v-for="item in order?.items"
+              v-for="item in order.items"
               :key="item.optionId"
             >
               <div
@@ -76,13 +71,13 @@ onMounted(async () => {
                   {{ item.productName }}
                 </h3>
                 <p class="mt-2 text-sm font-medium text-gray-900">
-                  ราคา ฿{{ item.price }}
+                  ราคา : ฿<a-currency :amount="item.price" />
                 </p>
                 <p class="mt-2 text-sm font-medium text-gray-900">
-                  จำนวน {{ item.quantity }} ชิ้น
+                  จำนวน : {{ item.quantity }} ชิ้น
                 </p>
                 <p class="mt-2 text-sm font-medium text-gray-900">
-                  ราคารวม ฿{{ item.price * item.quantity }}
+                  ราคารวม : ฿<a-currency :amount="item.price * item.quantity" />
                 </p>
               </div>
             </div>
@@ -94,16 +89,23 @@ onMounted(async () => {
               <dt class="font-medium text-gray-900">ที่อยู่ในการจัดส่ง</dt>
               <dd class="mt-3 text-gray-500">
                 <span class="block"
-                  >ชื่อ {{ order?.address.firstName }}
-                  {{ order?.address.lastName }}</span
+                  >ชื่อ : {{ order?.firstName }} {{ order.lastName }}</span
                 >
-                <span class="block">เบอร์โทร {{ order?.address.mobile }}</span>
-                <span class="block">ที่อยู่ {{ order?.address.address }}</span>
+                <span class="block">เบอร์โทร : {{ order.mobile }}</span>
+                <span class="block">ที่อยู่ : {{ order.address }}</span>
               </dd>
             </div>
-            <span class="font-medium text-gray-900"
-              >ราคาที่ชำระ {{ order?.totalPay }} บาท</span
-            >
+            <div class="flex flex-col">
+              <span class="font-medium text-gray-900"
+                >ยอดที่ชำระ : <a-currency :amount="order.totalPay" /> บาท
+              </span>
+              <span class="font-medium text-gray-900"
+                >เวลาที่ชำระ : {{ order.paidAt }}</span
+              >
+              <span class="font-medium text-gray-900"
+                >วิธีการชำระ : {{ order.payMethod }}</span
+              >
+            </div>
           </div>
         </div>
       </div>

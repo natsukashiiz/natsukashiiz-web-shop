@@ -30,7 +30,7 @@ defineProps({
             {{ item.items[0].optionName }}
           </p>
           <p class="mx-0 mt-1 mb-0 text-sm text-gray-400">
-            ฿{{ item.totalPay }}
+            ฿<a-currency :amount="item.items[0].price" />
           </p>
         </div>
 

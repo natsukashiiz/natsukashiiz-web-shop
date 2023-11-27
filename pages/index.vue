@@ -2,10 +2,6 @@
 import type { ProductResponse } from "~/types";
 import { getAllProduct } from "~/api/product";
 
-definePageMeta({
-  layout: "auth",
-});
-
 const products = ref<ProductResponse[]>([]);
 
 const loadData = async () => {
@@ -38,9 +34,9 @@ await loadData();
             </h5>
 
             <div class="flex items-center justify-between">
-              <span class="text-3xl font-bold text-gray-900"
-                >฿{{ item.options[0].price }}</span
-              >
+              <span class="text-xl font-bold text-gray-600">
+                ฿<ACurrency :amount="item.options[0].price" />
+              </span>
               <UButton color="blue" :to="`/products/${item.id}`">
                 รายละเอียด
               </UButton>

@@ -3,10 +3,6 @@ import type { CartResponse } from "~/types";
 import { getAllCart, deleteCart, addCart } from "~/api/cart";
 import { createOrder } from "~/api/order";
 
-definePageMeta({
-  layout: "auth",
-});
-
 const cart = ref<CartResponse[]>([]);
 const selected = ref<CartResponse[]>([]);
 
@@ -14,6 +10,7 @@ const loadData = async () => {
   const res = await getAllCart();
   if (res.status === 200 && res.data) {
     cart.value = res.data;
+    if (cart.value.length === 1) selected.value = cart.value;
   } else {
     window.alert("เกิดข้อผิดพลาด");
   }
@@ -33,6 +30,7 @@ const handleUpdateCart = async (
 
     if (res.status === 200 && res.data) {
     } else {
+      await loadData();
       window.alert("เกิดข้อผิดพลาด");
     }
   } catch (error: any) {
@@ -41,6 +39,7 @@ const handleUpdateCart = async (
     } else {
       window.alert("เกิดข้อผิดพลาด");
     }
+    await loadData();
   }
 };
 
@@ -92,7 +91,7 @@ const handleSelect = (item: CartResponse) => {
   if (index === -1) {
     selected.value.push(item);
   } else {
-    selected.value.splice(index, 1);
+    selected.value = selected.value.filter((i) => i.id !== item.id);
   }
 };
 
@@ -100,9 +99,11 @@ const isSelectedAll = computed(() => {
   return selected.value.length === cart.value.length;
 });
 
-onMounted(async () => {
-  await loadData();
-});
+const isSelect = (item: CartResponse) => {
+  return selected.value.findIndex((i) => i.id === item.id) !== -1;
+};
+
+await loadData();
 </script>
 <template>
   <section class="py-2">
@@ -137,9 +138,7 @@ onMounted(async () => {
                 <template v-for="item in cart" :key="item.id">
                   <a-cart-item
                     :item="item"
-                    :selected="
-                      selected.findIndex((i) => i.id === item.id) !== -1
-                    "
+                    :selected="isSelect(item)"
                     @selected="handleSelect(item)"
                     @update="
                       (quantity) =>
@@ -159,7 +158,7 @@ onMounted(async () => {
               <div class="flex items-center justify-between">
                 <p class="text-sm text-gray-400">ยอดรวม</p>
                 <p class="text-lg font-semibold text-gray-900">
-                  ฿{{ totalPrice }}
+                  ฿<ACurrency :amount="totalPrice" />
                 </p>
               </div>
               <div class="flex items-center justify-between">
@@ -170,8 +169,7 @@ onMounted(async () => {
             <div class="mt-6 flex items-center justify-between">
               <p class="text-sm font-medium text-gray-900">ยอดที่ต้องชำระ</p>
               <p class="text-2xl font-semibold text-gray-900">
-                <span class="text-xs font-normal text-gray-400">THB</span>
-                {{ totalPrice }}
+                <ACurrency :amount="totalPrice" /> บาท
               </p>
             </div>
 

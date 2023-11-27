@@ -32,12 +32,7 @@ const subscribeServer = () => {
 };
 
 onBeforeMount(() => {
-  authStore.loadAuth();
-  if (authStore.isAuth) {
-    subscribeServer();
-  } else {
-    return navigateTo("/login");
-  }
+  subscribeServer();
 });
 </script>
 <template>

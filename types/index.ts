@@ -52,6 +52,7 @@ export interface UpdateAddressRequest {
   lastName: string;
   mobile: string;
   address: string;
+  main?: boolean;
 }
 
 // response
@@ -85,13 +86,20 @@ export interface OptionResponse {
 }
 
 export interface OrderResponse {
-  orderId: number;
-  address: AddressResponse;
+  orderId: string;
   items: OrderItemResponse[];
+  firstName: string;
+  lastName: string;
+  mobile: string;
+  address: string;
   totalPay: number;
   status: string;
-  time: string;
+  payUrl: string;
   payExpire: number;
+  payMethod: string;
+  paidAt: string;
+  cancelAt: any;
+  createdAt: string;
 }
 
 export interface AddressResponse {
