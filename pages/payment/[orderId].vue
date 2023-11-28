@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { OrderResponse, AddressResponse } from "~/types";
-import { getOneOrder, payOrder } from "~/api/order";
+import { cancelOrder, getOneOrder, payOrder } from "~/api/order";
 import { getMainAddress } from "~/api/address";
 
 useHead({
@@ -28,6 +28,14 @@ const paymentMethod = ref<
     name: "Line pay",
     type: "rabbit_linepay",
   },
+  {
+    name: "Prompt pay",
+    type: "promptpay",
+  },
+  {
+    name: "TrueMoney",
+    type: "truemoney",
+  },
 ]);
 
 const route = useRoute();
@@ -35,6 +43,12 @@ const toast = useToast();
 const order = ref<OrderResponse>();
 const address = ref<AddressResponse>();
 const currentPaymentMethod = ref<string>(paymentMethod.value[0].type);
+const modalCancel = ref<boolean>(false);
+const modalPayImage = ref<boolean>(false);
+const modalPhoneNumber = ref<boolean>(false);
+const payImageUrl = ref<string>();
+const phoneNumber = ref<string>();
+const loading = ref<boolean>(false);
 
 const loadData = async () => {
   const res = await getOneOrder(route.params.orderId as string);
@@ -59,13 +73,26 @@ const loadAddress = async () => {
   }
 };
 
+const invalidPhoneNumber = computed(() => {
+  if (!phoneNumber.value) return true;
+  if (phoneNumber.value.length !== 10) return true;
+  return phoneNumber.value.startsWith("0") ? false : true;
+});
+
 const handelPay = async () => {
   if (!order.value) return;
+
+  if (currentPaymentMethod.value === "truemoney" && !phoneNumber.value) {
+    modalPhoneNumber.value = true;
+    return;
+  }
+
+  loading.value = true;
   toast.add({
     id: "pay",
     title: "กำลังดำเนินการ",
     description: "กรุณารอสักครู่",
-    timeout: 0,
+    timeout: 2000,
   });
 
   const source = await createSource(order.value.totalPay);
@@ -75,10 +102,16 @@ const handelPay = async () => {
   });
 
   if (res.status === 200 && res.data) {
-    window.location.href = res.data.url;
+    if (res.data.type === "LINK") {
+      window.location.href = res.data.url;
+    } else {
+      payImageUrl.value = res.data.url;
+      modalPayImage.value = true;
+    }
   } else {
     window.alert("Error");
   }
+  loading.value = false;
 };
 
 const createSource = (amount: number) => {
@@ -89,8 +122,10 @@ const createSource = (amount: number) => {
       {
         amount: amount * 100,
         currency: "THB",
+        phone_number: phoneNumber.value,
       },
       (statusCode: any, response: any) => {
+        loading.value = false;
         if (statusCode !== 200) {
           return reject(response);
         }
@@ -98,6 +133,23 @@ const createSource = (amount: number) => {
       }
     );
   });
+};
+
+const handleCancel = async () => {
+  if (!order.value) return;
+
+  const res = await cancelOrder(order.value.orderId);
+  if (res.status === 200) {
+    toast.add({
+      id: "cancel",
+      title: "ยกเลิกออเดอร์สำเร็จ",
+      description: "กรุณารอสักครู่",
+      timeout: 1000,
+    });
+    useRouter().push(`/orders/detail/${order.value.orderId}`);
+  } else {
+    window.alert("Error");
+  }
 };
 
 const payExpireTimeOut = ref<string>("0:00");
@@ -128,6 +180,41 @@ if (order.value) {
 </script>
 <template>
   <div>
+    <AModal
+      :modal="modalPayImage"
+      title="ชำระเงิน"
+      :image="payImageUrl"
+      :footer="false"
+      @close="modalPayImage = false"
+    />
+    <AModal
+      :modal="modalPhoneNumber"
+      title="กรอกเบอร์โทรศัพท์ TrueMoney"
+      @close="
+        () => {
+          modalPhoneNumber = false;
+          phoneNumber = undefined;
+        }
+      "
+      @confirm="handelPay"
+      :loading-confirm="loading"
+      :disabled-confirm="invalidPhoneNumber"
+      confirm-color="primary"
+    >
+      <UInput
+        v-model="phoneNumber"
+        placeholder="กรอกเบอร์โทรศัพท์"
+        class="w-full"
+      />
+    </AModal>
+    <AModal
+      :modal="modalCancel"
+      title="ยกเลิกออเดอร์"
+      label="คุณต้องการยกเลิกออเดอร์นี้ใช่หรือไม่"
+      description="หากยกเลิกออเดอร์แล้ว คุณจะไม่สามารถทำรายการนี้ได้อีก"
+      @close="modalCancel = false"
+      @confirm="handleCancel"
+    />
     <div
       class="flex flex-col items-center border-b bg-white py-4 sm:flex-row sm:px-10 lg:px-20 xl:px-32"
     ></div>
@@ -244,12 +331,19 @@ if (order.value) {
             </p>
           </div>
         </div>
-        <button
-          class="mt-4 mb-8 w-full rounded-md bg-gray-900 px-6 py-3 font-medium text-white"
-          @click="handelPay"
-        >
-          ชำระเงิน
-        </button>
+        <div class="flex flex-col space-y-2 mt-4">
+          <UButton color="black" block @click="handelPay" :loading="loading">
+            ชำระเงิน
+          </UButton>
+          <UButton
+            color="red"
+            block
+            @click="modalCancel = true"
+            :disabled="loading"
+          >
+            ยกเลิกออเดอร์
+          </UButton>
+        </div>
       </div>
     </div>
   </div>

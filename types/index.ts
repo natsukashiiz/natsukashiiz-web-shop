@@ -9,11 +9,17 @@ export interface TokenPayload {
   iat: number;
   jti: string;
   email: string;
+  verified: boolean;
 }
 
 // request
 
 export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface SignupRequest {
   email: string;
   password: string;
 }
@@ -55,6 +61,15 @@ export interface UpdateAddressRequest {
   main?: boolean;
 }
 
+export interface QueryOrderRequest {
+  status?: string;
+}
+
+export interface ChagePasswordRequest {
+  current: string;
+  latest: string;
+}
+
 // response
 
 export interface TokenResponse {
@@ -69,6 +84,7 @@ export interface CartResponse {
   optionName: string;
   price: number;
   quantity: number;
+  maxQuantity: number;
   product: ProductResponse;
 }
 
@@ -123,5 +139,6 @@ export interface OrderItemResponse {
 
 export interface PayOrderResponse {
   orderId: string;
+  type: "LINK" | "IMAGE";
   url: string;
 }

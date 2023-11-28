@@ -63,6 +63,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   return {
     token,
+    payload,
     isAuth,
     setToken,
     removeToken,

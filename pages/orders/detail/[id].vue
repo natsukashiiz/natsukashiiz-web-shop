@@ -99,12 +99,12 @@ await loadData();
               <span class="font-medium text-gray-900"
                 >ยอดที่ชำระ : <a-currency :amount="order.totalPay" /> บาท
               </span>
-              <span class="font-medium text-gray-900"
-                >เวลาที่ชำระ : {{ order.paidAt }}</span
-              >
-              <span class="font-medium text-gray-900"
-                >วิธีการชำระ : {{ order.payMethod }}</span
-              >
+              <span class="font-medium text-gray-900" v-if="order.paidAt">
+                เวลาที่ชำระ : {{ order.paidAt }}
+              </span>
+              <span class="font-medium text-gray-900" v-if="order.payMethod">
+                วิธีการชำระ : {{ order.payMethod }}
+              </span>
             </div>
           </div>
         </div>

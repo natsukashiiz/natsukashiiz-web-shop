@@ -34,12 +34,12 @@ const handleUpdateCart = async (
       window.alert("เกิดข้อผิดพลาด");
     }
   } catch (error: any) {
+    await loadData();
     if (error.response.status) {
       window.alert(error.response.data.error);
     } else {
       window.alert("เกิดข้อผิดพลาด");
     }
-    await loadData();
   }
 };
 
@@ -61,20 +61,33 @@ const totalPrice = computed(() => {
 });
 
 const handleCreateOrder = async () => {
-  const data = selected.value.map((item) => {
-    return {
-      productId: item.id,
-      optionId: item.optionId,
-      quantity: item.quantity,
-    };
-  });
-  const res = await createOrder(data);
-  if (res.status === 200) {
-    await loadData();
-    const router = useRouter();
-    router.push(`/payment/${res.data.orderId}`);
-  } else {
-    window.alert("เกิดข้อผิดพลาด");
+  try {
+    const data = selected.value.map((item) => {
+      return {
+        productId: item.id,
+        optionId: item.optionId,
+        quantity: item.quantity,
+      };
+    });
+    const res = await createOrder(data);
+    if (res.status === 200) {
+      await loadData();
+      const router = useRouter();
+      router.push(`/payment/${res.data.orderId}`);
+    } else {
+      window.alert("เกิดข้อผิดพลาด");
+    }
+  } catch (error: any) {
+    if (error.response.status) {
+      if (error.response.data.error === "address.invalid") {
+        const router = useRouter();
+        router.push("/address");
+      } else {
+        window.alert(error.response.data.error);
+      }
+    } else {
+      window.alert("เกิดข้อผิดพลาด");
+    }
   }
 };
 
@@ -139,6 +152,7 @@ await loadData();
                   <a-cart-item
                     :item="item"
                     :selected="isSelect(item)"
+                    :max-quantity="item.maxQuantity"
                     @selected="handleSelect(item)"
                     @update="
                       (quantity) =>
@@ -203,12 +217,9 @@ await loadData();
               <p class="text-2xl font-semibold text-gray-900">
                 ไม่มีสินค้าในตะกร้า
               </p>
-              <router-link
-                to="/"
-                class="mt-4 inline-flex items-center justify-center px-3 py-1.5 border border-transparent text-base font-medium rounded-md text-white bg-gray-900 hover:bg-gray-800"
-              >
+              <UButton to="/" color="white" variant="solid" class="mt-4">
                 กลับไปหน้าแรก
-              </router-link>
+              </UButton>
             </div>
           </div>
         </div>

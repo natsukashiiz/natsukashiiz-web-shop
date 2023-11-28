@@ -3,6 +3,7 @@ import { useAuthStore } from "~/stores/authStore";
 
 const authStore = useAuthStore();
 const toast = useToast();
+const route = useRoute();
 const router = useRouter();
 
 const { isMobile } = useDevice();
@@ -27,6 +28,10 @@ const subscribeServer = () => {
           toast.remove("NOTIFY-ORDER");
         },
       });
+
+      if (route.name === "orders-detail-id") {
+        router.go(0);
+      }
     }
   });
 };

@@ -5,6 +5,7 @@ import {
   GoogleSignInButton,
   type CredentialResponse,
 } from "vue3-google-signin";
+import type { FormError } from "@nuxt/ui/dist/runtime/types";
 
 const turnstileToken = ref<string>();
 
@@ -21,6 +22,8 @@ const handleLoginError = () => {
 
 const route = useRoute();
 const authStore = useAuthStore();
+const toast = useToast();
+const loading = ref(false);
 
 const form = reactive({
   email: "",
@@ -39,14 +42,31 @@ const redirect = () => {
 const handleLogin = async () => {
   if (disabled.value) return;
 
-  const res = await login(form);
+  loading.value = true;
+  try {
+    const res = await login(form);
 
-  if (res.status === 200 && res.data) {
-    authStore.setToken(res.data.token);
-    redirect();
-  } else {
-    window.alert("Login failed");
+    if (res.status === 200 && res.data) {
+      authStore.setToken(res.data.token);
+      redirect();
+    } else {
+      window.alert("มีบางอย่างผิดพลาด");
+    }
+  } catch (error: any) {
+    if (error.response.status) {
+      if (error.response.data.error === "login.invalid") {
+        toast.add({
+          title: "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+          timeout: 3000,
+        });
+      } else {
+        window.alert(error.response.data.error);
+      }
+    } else {
+      window.alert("มีบางอย่างผิดพลาด");
+    }
   }
+  loading.value = false;
 };
 
 const handleGoogle = async (idToken: string) => {
@@ -56,8 +76,16 @@ const handleGoogle = async (idToken: string) => {
     authStore.setToken(res.data.token);
     redirect();
   } else {
-    window.alert("Login failed");
+    window.alert("มีบางอย่างผิดพลาด");
   }
+};
+
+const validate = (state: any): FormError[] => {
+  const errors = [];
+  if (!state.email) errors.push({ path: "email", message: "อีเมลไม่ถูกต้อง" });
+  if (!state.password)
+    errors.push({ path: "password", message: "รหัสผ่านไม่ถูกต้อง" });
+  return errors;
 };
 
 const disabled = computed(() => {
@@ -71,79 +99,81 @@ onMounted(() => {
 });
 </script>
 <template>
-  <section>
-    <div class="flex flex-col items-center justify-center lg:py-0">
-      <div class="w-full bg-white rounded-lg shadow mt-20 sm:max-w-md xl:p-0">
-        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-          <h1
-            class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl"
+  <UContainer class="flex justify-center">
+    <UCard class="mt-24">
+      <template #header>
+        <h1
+          class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl"
+        >
+          เข้าสู่ระบบ
+        </h1>
+      </template>
+
+      <UForm
+        :state="form"
+        :validate="validate"
+        @submit="handleLogin"
+        class="space-y-4 w-96"
+      >
+        <UFormGroup label="อีเมล" name="email">
+          <UInput v-model="form.email" type="email" />
+        </UFormGroup>
+
+        <UFormGroup label="รหัสผ่าน" name="password">
+          <UInput v-model="form.password" type="password" />
+        </UFormGroup>
+
+        <div class="flex items-center justify-center">
+          <NuxtTurnstile
+            v-model="turnstileToken"
+            :options="{ theme: 'light' }"
+          />
+        </div>
+
+        <div class="flex justify-end">
+          <UButton
+            color="white"
+            type="submit"
+            :disabled="disabled"
+            :loading="loading"
+            block
           >
             เข้าสู่ระบบ
-          </h1>
-          <form class="space-y-4 md:space-y-6" @submit.prevent="handleLogin">
-            <div>
-              <label
-                for="email"
-                class="block mb-2 text-sm font-medium text-gray-900"
-                >อีเมล</label
-              >
-              <input
-                type="email"
-                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-rose-600 focus:border-rose-600 block w-full p-2.5 :bg-gray-700"
-                placeholder="name@company.com"
-                v-model="form.email"
-              />
-            </div>
-            <div>
-              <label
-                for="password"
-                class="block mb-2 text-sm font-medium text-gray-900"
-                >รหัสผ่าน</label
-              >
-              <input
-                type="password"
-                placeholder="••••••••"
-                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-rose-600 focus:border-rose-600 block w-full p-2.5"
-                v-model="form.password"
-              />
-            </div>
-            <div class="flex items-center justify-center">
-              <NuxtTurnstile
-                v-model="turnstileToken"
-                :options="{ theme: 'light' }"
-              />
-            </div>
-            <UButton color="rose" type="submit" :disabled="disabled" block>
-              เข้าสู่ระบบ
-            </UButton>
-            <UDivider label="หรือ" color="gray" />
-            <div class="px-6 sm:px-0 max-w-sm">
-              <GoogleSignInButton
-                @success="handleLoginSuccess"
-                @error="handleLoginError"
-                width="385"
-                size="medium"
-                text="เข้าสู่ระบบด้วย Google"
-              ></GoogleSignInButton>
-            </div>
-            <div class="flex items-center justify-between">
-              <p class="text-sm font-light text-gray-500">
-                ยังไม่มีบัญชีใช่ไหม?
-                <a href="#" class="font-medium text-rose-600 hover:underline"
-                  >ลงทะเบียน</a
-                >
-              </p>
-              <p class="text-sm font-light text-gray-500">
-                <a
-                  href="#"
-                  class="text-sm font-medium text-rose-600 hover:underline"
-                  >ลืมรหัสผ่านใช่ไหม?</a
-                >
-              </p>
-            </div>
-          </form>
+          </UButton>
         </div>
-      </div>
-    </div>
-  </section>
+
+        <UDivider label="หรือ" color="gray" />
+        <div class="py-2">
+          <GoogleSignInButton
+            @success="handleLoginSuccess"
+            @error="handleLoginError"
+            width="385"
+            size="medium"
+            text="signin_with"
+            logo-alignment="center"
+            locale="th"
+          ></GoogleSignInButton>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <p class="text-sm font-light text-gray-500">
+            ยังไม่มีบัญชีใช่ไหม?
+            <ULink
+              to="/register"
+              class="font-medium text-blue-600 hover:underline"
+            >
+              ลงทะเบียน
+            </ULink>
+          </p>
+          <p class="text-sm font-light text-gray-500">
+            <a
+              href="#"
+              class="text-sm font-medium text-blue-600 hover:underline"
+              >ลืมรหัสผ่านใช่ไหม?</a
+            >
+          </p>
+        </div>
+      </UForm>
+    </UCard>
+  </UContainer>
 </template>

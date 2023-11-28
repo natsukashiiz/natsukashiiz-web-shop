@@ -1,6 +1,7 @@
 import type {
   ServerResponse,
   LoginRequest,
+  SignupRequest,
   GoogleLoginRequest,
   TokenResponse,
 } from "~/types";
@@ -14,4 +15,7 @@ const login = (body: LoginRequest): ServerResponse<TokenResponse> =>
 const google = (body: GoogleLoginRequest): ServerResponse<TokenResponse> =>
   client.post("/v1/auth/google", body);
 
-export { login, google };
+const singup = (body: SignupRequest): ServerResponse<TokenResponse> =>
+  client.post("/v1/auth/signUp", body);
+
+export { login, google, singup };

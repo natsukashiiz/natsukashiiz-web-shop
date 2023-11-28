@@ -10,6 +10,10 @@ defineProps({
     type: Boolean,
     required: true,
   },
+  maxQuantity: {
+    type: Number,
+    required: true,
+  },
 });
 </script>
 <template>
@@ -54,6 +58,7 @@ defineProps({
                 @click="
                   item.quantity > 1 ? $emit('update', --item.quantity) : null
                 "
+                :disabled="item.quantity <= 1"
               >
                 -
               </button>
@@ -65,6 +70,7 @@ defineProps({
               <button
                 class="flex items-center justify-center rounded-r-md bg-gray-200 px-4 transition hover:bg-black hover:text-white"
                 @click="$emit('update', ++item.quantity)"
+                :disabled="item.quantity >= item.maxQuantity"
               >
                 +
               </button>

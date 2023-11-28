@@ -24,7 +24,8 @@ const loadData = async () => {
   }
 };
 
-const changePrice = (option: OptionResponse) => {
+const changeOption = (option: OptionResponse) => {
+  quantity.value = 1;
   currentOption.value = option;
 };
 
@@ -84,7 +85,7 @@ await loadData();
                   ? 'text-white bg-rose-400 px-2'
                   : 'text-black'
               } font-medium rounded-lg text-sm text-center`"
-              @click="changePrice(option)"
+              @click="changeOption(option)"
             >
               {{ option.name }}
             </button>

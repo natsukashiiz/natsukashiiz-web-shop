@@ -37,7 +37,7 @@ await loadData();
               <span class="text-xl font-bold text-gray-600">
                 ฿<ACurrency :amount="item.options[0].price" />
               </span>
-              <UButton color="blue" :to="`/products/${item.id}`">
+              <UButton color="white" :to="`/products/${item.id}`">
                 รายละเอียด
               </UButton>
             </div>

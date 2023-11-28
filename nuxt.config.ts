@@ -50,6 +50,6 @@ export default defineNuxtConfig({
       "213921102049-buchqc6diom118vnsidm9fito3cr51dd.apps.googleusercontent.com",
   },
   turnstile: {
-    siteKey: "1x00000000000000000000AA",
+    siteKey: "1x00000000000000000000BB",
   },
 });
