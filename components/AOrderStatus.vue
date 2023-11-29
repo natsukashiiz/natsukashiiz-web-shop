@@ -11,19 +11,19 @@ const { status } = defineProps({
 const statusMap = new Map([
   ["PENDING", "รอดำเนินการ"],
   ["PAID", "ชำระเงินแล้ว"],
-  ["SUCCESS", "สำเร็จ"],
-  ["FAIL", "ล้มเหลว"],
-  ["SELF_CANCEL", "ยกเลิกด้วยตนเอง"],
-  ["SYSTEM_CANCEL", "ยกเลิกโดยระบบ"],
+  ["SUCCESSFUL", "สำเร็จ"],
+  ["FAILED", "ล้มเหลว"],
+  ["SELF_CANCELED", "ยกเลิกด้วยตนเอง"],
+  ["SYSTEM_CANCELED", "ยกเลิกโดยระบบ"],
 ]);
 
 const statusColorMap = new Map([
   ["PENDING", "gray-500"],
   ["PAID", "blue-500"],
-  ["SUCCESS", "green-500"],
-  ["FAIL", "red-500"],
-  ["SELF_CANCEL", "orange-500"],
-  ["SYSTEM_CANCEL", "yellow-500"],
+  ["SUCCESSFUL", "green-500"],
+  ["FAILED", "red-500"],
+  ["SELF_CANCELED", "orange-500"],
+  ["SYSTEM_CANCELED", "yellow-500"],
 ]);
 </script>
 <template>

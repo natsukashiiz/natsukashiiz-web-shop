@@ -12,7 +12,17 @@ export interface TokenPayload {
   verified: boolean;
 }
 
+export interface PageResponse<T> {
+  list: T[];
+  total: number;
+}
+
 // request
+
+export interface Pagination {
+  page: number;
+  size: number;
+}
 
 export interface LoginRequest {
   email: string;
@@ -70,6 +80,16 @@ export interface ChagePasswordRequest {
   latest: string;
 }
 
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  email: string;
+  code: string;
+  password: string;
+}
+
 // response
 
 export interface TokenResponse {
@@ -92,6 +112,8 @@ export interface ProductResponse {
   id: number;
   name: string;
   options: OptionResponse[];
+  views: number;
+  orders: number;
 }
 
 export interface OptionResponse {

@@ -1,4 +1,11 @@
-const ignoeAuthRoutes = ["login", "register", "index", "products-id"];
+const allows = [
+  "login",
+  "register",
+  "index",
+  "products-id",
+  "reset-password",
+  "forgot-password",
+];
 
 export default defineNuxtRouteMiddleware((to, from) => {
   const authStore = useAuthStore();
@@ -18,7 +25,11 @@ export default defineNuxtRouteMiddleware((to, from) => {
       return navigateTo({ name: "index" });
     }
   } else {
-    if (!ignoeAuthRoutes.includes(to.name as string)) {
+    if (to.name === "verification") {
+      return navigateTo({ name: "login", query: { redirect: to.fullPath } });
+    }
+
+    if (!allows.includes(to.name as string)) {
       authStore.removeToken();
       return navigateTo({ name: "login" });
     }

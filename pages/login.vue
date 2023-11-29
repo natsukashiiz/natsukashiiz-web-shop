@@ -166,11 +166,12 @@ onMounted(() => {
             </ULink>
           </p>
           <p class="text-sm font-light text-gray-500">
-            <a
-              href="#"
-              class="text-sm font-medium text-blue-600 hover:underline"
-              >ลืมรหัสผ่านใช่ไหม?</a
+            <ULink
+              to="/forgot-password"
+              class="font-medium text-blue-600 hover:underline"
             >
+              ลืมรหัสผ่านใช่ไหม
+            </ULink>
           </p>
         </div>
       </UForm>

@@ -23,7 +23,7 @@ const redirect = () => {
 const validate = (state: any): FormError[] => {
   const errors = [];
   if (!state.code || state.code.length !== 6)
-    errors.push({ path: "code", message: "code ไม่ถูกต้อง" });
+    errors.push({ path: "code", message: "รหัสยืนยันไม่ถูกต้อง" });
   return errors;
 };
 
@@ -35,13 +35,13 @@ const handleSendVerifyCode = async () => {
 
     if (res.status === 200) {
       toast.add({
-        title: "ส่ง code สำเร็จ",
+        title: "ส่งรหัสยืนยันสำเร็จ",
         description: "กรุณาตรวจสอบอีเมลของท่าน",
         timeout: 10000,
       });
     } else {
       toast.add({
-        title: "ส่ง code ไม่สำเร็จ",
+        title: "ส่งรหัสยืนยันไม่สำเร็จ",
         timeout: 3000,
       });
     }
@@ -49,7 +49,7 @@ const handleSendVerifyCode = async () => {
     if (error.response.status) {
       if (error.response.data.error === "account.verify.code.invalid") {
         toast.add({
-          title: "code ไม่ถูกต้อง",
+          title: "รหัสยืนยันไม่ถูกต้อง",
           timeout: 3000,
         });
       } else {
@@ -78,7 +78,7 @@ const handleConfirmVerifyCode = async () => {
       redirect();
     } else {
       toast.add({
-        title: "code ไม่ถูกต้อง",
+        title: "รหัสยืนยันไม่ถูกต้อง",
         timeout: 3000,
       });
     }
@@ -86,7 +86,7 @@ const handleConfirmVerifyCode = async () => {
     if (error.response.status) {
       if (error.response.data.error === "account.verify.code.invalid") {
         toast.add({
-          title: "code ไม่ถูกต้อง",
+          title: "รหัสยืนยันไม่ถูกต้อง",
           timeout: 3000,
         });
       } else {
@@ -102,6 +102,10 @@ const handleConfirmVerifyCode = async () => {
 const disabled = computed(() => {
   return !form.code || form.code.length !== 6;
 });
+
+if (route.query.code) {
+  form.code = route.query.code as string;
+}
 </script>
 <template>
   <UContainer class="flex justify-center">
@@ -124,7 +128,7 @@ const disabled = computed(() => {
           <UInput :value="authStore.payload?.email" disabled />
         </UFormGroup>
 
-        <UFormGroup label="code" name="code">
+        <UFormGroup label="รหัสยืนยัน" name="code">
           <UInput v-model="form.code" />
         </UFormGroup>
 
@@ -134,7 +138,7 @@ const disabled = computed(() => {
             @click="handleSendVerifyCode"
             :loading="loading"
           >
-            รับ code ใหม่
+            รับรหัสยืนยันใหม่
           </UButton>
           <UButton type="submit" :disabled="disabled" :loading="loading">
             ยืนยันตัวตน
