@@ -37,7 +37,6 @@ export default defineNuxtConfig({
   },
   app: {
     baseURL: process.env.WEB_BASE_URL || "/",
-    pageTransition: { name: "page", mode: "out-in" },
   },
   ui: {
     primary: "rose",

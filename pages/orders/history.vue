@@ -19,19 +19,19 @@ const items = [
   },
   {
     label: "สำเร็จ",
-    value: "success",
+    value: "successful",
   },
   {
     label: "ยกเลิกด้วยตนเอง",
-    value: "self_cancel",
+    value: "self_canceled",
   },
   {
     label: "ยกเลิกโดยระบบ",
-    value: "system_cancel",
+    value: "system_canceled",
   },
   {
     label: "ล้มเหลว",
-    value: "fail",
+    value: "failed",
   },
 ];
 
@@ -54,7 +54,9 @@ const loadData = async () => {
   }
 };
 
-await loadData();
+onMounted(async () => {
+  await loadData();
+});
 </script>
 <template>
   <section class="py-2">

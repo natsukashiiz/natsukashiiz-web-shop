@@ -39,6 +39,7 @@ const paymentMethod = ref<
 ]);
 
 const route = useRoute();
+const router = useRouter();
 const toast = useToast();
 const order = ref<OrderResponse>();
 const address = ref<AddressResponse>();
@@ -51,17 +52,22 @@ const phoneNumber = ref<string>();
 const loading = ref<boolean>(false);
 
 const loadData = async () => {
-  const res = await getOneOrder(route.params.orderId as string);
-  if (res.status === 200 && res.data) {
-    order.value = res.data;
+  loading.value = true;
+  try {
+    const res = await getOneOrder((route.params as any).orderId as string);
+    if (res.status === 200 && res.data) {
+      order.value = res.data;
 
-    if (order.value.status !== "PENDING") {
-      const router = useRouter();
-      router.push(`/orders/detail/${order.value.orderId}`);
+      if (order.value.status !== "PENDING") {
+        router.push(`/orders/detail/${order.value.orderId}`);
+      }
+    } else {
+      window.alert("Error");
     }
-  } else {
+  } catch (error) {
     window.alert("Error");
   }
+  loading.value = false;
 };
 
 const loadAddress = async () => {
@@ -88,33 +94,33 @@ const handelPay = async () => {
   }
 
   loading.value = true;
-  toast.add({
-    id: "pay",
-    title: "กำลังดำเนินการ",
-    description: "กรุณารอสักครู่",
-    timeout: 2000,
-  });
-
   const source = await createSource(order.value.totalPay);
-  const res = await payOrder({
-    orderId: order.value.orderId,
-    source: source.id,
-  });
 
-  if (res.status === 200 && res.data) {
-    if (res.data.type === "LINK") {
-      window.location.href = res.data.url;
+  try {
+    const res = await payOrder({
+      orderId: order.value.orderId,
+      source: source.id,
+    });
+
+    if (res.status === 200 && res.data) {
+      if (res.data.type === "LINK") {
+        window.location.href = res.data.url;
+      } else {
+        payImageUrl.value = res.data.url;
+        modalPayImage.value = true;
+      }
     } else {
-      payImageUrl.value = res.data.url;
-      modalPayImage.value = true;
+      window.alert("Error");
     }
-  } else {
+  } catch (error) {
     window.alert("Error");
   }
+
   loading.value = false;
 };
 
-const createSource = (amount: number) => {
+const createSource = (amount: number): Promise<{ id: string }> => {
+  const Omise = (window as any).Omise;
   Omise.setPublicKey("pkey_test_5un4a0mz82obwpz257q");
   return new Promise((resolve, reject) => {
     Omise.createSource(
@@ -125,7 +131,6 @@ const createSource = (amount: number) => {
         phone_number: phoneNumber.value,
       },
       (statusCode: any, response: any) => {
-        loading.value = false;
         if (statusCode !== 200) {
           return reject(response);
         }
@@ -137,19 +142,24 @@ const createSource = (amount: number) => {
 
 const handleCancel = async () => {
   if (!order.value) return;
-
-  const res = await cancelOrder(order.value.orderId);
-  if (res.status === 200) {
-    toast.add({
-      id: "cancel",
-      title: "ยกเลิกออเดอร์สำเร็จ",
-      description: "กรุณารอสักครู่",
-      timeout: 1000,
-    });
-    useRouter().push(`/orders/detail/${order.value.orderId}`);
-  } else {
+  loading.value = true;
+  try {
+    const res = await cancelOrder(order.value.orderId);
+    if (res.status === 200) {
+      toast.add({
+        id: "cancel",
+        title: "ยกเลิกออเดอร์สำเร็จ",
+        description: "กรุณารอสักครู่",
+        timeout: 1000,
+      });
+      router.push(`/orders/detail/${order.value.orderId}`);
+    } else {
+      window.alert("Error");
+    }
+  } catch (error) {
     window.alert("Error");
   }
+  loading.value = false;
 };
 
 const payExpireTimeOut = ref<string>("0:00");
@@ -164,22 +174,25 @@ const timeOut = () => {
   payExpireTimeOut.value = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 };
 
-await loadData();
-await loadAddress();
+onMounted(async () => {
+  await loadData();
+  await loadAddress();
 
-if (order.value) {
-  setInterval(timeOut, 1000);
+  if (order.value) {
+    setInterval(timeOut, 1000);
 
-  const now = new Date();
-  const expire = new Date(order.value.payExpire);
-  const diff = expire.getTime() - now.getTime();
-  setTimeout(() => {
-    useRouter().push(`/orders/detail/${order.value?.orderId}`);
-  }, diff);
-}
+    const now = new Date();
+    const expire = new Date(order.value.payExpire);
+    const diff = expire.getTime() - now.getTime();
+    setTimeout(() => {
+      router.push(`/orders/detail/${order.value?.orderId}`);
+    }, diff);
+  }
+});
 </script>
 <template>
   <div>
+    <NuxtLoadingBar :loading="loading" />
     <AModal
       :modal="modalPayImage"
       title="ชำระเงิน"

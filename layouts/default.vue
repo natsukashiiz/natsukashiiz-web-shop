@@ -6,6 +6,7 @@ const colorMode = useColorMode();
 colorMode.preference = "light";
 </script>
 <template>
+  <NuxtLoadingBar />
   <a-top-bar />
   <div :class="divClass">
     <slot />

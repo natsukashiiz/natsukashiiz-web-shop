@@ -3,6 +3,8 @@ import type { CartResponse } from "~/types";
 import { getAllCart, deleteCart, addCart } from "~/api/cart";
 import { createOrder } from "~/api/order";
 
+const router = useRouter();
+
 const cart = ref<CartResponse[]>([]);
 const selected = ref<CartResponse[]>([]);
 
@@ -71,8 +73,6 @@ const handleCreateOrder = async () => {
     });
     const res = await createOrder(data);
     if (res.status === 200) {
-      await loadData();
-      const router = useRouter();
       router.push(`/payment/${res.data.orderId}`);
     } else {
       window.alert("เกิดข้อผิดพลาด");
@@ -80,7 +80,6 @@ const handleCreateOrder = async () => {
   } catch (error: any) {
     if (error.response.status) {
       if (error.response.data.error === "address.invalid") {
-        const router = useRouter();
         router.push("/address");
       } else {
         window.alert(error.response.data.error);
@@ -116,7 +115,9 @@ const isSelect = (item: CartResponse) => {
   return selected.value.findIndex((i) => i.id === item.id) !== -1;
 };
 
-await loadData();
+onMounted(async () => {
+  await loadData();
+});
 </script>
 <template>
   <section class="py-2">

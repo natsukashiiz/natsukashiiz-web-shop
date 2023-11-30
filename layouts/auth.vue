@@ -3,7 +3,6 @@ import { useAuthStore } from "~/stores/authStore";
 
 const authStore = useAuthStore();
 const toast = useToast();
-const route = useRoute();
 const router = useRouter();
 
 const { isMobile } = useDevice();
@@ -28,10 +27,6 @@ const subscribeServer = () => {
           toast.remove("NOTIFY-ORDER");
         },
       });
-
-      if (route.name === "orders-detail-id") {
-        router.go(0);
-      }
     }
   });
 };
@@ -41,6 +36,7 @@ onBeforeMount(() => {
 });
 </script>
 <template>
+  <NuxtLoadingBar />
   <a-top-bar-auth />
   <div :class="divClass">
     <slot />
@@ -50,14 +46,5 @@ onBeforeMount(() => {
 <style>
 body {
   font-family: Mitr, sans-serif;
-}
-.page-enter-active,
-.page-leave-active {
-  transition: all 0.3s;
-}
-.page-enter-from,
-.page-leave-to {
-  opacity: 0;
-  filter: blur(1rem);
 }
 </style>

@@ -16,7 +16,9 @@ const tost = useToast();
 
 const addresses = ref<AddressResponse[]>([]);
 const modalForm = ref(false);
+const modalDelete = ref(false);
 const formMode = ref<"add" | "edit">("add");
+const currentId = ref<number | null>(null);
 
 const columns = [
   {
@@ -60,10 +62,10 @@ const items = (row: AddressResponse) => [
       label: "ลบ",
       icon: "i-heroicons-trash-20-solid",
       click: () => {
-        if (window.confirm("คุณต้องการลบใช่หรือไม่")) {
-          handleDeleteAddress(row.id);
-        }
+        currentId.value = row.id;
+        modalDelete.value = true;
       },
+      disabled: row.main,
     },
   ],
 ];
@@ -76,7 +78,6 @@ const loadData = async () => {
   }
 };
 
-const currentId = ref<number | null>(null);
 const formState = reactive<CreateAddressRequest>({
   firstName: "",
   lastName: "",
@@ -118,6 +119,7 @@ const resetForm = () => {
   formState.lastName = "";
   formState.mobile = "";
   formState.address = "";
+  formMode.value = "add";
 };
 
 const handleSetMainAddress = async (address: AddressResponse) => {
@@ -168,8 +170,10 @@ const handleEditAddress = async (data: UpdateAddressRequest) => {
   }
 };
 
-const handleDeleteAddress = async (addressId: number) => {
-  const res = await deleteAddress(addressId);
+const handleDeleteAddress = async () => {
+  if (!currentId.value) return;
+
+  const res = await deleteAddress(currentId.value);
   if (res.status === 200) {
     await loadData();
     tost.add({
@@ -182,68 +186,63 @@ const handleDeleteAddress = async (addressId: number) => {
   }
 };
 
-await loadData();
+onMounted(async () => {
+  await loadData();
+});
 </script>
 <template>
   <div class="flex justify-center mt-10">
-    <UModal v-model="modalForm" prevent-close>
-      <UCard
-        :ui="{
-          ring: '',
-          divide: 'divide-y divide-gray-100 dark:divide-gray-800',
-        }"
+    <AModal
+      :modal="modalDelete"
+      title="ลบที่อยู่"
+      description="คุณต้องการลบที่อยู่ใช่หรือไม่"
+      @close="
+        () => {
+          modalDelete = false;
+          currentId = null;
+        }
+      "
+      @confirm="() => handleDeleteAddress()"
+    />
+    <AModal
+      :modal="modalForm"
+      :title="formMode === 'add' ? 'เพิ่มที่อยู่' : 'แก้ไขที่อยู่'"
+      @close="
+        () => {
+          modalForm = false;
+          resetForm();
+        }
+      "
+      :footer="false"
+    >
+      <UForm
+        :validate="validate"
+        :state="formState"
+        class="space-y-4"
+        @submit="handleSubmitForm"
       >
-        <template #header>
-          <div class="flex items-center justify-between">
-            <h3
-              class="text-base font-semibold leading-6 text-gray-900 dark:text-white"
-            >
-              {{ formMode === "add" ? "เพิ่มที่อยู่" : "แก้ไขที่อยู่" }}
-            </h3>
-            <UButton
-              color="gray"
-              variant="ghost"
-              icon="i-heroicons-x-mark-20-solid"
-              class="-my-1"
-              @click="
-                () => {
-                  resetForm();
-                  modalForm = false;
-                }
-              "
-            />
-          </div>
-        </template>
+        <UFormGroup label="ชื่อ" name="firstName">
+          <UInput v-model="formState.firstName" />
+        </UFormGroup>
 
-        <UForm
-          :validate="validate"
-          :state="formState"
-          class="space-y-4"
-          @submit="handleSubmitForm"
-        >
-          <UFormGroup label="ชื่อ" name="firstName">
-            <UInput v-model="formState.firstName" />
-          </UFormGroup>
+        <UFormGroup label="นามสกุล" name="lastName">
+          <UInput v-model="formState.lastName" />
+        </UFormGroup>
 
-          <UFormGroup label="นามสกุล" name="lastName">
-            <UInput v-model="formState.lastName" />
-          </UFormGroup>
+        <UFormGroup label="เบอร์โทร" name="mobile">
+          <UInput v-model="formState.mobile" />
+        </UFormGroup>
 
-          <UFormGroup label="เบอร์โทร" name="mobile">
-            <UInput v-model="formState.mobile" />
-          </UFormGroup>
+        <UFormGroup label="ที่อยู่" name="address">
+          <UTextarea v-model="formState.address" />
+        </UFormGroup>
 
-          <UFormGroup label="ที่อยู่" name="address">
-            <UTextarea v-model="formState.address" />
-          </UFormGroup>
-
-          <div class="flex justify-end">
-            <div></div>
-            <UButton type="submit"> บันทึก </UButton>
-          </div>
-        </UForm>
-      </UCard>
-    </UModal>
+        <div class="flex justify-end">
+          <div></div>
+          <UButton type="submit"> บันทึก </UButton>
+        </div>
+      </UForm>
+    </AModal>
     <UCard>
       <template #header>
         <div class="flex justify-between items-center">

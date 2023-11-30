@@ -103,9 +103,7 @@ watchEffect(() => {
         <img :src="image" class="w-80 h-full object-cover rounded-lg" />
       </div>
 
-      <div class="flex justify-center">
-        <slot />
-      </div>
+      <slot />
 
       <template #footer v-if="footer">
         <div class="flex justify-end space-x-2">

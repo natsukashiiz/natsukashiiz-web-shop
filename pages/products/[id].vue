@@ -3,21 +3,22 @@ import type { OptionResponse, ProductResponse } from "~/types";
 import { getOneProduct } from "~/api/product";
 import { useAuthStore } from "~/stores/authStore";
 import { addCart } from "~/api/cart";
+import { createOrder } from "~/api/order";
 
 const authStore = useAuthStore();
 const route = useRoute();
 const router = useRouter();
 const toast = useToast();
 
-const productDatil = ref<ProductResponse>();
+const product = ref<ProductResponse>();
 const currentOption = ref<OptionResponse>();
 const quantity = ref(1);
 
 const loadData = async () => {
-  const res = await getOneProduct(Number(route.params.id));
+  const res = await getOneProduct(Number((route.params as any).id));
 
   if (res.status === 200 && res.data) {
-    productDatil.value = res.data;
+    product.value = res.data;
     currentOption.value = res.data.options[0];
   } else {
     window.alert("เกิดข้อผิดพลาด");
@@ -31,14 +32,14 @@ const changeOption = (option: OptionResponse) => {
 
 const handleAddCart = async () => {
   if (!authStore.isAuth) {
-    router.push(`/login?redirect=${router.currentRoute.value.fullPath}`);
+    router.push(`/login?redirect=${route.fullPath}`);
     return;
   }
 
-  if (!productDatil.value || !currentOption.value) return;
+  if (!product.value || !currentOption.value) return;
 
   const res = await addCart({
-    productId: productDatil.value?.id,
+    productId: product.value.id,
     optionId: currentOption.value?.id,
     quantity: quantity.value,
   });
@@ -59,10 +60,41 @@ const handleAddCart = async () => {
   }
 };
 
-await loadData();
+const handleCreateOrder = async () => {
+  if (!product.value || !currentOption.value) return;
+
+  try {
+    const res = await createOrder([
+      {
+        productId: product.value.id,
+        optionId: currentOption.value.id,
+        quantity: quantity.value,
+      },
+    ]);
+    if (res.status === 200) {
+      router.push(`/payment/${res.data.orderId}`);
+    } else {
+      window.alert("เกิดข้อผิดพลาด");
+    }
+  } catch (error: any) {
+    if (error.response.status) {
+      if (error.response.data.error === "address.invalid") {
+        router.push("/address");
+      } else {
+        window.alert(error.response.data.error);
+      }
+    } else {
+      window.alert("เกิดข้อผิดพลาด");
+    }
+  }
+};
+
+onMounted(async () => {
+  await loadData();
+});
 </script>
 <template>
-  <div class="flex justify-center mt-10" v-if="productDatil && currentOption">
+  <div class="flex justify-center mt-10" v-if="product && currentOption">
     <div
       class="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 pb-4"
     >
@@ -75,10 +107,10 @@ await loadData();
         <h5
           class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white"
         >
-          {{ productDatil?.name }}
+          {{ product?.name }}
         </h5>
         <div class="flex items-center gap-2 mt-2">
-          <template v-for="option in productDatil?.options" :key="option.id">
+          <template v-for="option in product?.options" :key="option.id">
             <button
               :class="`${
                 option.id === currentOption?.id
@@ -153,19 +185,22 @@ await loadData();
           >
             สินค้าหมด
           </span>
-          <UButton
-            color="blue"
-            @click="handleAddCart"
-            v-else-if="currentOption.quantity > 0"
-          >
-            เพิ่มลงตะกร้า
-          </UButton>
+          <template v-else-if="currentOption.quantity > 0">
+            <div class="flex gap-2">
+              <UButton color="blue" @click="handleAddCart">
+                เพิ่มลงตะกร้า
+              </UButton>
+              <UButton color="pink" @click="handleCreateOrder">
+                ซื้อสินค้า
+              </UButton>
+            </div>
+          </template>
         </div>
       </div>
       <UDivider label="รายละเอียด" color="gray" />
       <div class="flex justify-around mt-4 mb-2 mx-2">
-        <span>จำนวนผู้เข้าชม: {{ productDatil.views }}</span>
-        <span>จำนวนการสั่ง: {{ productDatil.orders }}</span>
+        <span>จำนวนผู้เข้าชม: {{ product.views }}</span>
+        <span>จำนวนการสั่ง: {{ product.orders }}</span>
       </div>
       <UDivider label="แชร์สินค้านี้" color="gray" />
       <div class="flex justify-center flex-row gap-10 mt-4">
