@@ -2,6 +2,8 @@
 import type { OrderResponse } from "~/types";
 import { getAllOrder } from "~/api/order";
 
+const loading = useLoading();
+
 const orders = ref<OrderResponse[]>([]);
 
 const items = [
@@ -43,6 +45,7 @@ const onChange = async (index: number) => {
 };
 
 const loadData = async () => {
+  loading.value = true;
   const res = await getAllOrder({
     status: currentStatus.value,
   });
@@ -52,6 +55,7 @@ const loadData = async () => {
   } else {
     window.alert("Error");
   }
+  loading.value = false;
 };
 
 onMounted(async () => {

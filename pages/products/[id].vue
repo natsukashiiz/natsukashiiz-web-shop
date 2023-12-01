@@ -61,6 +61,11 @@ const handleAddCart = async () => {
 };
 
 const handleCreateOrder = async () => {
+  if (!authStore.isAuth) {
+    router.push(`/login?redirect=${route.fullPath}`);
+    return;
+  }
+
   if (!product.value || !currentOption.value) return;
 
   try {
@@ -110,17 +115,14 @@ onMounted(async () => {
           {{ product?.name }}
         </h5>
         <div class="flex items-center gap-2 mt-2">
-          <template v-for="option in product?.options" :key="option.id">
-            <button
-              :class="`${
-                option.id === currentOption?.id
-                  ? 'text-white bg-rose-400 px-2'
-                  : 'text-black'
-              } font-medium rounded-lg text-sm text-center`"
+          <template v-for="option in product.options" :key="option.id">
+            <UButton
+              :color="option.id === currentOption.id ? 'primary' : 'white'"
+              size="xs"
               @click="changeOption(option)"
             >
               {{ option.name }}
-            </button>
+            </UButton>
           </template>
         </div>
         <div class="flex items-center justify-between py-2">
@@ -187,10 +189,10 @@ onMounted(async () => {
           </span>
           <template v-else-if="currentOption.quantity > 0">
             <div class="flex gap-2">
-              <UButton color="blue" @click="handleAddCart">
+              <UButton color="white" @click="handleAddCart">
                 เพิ่มลงตะกร้า
               </UButton>
-              <UButton color="pink" @click="handleCreateOrder">
+              <UButton color="blue" @click="handleCreateOrder">
                 ซื้อสินค้า
               </UButton>
             </div>

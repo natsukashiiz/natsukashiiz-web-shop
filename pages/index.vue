@@ -2,7 +2,7 @@
 import type { ProductResponse } from "~/types";
 import { getPageProduct } from "~/api/product";
 
-const loading = ref(false);
+const loading = useLoading();
 
 const products = ref<ProductResponse[]>([]);
 const pagination = reactive({
@@ -30,13 +30,13 @@ const loadData = async () => {
 const scroll = () => {
   window.onscroll = async () => {
     let bottomOfWindow =
-      Math.max(
-        window.scrollY,
-        document.documentElement.scrollTop,
-        document.body.scrollTop
-      ) +
-        window.innerHeight ===
-      document.documentElement.offsetHeight;
+      Math.floor(
+        Math.max(
+          window.scrollY,
+          document.documentElement.scrollTop,
+          document.body.scrollTop
+        ) + window.innerHeight
+      ) === document.documentElement.offsetHeight;
 
     if (bottomOfWindow) {
       if (products.value.length < pagination.total) {
@@ -54,7 +54,6 @@ onMounted(async () => {
 </script>
 <template>
   <UContainer class="flex flex-col gap-y-2 p-5">
-    <NuxtLoadingBar :loading="loading" />
     <div
       class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 grid-rows-2 gap-3"
     >

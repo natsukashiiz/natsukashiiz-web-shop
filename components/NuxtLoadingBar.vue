@@ -104,7 +104,20 @@ nuxtApp.hook("page:finish", finish);
 
 onBeforeUnmount(() => clear);
 
-start();
+// start();
+
+const loading = useLoading();
+
+watch(
+  () => loading.value,
+  (newVal) => {
+    if (newVal) {
+      start();
+    } else {
+      finish();
+    }
+  }
+);
 </script>
 
 <template>

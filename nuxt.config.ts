@@ -38,12 +38,16 @@ export default defineNuxtConfig({
   app: {
     baseURL: process.env.WEB_BASE_URL || "/",
   },
-  ui: {
-    primary: "rose",
-    notifications: {
-      // Show toasts at the top right of the screen
-      position: "top-0 bottom-auto",
-    },
+  routeRules: {
+    "/": { prerender: true },
+    "/orders/**": { ssr: false },
+    "/payment/**": { ssr: false },
+    "/address/**": { ssr: false },
+    "/cart/**": { ssr: false },
+    "/profile/**": { ssr: false },
+  },
+  colorMode: {
+    preference: "light",
   },
   googleSignIn: {
     clientId:

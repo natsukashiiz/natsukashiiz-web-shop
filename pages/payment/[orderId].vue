@@ -14,12 +14,12 @@ useHead({
   ],
 });
 
-const paymentMethod = ref<
-  {
-    name: string;
-    type: string;
-  }[]
->([
+interface PaymentMethod {
+  name: string;
+  type: string;
+}
+
+const paymentMethod = ref<PaymentMethod[]>([
   {
     name: "Alipay",
     type: "alipay",
@@ -43,7 +43,7 @@ const router = useRouter();
 const toast = useToast();
 const order = ref<OrderResponse>();
 const address = ref<AddressResponse>();
-const currentPaymentMethod = ref<string>(paymentMethod.value[0].type);
+const currentPaymentMethod = ref<PaymentMethod>(paymentMethod.value[0]);
 const modalCancel = ref<boolean>(false);
 const modalPayImage = ref<boolean>(false);
 const modalPhoneNumber = ref<boolean>(false);
@@ -88,7 +88,7 @@ const invalidPhoneNumber = computed(() => {
 const handelPay = async () => {
   if (!order.value) return;
 
-  if (currentPaymentMethod.value === "truemoney" && !phoneNumber.value) {
+  if (currentPaymentMethod.value.type === "truemoney" && !phoneNumber.value) {
     modalPhoneNumber.value = true;
     return;
   }
@@ -124,7 +124,7 @@ const createSource = (amount: number): Promise<{ id: string }> => {
   Omise.setPublicKey("pkey_test_5un4a0mz82obwpz257q");
   return new Promise((resolve, reject) => {
     Omise.createSource(
-      currentPaymentMethod.value,
+      currentPaymentMethod.value.type,
       {
         amount: amount * 100,
         currency: "THB",
@@ -191,7 +191,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <div>
+  <div v-if="order && address">
     <NuxtLoadingBar :loading="loading" />
     <AModal
       :modal="modalPayImage"
@@ -233,7 +233,7 @@ onMounted(async () => {
     ></div>
     <div class="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
       <div class="px-4 pt-8">
-        <p class="text-xl font-medium">ออเดอร์ : {{ order?.orderId }}</p>
+        <p class="text-xl font-medium">ออเดอร์ : {{ order.orderId }}</p>
         <p class="text-lg font-medium">
           กรุณาชำระเงินภายในเวลา :
           <span class="text-red-500 font-bold">{{ payExpireTimeOut }}</span>
@@ -245,7 +245,7 @@ onMounted(async () => {
         >
           <div
             class="flex flex-col rounded-lg bg-white sm:flex-row"
-            v-for="item in order?.items"
+            v-for="item in order.items"
             :key="item.optionId"
           >
             <img
@@ -300,8 +300,8 @@ onMounted(async () => {
           >
           <div class="flex space-x-2">
             <span class="text-gray-400">
-              {{ address?.firstName }} {{ address?.lastName }} |
-              {{ address?.mobile }} | {{ address?.address }}</span
+              {{ address.firstName }} {{ address.lastName }} |
+              {{ address.mobile }} | {{ address.address }}</span
             >
             <ULink
               to="/address"
@@ -315,14 +315,11 @@ onMounted(async () => {
           <label for="email" class="mt-4 mb-2 block text-sm font-medium"
             >วิธีชำระเงิน</label
           >
-          <select
-            class="w-full rounded-md border border-gray-200 px-4 py-3 text-sm shadow-sm outline-none focus:z-10 focus:border-blue-500 focus:ring-blue-500"
+          <USelectMenu
             v-model="currentPaymentMethod"
-          >
-            <template v-for="method in paymentMethod" :key="method.type">
-              <option :value="method.type">{{ method.name }}</option>
-            </template>
-          </select>
+            :options="paymentMethod"
+            option-attribute="name"
+          />
 
           <!-- Total -->
           <div class="mt-6 border-t border-b py-2">

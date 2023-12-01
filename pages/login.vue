@@ -23,7 +23,7 @@ const handleLoginError = () => {
 const route = useRoute();
 const authStore = useAuthStore();
 const toast = useToast();
-const loading = ref(false);
+const loading = useLoading();
 
 const form = reactive({
   email: "",

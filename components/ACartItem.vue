@@ -53,27 +53,27 @@ defineProps({
 
           <div class="sm:order-1">
             <div class="mx-auto flex h-8 items-stretch text-gray-600">
-              <button
-                class="flex items-center justify-center rounded-l-md bg-gray-200 px-4 transition hover:bg-black hover:text-white"
+              <UButton
+                label="-"
+                color="white"
+                class="rounded-r-none"
                 @click="
                   item.quantity > 1 ? $emit('update', --item.quantity) : null
                 "
                 :disabled="item.quantity <= 1"
-              >
-                -
-              </button>
-              <div
-                class="flex w-full items-center justify-center bg-gray-100 px-4 text-xs uppercase transition"
-              >
-                {{ item.quantity }}
-              </div>
-              <button
-                class="flex items-center justify-center rounded-r-md bg-gray-200 px-4 transition hover:bg-black hover:text-white"
+              />
+              <UInput
+                v-model="item.quantity"
+                disabled
+                :ui="{ rounded: 'rounded-none' }"
+              />
+              <UButton
+                label="+"
+                color="white"
+                class="rounded-l-none"
                 @click="$emit('update', ++item.quantity)"
                 :disabled="item.quantity >= item.maxQuantity"
-              >
-                +
-              </button>
+              />
             </div>
           </div>
         </div>

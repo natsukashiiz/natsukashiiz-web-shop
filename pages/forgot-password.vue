@@ -4,7 +4,7 @@ import type { FormError } from "@nuxt/ui/dist/runtime/types";
 import type { ForgotPasswordRequest } from "~/types";
 
 const toast = useToast();
-const loading = ref<boolean>(false);
+const loading = useLoading();
 
 const form = reactive<ForgotPasswordRequest>({
   email: "",
