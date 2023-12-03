@@ -247,7 +247,9 @@ onMounted(async () => {
       <template #header>
         <div class="flex justify-between items-center">
           <h1 class="text-2xl font-bold">ที่อยู่</h1>
-          <UButton color="primary" @click="modalForm = true"> เพิ่ม </UButton>
+          <UButton color="white" variant="solid" @click="modalForm = true">
+            เพิ่ม
+          </UButton>
         </div>
       </template>
 

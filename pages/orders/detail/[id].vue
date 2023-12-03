@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { OrderResponse } from "~/types";
-import { getOneOrder } from "~/api/order";
+import { cancelOrder, getOneOrder } from "~/api/order";
+import { OrderStatus } from "~/types/enum";
 
 const route = useRoute();
 
@@ -98,15 +99,37 @@ onMounted(async () => {
               </dd>
             </div>
             <div class="flex flex-col">
-              <span class="font-medium text-gray-900"
-                >ยอดที่ชำระ : <a-currency :amount="order.totalPay" /> บาท
-              </span>
-              <span class="font-medium text-gray-900" v-if="order.paidAt">
-                เวลาที่ชำระ : {{ order.paidAt }}
-              </span>
-              <span class="font-medium text-gray-900" v-if="order.payMethod">
-                วิธีการชำระ : {{ order.payMethod }}
-              </span>
+              <template v-if="order.status === OrderStatus.PENDING">
+                <span class="font-medium text-gray-900">
+                  ยอดที่ต้องชำระ : <a-currency :amount="order.totalPay" /> บาท
+                </span>
+                <UButton :to="`/payment/${order.orderId}`" block class="mt-2">
+                  ชำระเงิน
+                </UButton>
+                <UButton
+                  :to="`/payment/${order.orderId}`"
+                  block
+                  class="mt-2 bg-red-500 hover:bg-red-600"
+                >
+                  ยกเลิกออเดอร์
+                </UButton>
+              </template>
+              <template v-if="order.status === OrderStatus.PAID">
+                <span class="font-medium text-gray-900"
+                  >ยอดที่ชำระ : <a-currency :amount="order.totalPay" /> บาท
+                </span>
+                <span class="font-medium text-gray-900" v-if="order.paidAt">
+                  เวลาที่ชำระ : {{ order.paidAt }}
+                </span>
+                <span class="font-medium text-gray-900" v-if="order.payMethod">
+                  วิธีการชำระ : {{ order.payMethod }}
+                </span>
+              </template>
+              <template v-if="order.status === OrderStatus.SELF_CANCELED">
+                <span class="font-medium text-gray-900" v-if="order.cancelAt">
+                  เวลาที่ยกเลิก : {{ order.cancelAt }}
+                </span>
+              </template>
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CartResponse } from "~/types";
 
-defineProps({
+const props = defineProps({
   item: {
     type: Object as () => CartResponse,
     required: true,
@@ -15,13 +15,21 @@ defineProps({
     required: true,
   },
 });
+
+const disabled = computed(() => {
+  return props.maxQuantity < props.item.quantity;
+});
 </script>
 <template>
   <li
     class="flex flex-col space-y-3 py-6 text-left sm:flex-row sm:space-x-5 sm:space-y-0"
   >
     <div class="flex items-center">
-      <UCheckbox :model-value="selected" @change="$emit('selected', item)" />
+      <UCheckbox
+        :model-value="selected"
+        @change="$emit('selected', item)"
+        :disabled="disabled"
+      />
     </div>
     <div class="shrink-0">
       <img
@@ -39,6 +47,15 @@ defineProps({
           </p>
           <p class="mx-0 mt-1 mb-0 text-sm text-gray-400">
             {{ item.optionName }}
+          </p>
+          <p
+            class="mx-0 mt-1 mb-0 text-sm text-red-500"
+            v-if="maxQuantity === 0"
+          >
+            สินค้าหมด
+          </p>
+          <p class="mx-0 mt-1 mb-0 text-sm text-red-500" v-else-if="disabled">
+            สินค้าไม่เพียงพอ
           </p>
         </div>
 
@@ -60,7 +77,7 @@ defineProps({
                 @click="
                   item.quantity > 1 ? $emit('update', --item.quantity) : null
                 "
-                :disabled="item.quantity <= 1"
+                :disabled="item.quantity <= 1 || disabled"
               />
               <UInput
                 v-model="item.quantity"
@@ -72,7 +89,7 @@ defineProps({
                 color="white"
                 class="rounded-l-none"
                 @click="$emit('update', ++item.quantity)"
-                :disabled="item.quantity >= item.maxQuantity"
+                :disabled="item.quantity >= item.maxQuantity || disabled"
               />
             </div>
           </div>

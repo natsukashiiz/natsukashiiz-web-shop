@@ -191,8 +191,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <div v-if="order && address">
-    <NuxtLoadingBar :loading="loading" />
+  <template v-if="order && address">
     <AModal
       :modal="modalPayImage"
       title="ชำระเงิน"
@@ -342,7 +341,7 @@ onMounted(async () => {
           </div>
         </div>
         <div class="flex flex-col space-y-2 mt-4">
-          <UButton color="black" block @click="handelPay" :loading="loading">
+          <UButton block @click="handelPay" :loading="loading">
             ชำระเงิน
           </UButton>
           <UButton
@@ -356,5 +355,5 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-  </div>
+  </template>
 </template>

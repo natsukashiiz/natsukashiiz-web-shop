@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useAuthStore } from "~/stores/authStore";
+import type { NotificationResponse } from "~/types";
+import { OrderStatus } from "~/types/enum";
 
 const authStore = useAuthStore();
 const toast = useToast();
@@ -14,37 +16,34 @@ const subscribeServer = () => {
     "http://localhost:8080/v1/notifications/subscribe?Authorization=" +
       authStore.token
   );
-  event.addEventListener("EVENT", async function (event) {
-    const data = JSON.parse(event.data) as PAYLOAD;
+  event.addEventListener("ORDER", async function (event) {
+    const data = JSON.parse(event.data) as NotificationResponse;
 
-    if (data.type === "ORDER") {
-      toast.add({
-        id: "NOTIFY-ORDER",
-        title: "รายการสั่งซื้อมีการเปลี่ยนแปลง",
-        description: "รายการสั่งซื้อมีการเปลี่ยนแปลง",
-        click: () => {
-          router.push("/orders/history");
-          toast.remove("NOTIFY-ORDER");
+    toast.add({
+      id: data.type,
+      title: data.title,
+      description: data.content,
+      timeout: 2500,
+      click: () => {
+        router.push({
+          name: "orders-detail-id",
+          params: {
+            id: data.eventId,
+          },
+        });
+      },
+    });
+
+    if (route.name === "payment-orderId") {
+      router.push({
+        name: "orders-detail-id",
+        params: {
+          id: data.eventId,
         },
       });
     }
-
-    if (data.type === "PAYMENT") {
-      const orderId = (route.params as any).orderId;
-      if (orderId === data.orderId) {
-        router.push("/orders/detail/" + data.orderId);
-      }
-    }
   });
 };
-
-interface PAYLOAD {
-  type: string;
-  from?: number;
-  to?: number;
-  message?: string;
-  orderId?: number;
-}
 
 onBeforeMount(() => {
   subscribeServer();

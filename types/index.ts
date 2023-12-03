@@ -114,6 +114,7 @@ export interface ProductResponse {
   options: OptionResponse[];
   views: number;
   orders: number;
+  createdAt: string;
 }
 
 export interface OptionResponse {
@@ -163,4 +164,14 @@ export interface PayOrderResponse {
   orderId: string;
   type: "LINK" | "IMAGE";
   url: string;
+}
+
+export interface NotificationResponse {
+  id: number;
+  type: string;
+  eventId: string;
+  title: string;
+  content: string;
+  read: boolean;
+  createdAt: string;
 }

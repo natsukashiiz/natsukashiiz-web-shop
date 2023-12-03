@@ -26,7 +26,6 @@ export default defineNuxtConfig({
       },
     ],
   ],
-  plugins: ["~/plugins/scroll.ts"],
   runtimeConfig: {
     public: {
       apiUrl: process.env.API_BASE_URL,
