@@ -8,7 +8,7 @@ const route = useRoute();
 const products = ref<ProductResponse[]>([]);
 const pagination = reactive({
   page: 1,
-  limit: 8,
+  limit: 20,
   total: 0,
 });
 

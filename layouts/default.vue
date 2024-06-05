@@ -1,4 +1,7 @@
 <script setup lang="ts">
+const colorMode = useColorMode();
+colorMode.preference = "light";
+
 const { isMobile } = useDevice();
 const divClass = isMobile ? "pt-24 min-h-screen" : "pt-14 min-h-screen";
 </script>

@@ -111,6 +111,7 @@ export interface CartResponse {
 export interface ProductResponse {
   id: number;
   name: string;
+  thumbnail: string;
   options: OptionResponse[];
   views: number;
   orders: number;
@@ -153,6 +154,7 @@ export interface AddressResponse {
 export interface OrderItemResponse {
   productId: number;
   productName: string;
+  productThumbnail: string;
   optionId: number;
   optionName: string;
   price: number;
