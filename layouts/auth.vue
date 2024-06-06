@@ -13,8 +13,9 @@ const divClass = isMobile ? "pt-24 min-h-screen" : "pt-14 min-h-screen";
 
 const subscribeServer = () => {
   const event = new EventSource(
-    "http://localhost:8080/v1/notifications/subscribe?Authorization=" +
-      authStore.token
+    `${
+      import.meta.env.VITE_API_BASEURL
+    }/v1/notifications/subscribe?Authorization=${authStore.token}`
   );
   event.addEventListener("ORDER", async function (event) {
     const data = JSON.parse(event.data) as NotificationResponse;

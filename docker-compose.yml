@@ -1,0 +1,8 @@
+version: '3'
+services:
+  shop-app:
+    build: .
+    container_name: shop-app
+    restart: unless-stopped
+    ports:
+      - 811:3000
