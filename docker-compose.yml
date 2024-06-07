@@ -6,3 +6,9 @@ services:
     restart: unless-stopped
     ports:
       - 811:3000
+    networks:
+      - nginx-docker
+
+networks:
+  nginx-docker:
+    external: true
