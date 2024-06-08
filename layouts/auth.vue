@@ -26,7 +26,7 @@ const subscribeServer = () => {
       description: data.content,
       timeout: 2500,
       click: () => {
-        router.push({
+        router.replace({
           name: "orders-detail-id",
           params: {
             id: data.eventId,
@@ -36,12 +36,16 @@ const subscribeServer = () => {
     });
 
     if (route.name === "payment-orderId") {
-      router.push({
+      router.replace({
         name: "orders-detail-id",
         params: {
           id: data.eventId,
         },
       });
+    }
+
+    if (route.name === "orders-detail-id") {
+      router.go(0);
     }
   });
 };
