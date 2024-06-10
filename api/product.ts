@@ -3,11 +3,12 @@ import type {
   ProductResponse,
   Pagination,
   PageResponse,
+  QueryProductRequest,
 } from "~/types";
 import client from "~/api/request";
 
 const getAllProduct = (): ServerResponse<ProductResponse[]> =>
-  client.get("/v1/products");
+  client.get("/v1/products/all");
 
 const getPageProduct = (
   params: Pagination
@@ -17,4 +18,9 @@ const getPageProduct = (
 const getOneProduct = (id: number): ServerResponse<ProductResponse> =>
   client.get(`/v1/products/${id}`);
 
-export { getAllProduct, getPageProduct, getOneProduct };
+const getProduct = (
+  params: QueryProductRequest
+): ServerResponse<PageResponse<ProductResponse>> =>
+  client.get("/v1/products", { params });
+
+export { getAllProduct, getPageProduct, getOneProduct, getProduct };

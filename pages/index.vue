@@ -1,9 +1,16 @@
 <script setup lang="ts">
-import type { ProductResponse } from "~/types";
+import type {
+  ProductResponse,
+  CarouselResponse,
+  CategoryResponse,
+} from "~/types";
 import { getPageProduct } from "~/api/product";
+import { getAllCarousel } from "~/api/carousel";
+import { getAllCategory } from "~/api/category";
 
 const loading = useLoading();
 const route = useRoute();
+const router = useRouter();
 
 const products = ref<ProductResponse[]>([]);
 const pagination = reactive({
@@ -11,6 +18,9 @@ const pagination = reactive({
   limit: 20,
   total: 0,
 });
+const carousels = ref<CarouselResponse[]>([]);
+const carouselRef = ref();
+const categories = ref<CategoryResponse[]>([]);
 
 const loadData = async () => {
   loading.value = true;
@@ -28,6 +38,34 @@ const loadData = async () => {
     window.alert("เกิดข้อผิดพลาด");
   }
   loading.value = false;
+};
+
+const loadCarousel = async () => {
+  const res = await getAllCarousel();
+  if (res.status === 200 && res.data) {
+    carousels.value = res.data;
+  } else {
+    window.alert("เกิดข้อผิดพลาด");
+  }
+};
+
+const loadCategory = async () => {
+  const res = await getAllCategory();
+  if (res.status === 200 && res.data) {
+    categories.value = res.data;
+  } else {
+    window.alert("เกิดข้อผิดพลาด");
+  }
+};
+
+const changePage = async () => {
+  const currentPage = route.query.page ? Number(route.query.page) : 1;
+  if (currentPage !== pagination.page) {
+    await router.push({
+      query: { page: pagination.page },
+    });
+    await loadData();
+  }
 };
 
 const scroll = () => {
@@ -55,12 +93,56 @@ onMounted(async () => {
     pagination.page = Number(route.query.page);
   }
 
-  await loadData();
+  Promise.all([loadData(), loadCarousel(), loadCategory()]);
   //   scroll();
+
+  setInterval(() => {
+    if (!carouselRef.value) return;
+
+    if (carouselRef.value.page === carouselRef.value.pages) {
+      return carouselRef.value.select(0);
+    }
+
+    carouselRef.value.next();
+  }, 5000);
 });
 </script>
 <template>
   <UContainer class="flex flex-col gap-y-2 p-5">
+    <div class="max-w-3xl mx-auto mb-5">
+      <!-- carousel -->
+      <UCarousel
+        ref="carouselRef"
+        v-slot="{ item }"
+        :items="carousels"
+        :ui="{ item: 'basis-full' }"
+        class="rounded-lg overflow-hidden"
+        arrows
+      >
+        <img :src="item.imageUrl" class="w-full" draggable="false" />
+      </UCarousel>
+    </div>
+
+    <!-- search -->
+    <div class="w-80 mx-auto mb-5">
+      <a-product-search />
+    </div>
+
+    <!-- category -->
+    <div class="max-w-3xl mx-auto mb-5">
+      <div class="flex flex-wrap gap-2">
+        <template v-for="item in categories" :key="item.id">
+          <UButton
+            :to="`/products/search?categoryId=${item.id}`"
+            variant="outline"
+            color="gray"
+            class="rounded-full"
+            >{{ item.name }}</UButton
+          >
+        </template>
+      </div>
+    </div>
+
     <div
       class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 grid-rows-2 gap-3"
     >
@@ -74,12 +156,7 @@ onMounted(async () => {
         v-model="pagination.page"
         :page-count="pagination.limit"
         :total="pagination.total"
-        @click="
-          () => {
-            $router.push({ query: { page: pagination.page } });
-            loadData();
-          }
-        "
+        @click="changePage"
         :active-button="{ variant: 'outline' }"
         :inactive-button="{ color: 'gray' }"
       />

@@ -20,8 +20,8 @@ export interface PageResponse<T> {
 // request
 
 export interface Pagination {
-  page: number;
-  size: number;
+  page?: number;
+  size?: number;
 }
 
 export interface LoginRequest {
@@ -108,11 +108,19 @@ export interface CartResponse {
   product: ProductResponse;
 }
 
+export interface QueryProductRequest extends Pagination {
+  name?: string;
+  categoryId?: number;
+}
+
 export interface ProductResponse {
   id: number;
   name: string;
+  description: string;
   thumbnail: string;
   options: OptionResponse[];
+  images: string[];
+  category: CategoryResponse;
   views: number;
   orders: number;
   createdAt: string;
@@ -176,4 +184,14 @@ export interface NotificationResponse {
   content: string;
   read: boolean;
   createdAt: string;
+}
+
+export interface CarouselResponse {
+  title: string;
+  imageUrl: string;
+}
+
+export interface CategoryResponse {
+  id: number;
+  name: string;
 }

@@ -33,9 +33,9 @@ const form = reactive({
 const redirect = () => {
   const router = useRouter();
   if (route.query.redirect) {
-    router.push(route.query.redirect as string);
+    router.replace(route.query.redirect as string);
   } else {
-    router.push("/");
+    router.replace("/");
   }
 };
 
@@ -113,7 +113,7 @@ onMounted(() => {
         :state="form"
         :validate="validate"
         @submit="handleLogin"
-        class="space-y-4 w-96"
+        class="space-y-4"
       >
         <UFormGroup label="อีเมล" name="email">
           <UInput v-model="form.email" type="email" />

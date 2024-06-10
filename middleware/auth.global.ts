@@ -5,6 +5,8 @@ const allows = [
   "products-id",
   "reset-password",
   "forgot-password",
+  "categoies-id",
+  "products-search",
 ];
 
 export default defineNuxtRouteMiddleware((to, from) => {
