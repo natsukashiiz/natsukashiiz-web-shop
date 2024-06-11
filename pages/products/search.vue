@@ -11,14 +11,15 @@ const pagination = reactive({
   limit: 20,
   total: 0,
 });
-const categoryId = ref<number | undefined>(undefined);
+const categoryName = ref<string | undefined>(undefined);
 const productName = ref<string | undefined>(undefined);
 
 const loadData = async () => {
   loading.value = true;
   const res = await getProduct({
     name: productName.value,
-    categoryId: categoryId.value,
+    description: productName.value,
+    "category.name": categoryName.value,
     page: pagination.page,
     size: pagination.limit,
   });
@@ -39,22 +40,24 @@ onMounted(async () => {
     pagination.page = Number(route.query.page);
   }
 
-  if (route.query.categoryId) {
-    categoryId.value = Number(route.query.categoryId);
+  if (route.query.categoryName) {
+    categoryName.value = (route.query as any).categoryName;
   }
 
-  productName.value = (route.query as any).name;
+  if (route.query.name) {
+    productName.value = (route.query as any).name;
+  }
 
   await loadData();
 });
 </script>
 <template>
   <UContainer class="flex flex-col gap-y-2 p-5">
-    <span v-if="productName" class="text-2xl">
-      Product Name: {{ productName }}
-    </span>
-    <span v-if="categoryId" class="text-2xl">
-      Category ID: {{ categoryId }}
+    <span v-if="productName" class="text-2xl"> Search: {{ productName }} </span>
+    <span v-if="categoryName" class="text-2xl">
+      <UBadge color="white" variant="solid" size="lg">
+        Category: {{ categoryName }}
+      </UBadge>
     </span>
 
     <template v-if="!loading">

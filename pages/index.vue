@@ -133,7 +133,7 @@ onMounted(async () => {
       <div class="flex flex-wrap gap-2">
         <template v-for="item in categories" :key="item.id">
           <UButton
-            :to="`/products/search?categoryId=${item.id}`"
+            :to="`/products/search?categoryName=${item.name}`"
             variant="outline"
             color="gray"
             class="rounded-full"

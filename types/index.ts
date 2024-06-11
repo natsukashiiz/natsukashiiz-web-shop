@@ -110,7 +110,9 @@ export interface CartResponse {
 
 export interface QueryProductRequest extends Pagination {
   name?: string;
-  categoryId?: number;
+  description?: string;
+  "category.id"?: number;
+  "category.name"?: string;
 }
 
 export interface ProductResponse {
@@ -189,6 +191,11 @@ export interface NotificationResponse {
 export interface CarouselResponse {
   title: string;
   imageUrl: string;
+}
+
+export interface QueryCategoryRequest {
+  id?: number;
+  name?: string;
 }
 
 export interface CategoryResponse {
