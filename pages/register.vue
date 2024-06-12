@@ -33,22 +33,32 @@ const handleRegister = async () => {
 
   loading.value = true;
 
-  const res = await singup({
-    email: form.email,
-    password: form.password,
-  });
-
-  if (res.status === 200 && res.data) {
-    toast.add({
-      title: "สำเร็จ",
-      description: "สมัครสมาชิกสำเร็จ",
-      timeout: 3000,
+  try {
+    const res = await singup({
+      email: form.email,
+      password: form.password,
     });
 
-    authStore.setToken(res.data.token);
-    router.push({ name: "verification" });
-  } else {
-    window.alert("มีบางอย่างผิดพลาด");
+    if (res.status === 200 && res.data) {
+      toast.add({
+        title: "สำเร็จ",
+        description: "สมัครสมาชิกสำเร็จ",
+        timeout: 3000,
+      });
+
+      authStore.setToken(res.data.token);
+      router.push({ name: "verification" });
+    } else {
+      window.alert("มีบางอย่างผิดพลาด");
+    }
+  } catch (error: any) {
+    console.error(error);
+    if (error.response.data.error === "signUp.email.duplicate") {
+      toast.add({
+        title: "อีเมลนี้เคยลงทะเบียนแล้ว",
+        timeout: 3000,
+      });
+    }
   }
 
   loading.value = false;
@@ -78,7 +88,7 @@ onMounted(() => {
 </script>
 <template>
   <UContainer class="flex justify-center">
-    <UCard class="mt-24">
+    <UCard class="mt-24 md:w-96 sm:w-11/12">
       <template #header>
         <h1
           class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl"
@@ -91,7 +101,7 @@ onMounted(() => {
         :state="form"
         :validate="validate"
         @submit="handleRegister"
-        class="space-y-4 w-96"
+        class="space-y-4"
       >
         <UFormGroup label="อีเมล" name="email">
           <UInput v-model="form.email" type="email" />

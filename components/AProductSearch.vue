@@ -13,7 +13,7 @@ const search = () => {
   <UInput
     v-model="keyword"
     name="keyword"
-    placeholder="Search..."
+    placeholder="ค้นหาสินค้าที่คุณต้องการ..."
     icon="i-heroicons-magnifying-glass-20-solid"
     autocomplete="off"
     :ui="{ icon: { trailing: { pointer: '' } } }"

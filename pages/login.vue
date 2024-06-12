@@ -100,7 +100,7 @@ onMounted(() => {
 </script>
 <template>
   <UContainer class="flex justify-center">
-    <UCard class="mt-24">
+    <UCard class="mt-24 md:w-96 sm:w-11/12">
       <template #header>
         <h1
           class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl"
@@ -143,11 +143,11 @@ onMounted(() => {
         </div>
 
         <UDivider label="หรือ" color="gray" />
-        <div class="py-2">
+        <div class="flex justify-center">
           <GoogleSignInButton
             @success="handleLoginSuccess"
             @error="handleLoginError"
-            width="385"
+            width="100%"
             size="medium"
             text="signin_with"
             logo-alignment="center"

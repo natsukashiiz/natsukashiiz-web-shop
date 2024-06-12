@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import icon from "~/assets/img/shop-icon.png";
+
 const menus = [
   {
     label: "หน้าหลัก",
@@ -8,30 +10,38 @@ const menus = [
 
 const { isMobile } = useDevice();
 const navClass = isMobile
-  ? "flex-1 justify-between items-center bg-slate-50 bg-opacity-60 py-2 px-2 h-26 border-b-[1.5px] border-slate-200"
-  : "flex justify-between items-center bg-slate-50 bg-opacity-60 py-2 px-5 h-16 border-b-[1.5px] border-slate-200";
+  ? "flex flex-col space-y-2 justify-between items-center bg-slate-50 bg-opacity-60 py-2 px-2 h-26 border-b-[1.5px] border-slate-200"
+  : "flex justify-around items-center bg-slate-50 bg-opacity-60 py-2 px-5 h-16 border-b-[1.5px] border-slate-200";
 </script>
 <template>
   <div class="fixed z-[9999] w-full backdrop-blur-sm">
     <nav :class="navClass">
       <div class="flex items-center space-x-4">
-        <ULink to="/" class="font-bold tracking-widest sm:text-sm lg:text-3xl">
-          ร้านค้า
+        <ULink to="/">
+          <img :src="icon" class="w-8 h-8" />
         </ULink>
-      </div>
-      <div class="flex items-center space-x-4">
         <template v-for="menu in menus" :key="menu.to">
           <ULink
             :to="menu.to"
-            active-class="font-bold border-b-2 border-white"
+            active-class="font-bold"
             inactive-class="hover:text-gray-700"
           >
             {{ menu.label }}
           </ULink>
         </template>
-        <UButton color="white" variant="solid" to="/login">
-          เข้าสู่ระบบ
-        </UButton>
+      </div>
+      <div class="flex items-center space-x-4">
+        <a-product-search class="md:w-96 sm:w-11/12" />
+      </div>
+      <div class="flex flex-row gap-2">
+        <UChip :show="false" size="2xl">
+          <UButton icon="i-heroicons-shopping-cart" color="gray" />
+        </UChip>
+        <div class="flex items-center space-x-4">
+          <UButton color="white" variant="solid" to="/login">
+            เข้าสู่ระบบ
+          </UButton>
+        </div>
       </div>
     </nav>
   </div>

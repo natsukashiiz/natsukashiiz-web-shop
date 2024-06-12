@@ -9,4 +9,6 @@ const addCart = (body: CartRequest): ServerResponse<CartResponse> =>
 const deleteCart = (id: number): ServerResponse<CartResponse> =>
   client.delete(`/v1/cart/${id}`);
 
-export { getAllCart, addCart, deleteCart };
+const getCountCart = (): ServerResponse<number> => client.get("/v1/cart/count");
+
+export { getAllCart, addCart, deleteCart, getCountCart };

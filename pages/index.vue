@@ -1,4 +1,9 @@
 <script setup lang="ts">
+definePageMeta({
+  key: (route) => route.fullPath,
+  keepalive: true,
+});
+
 import type {
   ProductResponse,
   CarouselResponse,
@@ -122,27 +127,31 @@ onMounted(async () => {
         <img :src="item.imageUrl" class="w-full" draggable="false" />
       </UCarousel>
     </div>
-
-    <!-- search -->
-    <div class="w-80 mx-auto mb-5">
-      <a-product-search />
-    </div>
-
     <!-- category -->
     <div class="max-w-3xl mx-auto mb-5">
+      <UDivider label="หมวดหมู่" class="pb-4" />
+
       <div class="flex flex-wrap gap-2">
         <template v-for="item in categories" :key="item.id">
           <UButton
-            :to="`/products/search?categoryName=${item.name}`"
+            :label="item.name"
+            :to="{
+              name: 'products-search',
+              query: {
+                categoryName: item.name,
+              },
+            }"
             variant="outline"
             color="gray"
             class="rounded-full"
-            >{{ item.name }}</UButton
+            size="sm"
           >
+            <template #leading> <UAvatar :src="item.thumbnail" /> </template
+          ></UButton>
         </template>
       </div>
     </div>
-
+    <UDivider label="สินค้าแนะนำ" class="mb-4" />
     <div
       class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 grid-rows-2 gap-3"
     >

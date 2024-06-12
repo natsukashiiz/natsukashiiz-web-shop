@@ -19,6 +19,8 @@ const isNew = computed(() => {
 });
 </script>
 <template>
-  <UBadge color="red" variant="subtle" v-if="orders >= 5"> สินค้าขายดี </UBadge>
+  <UBadge color="red" variant="subtle" v-if="orders >= 300">
+    สินค้าขายดี
+  </UBadge>
   <UBadge color="blue" variant="subtle" v-else-if="isNew">ใหม่</UBadge>
 </template>

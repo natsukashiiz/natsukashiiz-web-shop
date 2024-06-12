@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { getCountCart } from "~/api/cart";
 import { useAuthStore } from "~/stores/authStore";
 import type { NotificationResponse } from "~/types";
 import { OrderStatus } from "~/types/enum";
 
 const authStore = useAuthStore();
+const cartStore = useCartStore();
+
 const toast = useToast();
 const router = useRouter();
 const route = useRoute();
@@ -50,13 +53,26 @@ const subscribeServer = () => {
   });
 };
 
-onBeforeMount(() => {
+const fetchCountCart = async () => {
+  try {
+    const res = await getCountCart();
+    if (res.status === 200) {
+      cartStore.setCount(res.data);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+onBeforeMount(async () => {
+  await fetchCountCart();
+
   subscribeServer();
 });
 </script>
 <template>
   <NuxtLoadingBar />
-  <a-top-bar-auth />
+  <a-top-bar-auth :countCart="cartStore.count" />
   <div :class="divClass">
     <slot />
   </div>

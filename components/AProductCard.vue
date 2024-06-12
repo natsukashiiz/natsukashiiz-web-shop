@@ -7,23 +7,27 @@ defineProps<{
 </script>
 <template>
   <UCard class="relative">
-    <div class="absolute top-4 right-2">
+    <div class="absolute top-2 right-2">
       <AProductBadge :orders="product.orders" :created-at="product.createdAt" />
     </div>
-    <img
-      class="p-2 rounded-t-lg w-full h-52 object-cover"
-      :src="product.thumbnail"
-      alt="product image"
-    />
+    <a-product-image :src="product.thumbnail" />
     <template #footer>
-      <h5 class="text-xl font-semibold tracking-tight text-gray-900">
+      <h5
+        class="text-xl font-semibold tracking-tight text-gray-900 text-pretty"
+      >
         {{ product.name }}
       </h5>
       <div class="flex items-center justify-between mt-2">
         <span class="text-xl font-bold text-gray-600">
           ฿<ACurrency :amount="product.options[0].price" />
         </span>
-        <UButton color="white" :to="`/products/${product.id}`">
+        <UButton
+          color="white"
+          :to="{
+            name: 'products-id',
+            params: { id: product.id },
+          }"
+        >
           รายละเอียด
         </UButton>
       </div>

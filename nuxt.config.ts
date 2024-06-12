@@ -13,6 +13,7 @@ export default defineNuxtConfig({
     "nuxt-typed-router",
     "@stefanobartoletti/nuxt-social-share",
     "@nuxtjs/turnstile",
+    "@nuxt/image",
     [
       "@nuxtjs/google-fonts",
       {

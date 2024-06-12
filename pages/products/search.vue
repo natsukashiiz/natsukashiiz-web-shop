@@ -53,10 +53,10 @@ onMounted(async () => {
 </script>
 <template>
   <UContainer class="flex flex-col gap-y-2 p-5">
-    <span v-if="productName" class="text-2xl"> Search: {{ productName }} </span>
+    <span v-if="productName" class="text-2xl"> ค้นหา: {{ productName }} </span>
     <span v-if="categoryName" class="text-2xl">
       <UBadge color="white" variant="solid" size="lg">
-        Category: {{ categoryName }}
+        หมวดหมู่: {{ categoryName }}
       </UBadge>
     </span>
 

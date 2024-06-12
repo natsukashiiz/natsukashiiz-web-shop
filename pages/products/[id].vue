@@ -2,10 +2,12 @@
 import type { OptionResponse, ProductResponse } from "~/types";
 import { getOneProduct } from "~/api/product";
 import { useAuthStore } from "~/stores/authStore";
-import { addCart } from "~/api/cart";
+import { addCart, getCountCart } from "~/api/cart";
 import { createOrder } from "~/api/order";
 
 const authStore = useAuthStore();
+const cartStore = useCartStore();
+
 const route = useRoute();
 const router = useRouter();
 const toast = useToast();
@@ -55,6 +57,7 @@ const handleAddCart = async () => {
         toast.remove("add-cart");
       },
     });
+    await fetchCountCart();
   } else {
     window.alert("เกิดข้อผิดพลาด");
   }
@@ -94,6 +97,17 @@ const handleCreateOrder = async () => {
   }
 };
 
+const fetchCountCart = async () => {
+  try {
+    const res = await getCountCart();
+    if (res.status === 200) {
+      cartStore.setCount(res.data);
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 onMounted(async () => {
   await loadData();
 });
@@ -124,7 +138,7 @@ onMounted(async () => {
           arrows
           class="w-64 mx-auto"
         >
-          <img :src="item" class="w-full" draggable="false" />
+          <a-product-image :src="item" />
         </UCarousel>
         <div class="px-5 pb-5">
           <h5 class="text-xl font-semibold tracking-tight text-gray-900">
@@ -221,7 +235,9 @@ onMounted(async () => {
       </div>
       <UDivider label="รายละเอียด" color="gray" />
       <div class="px-5 py-2">
-        <p class="text-sm text-gray-700">{{ product.description }}</p>
+        <p class="text-sm text-gray-700 text-pretty">
+          {{ product.description }}
+        </p>
       </div>
       <UDivider label="แชร์สินค้านี้" color="gray" />
       <div class="flex justify-center flex-row gap-10 mt-4">

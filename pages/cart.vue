@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { CartResponse } from "~/types";
-import { getAllCart, deleteCart, addCart } from "~/api/cart";
+import { getAllCart, deleteCart, addCart, getCountCart } from "~/api/cart";
 import { createOrder } from "~/api/order";
 
+const cartStore = useCartStore();
 const router = useRouter();
 
 const cart = ref<CartResponse[]>([]);
@@ -15,6 +16,17 @@ const loadData = async () => {
     if (count.value === 1) selected.value = cart.value;
   } else {
     window.alert("เกิดข้อผิดพลาด");
+  }
+};
+
+const fetchCountCart = async () => {
+  try {
+    const res = await getCountCart();
+    if (res.status === 200) {
+      cartStore.setCount(res.data);
+    }
+  } catch (error) {
+    console.error(error);
   }
 };
 
@@ -31,6 +43,7 @@ const handleUpdateCart = async (
     });
 
     if (res.status === 200 && res.data) {
+      await fetchCountCart();
     } else {
       await loadData();
       window.alert("เกิดข้อผิดพลาด");
@@ -51,6 +64,7 @@ const removeItem = async (id: number) => {
   const res = await deleteCart(id);
   if (res.status === 200) {
     await loadData();
+    await fetchCountCart();
   } else {
     window.alert("เกิดข้อผิดพลาด");
   }
