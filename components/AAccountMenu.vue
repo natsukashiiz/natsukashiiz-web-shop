@@ -66,7 +66,7 @@ const handleLogout = () => {
     <template #account="{ item }">
       <div class="text-left">
         <p>เข้าสู่ระบบโดย</p>
-        <p class="truncate font-medium text-gray-900 dark:text-white">
+        <p class="font-medium text-gray-900 text-wrap">
           {{ item.label }}
         </p>
       </div>

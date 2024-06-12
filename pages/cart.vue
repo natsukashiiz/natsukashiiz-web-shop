@@ -5,9 +5,12 @@ import { createOrder } from "~/api/order";
 
 const cartStore = useCartStore();
 const router = useRouter();
+const toast = useToast();
 
 const cart = ref<CartResponse[]>([]);
 const selected = ref<CartResponse[]>([]);
+
+const maxAmount = 150000;
 
 const loadData = async () => {
   const res = await getAllCart();
@@ -77,6 +80,17 @@ const totalPrice = computed(() => {
 });
 
 const handleCreateOrder = async () => {
+  // verify amount max
+  if (totalPrice.value > maxAmount) {
+    toast.clear();
+    toast.add({
+      title: "เกิดข้อผิดพลาด",
+      description: `ยอดรวมต้องไม่เกิน ฿150,000`,
+      timeout: 3000,
+    });
+    return;
+  }
+
   try {
     const data = selected.value.map((item) => {
       return {

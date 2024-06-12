@@ -129,9 +129,14 @@ onMounted(async () => {
     </div>
     <!-- category -->
     <div class="max-w-3xl mx-auto mb-5">
-      <UDivider label="หมวดหมู่" class="pb-4" />
+      <UDivider
+        label="หมวดหมู่"
+        class="pb-4"
+        size="xs"
+        :ui="{ label: 'text-xl' }"
+      />
 
-      <div class="flex flex-wrap gap-2">
+      <div class="flex flex-wrap gap-2 justify-center">
         <template v-for="item in categories" :key="item.id">
           <UButton
             :label="item.name"
@@ -151,7 +156,12 @@ onMounted(async () => {
         </template>
       </div>
     </div>
-    <UDivider label="สินค้าแนะนำ" class="mb-4" />
+    <UDivider
+      label="สินค้าแนะนำ"
+      class="mb-4"
+      size="xs"
+      :ui="{ label: 'text-xl' }"
+    />
     <div
       class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 grid-rows-2 gap-3"
     >

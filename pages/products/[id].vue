@@ -202,6 +202,7 @@ onMounted(async () => {
                   />
                 </svg>
               </button>
+              / {{ currentOption.quantity }} ชิ้น
             </div>
           </div>
           <div class="flex items-center justify-between">

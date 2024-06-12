@@ -35,10 +35,16 @@ const navClass = isMobile
       </div>
       <div class="flex flex-row gap-2">
         <UChip :show="false" size="2xl">
-          <UButton icon="i-heroicons-shopping-cart" color="gray" />
+          <UButton
+            icon="i-heroicons-shopping-cart"
+            color="gray"
+            :to="{
+              name: 'login',
+            }"
+          />
         </UChip>
         <div class="flex items-center space-x-4">
-          <UButton color="white" variant="solid" to="/login">
+          <UButton color="white" variant="solid" :to="{ name: 'login' }">
             เข้าสู่ระบบ
           </UButton>
         </div>
