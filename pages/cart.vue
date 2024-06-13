@@ -149,8 +149,9 @@ const isSelect = (item: CartResponse) => {
   return selected.value.findIndex((i) => i.id === item.id) !== -1;
 };
 
-onMounted(async () => {
-  await loadData();
+onActivated(() => {
+  selected.value = [];
+  loadData();
 });
 </script>
 <template>

@@ -17,8 +17,8 @@ const loadData = async () => {
   }
 };
 
-onMounted(async () => {
-  await loadData();
+onActivated(() => {
+  loadData();
 });
 </script>
 

@@ -74,7 +74,7 @@ onBeforeMount(async () => {
   <NuxtLoadingBar />
   <a-top-bar-auth :countCart="cartStore.count" />
   <div :class="divClass">
-    <slot />
+    <NuxtPage keepalive />
   </div>
   <UNotifications />
 </template>

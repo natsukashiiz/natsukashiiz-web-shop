@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ProductResponse } from "~/types";
 import { getProduct } from "~/api/product";
+import type { LocationQuery } from "vue-router";
 
 const loading = useLoading();
 const route = useRoute();
@@ -16,39 +17,51 @@ const productName = ref<string | undefined>(undefined);
 
 const loadData = async () => {
   loading.value = true;
-  const res = await getProduct({
-    name: productName.value,
-    description: productName.value,
-    "category.name": categoryName.value,
-    page: pagination.page,
-    size: pagination.limit,
-  });
+  try {
+    const res = await getProduct({
+      name: productName.value,
+      description: productName.value,
+      "category.name": categoryName.value,
+      page: pagination.page,
+      size: pagination.limit,
+    });
 
-  if (res.status === 200 && res.data) {
-    // products.value.push(...res.data.list);
-    products.value = res.data.list;
-    pagination.total = res.data.total;
-    // window.scrollTo(0, 0);
-  } else {
+    if (res.status === 200 && res.data) {
+      // products.value.push(...res.data.list);
+      products.value = res.data.list;
+      pagination.total = res.data.total;
+      // window.scrollTo(0, 0);
+    } else {
+      window.alert("เกิดข้อผิดพลาด");
+    }
+  } catch (error) {
+    console.error(error);
     window.alert("เกิดข้อผิดพลาด");
   }
   loading.value = false;
 };
 
-onMounted(async () => {
-  if (route.query.page) {
-    pagination.page = Number(route.query.page);
+const loadDataFromQuery = (query: LocationQuery) => {
+  if (query.name) {
+    productName.value = query.name as string;
   }
-
-  if (route.query.categoryName) {
-    categoryName.value = (route.query as any).categoryName;
+  if (query.category) {
+    categoryName.value = query.category as string;
   }
-
-  if (route.query.name) {
-    productName.value = (route.query as any).name;
+  if (query.page) {
+    pagination.page = parseInt(query.page as string);
   }
+};
 
-  await loadData();
+onActivated(() => {
+  loadDataFromQuery(route.query);
+  loadData();
+});
+
+onBeforeRouteUpdate((to, from, next) => {
+  loadDataFromQuery(to.query);
+  loadData();
+  next();
 });
 </script>
 <template>

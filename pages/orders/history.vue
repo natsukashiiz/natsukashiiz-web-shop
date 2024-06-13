@@ -58,8 +58,8 @@ const loadData = async () => {
   loading.value = false;
 };
 
-onMounted(async () => {
-  await loadData();
+onActivated(() => {
+  loadData();
 });
 </script>
 <template>

@@ -142,6 +142,7 @@ const createSource = (amount: number): Promise<{ id: string }> => {
 
 const handleCancel = async () => {
   if (!order.value) return;
+  modalCancel.value = false;
   loading.value = true;
   try {
     const res = await cancelOrder(order.value.orderId);
@@ -174,7 +175,7 @@ const timeOut = () => {
   payExpireTimeOut.value = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
 };
 
-onMounted(async () => {
+onActivated(async () => {
   await loadData();
   await loadAddress();
 

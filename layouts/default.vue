@@ -9,7 +9,7 @@ const divClass = isMobile ? "pt-24 min-h-screen" : "pt-14 min-h-screen";
   <NuxtLoadingBar />
   <a-top-bar />
   <div :class="divClass">
-    <slot />
+    <NuxtPage keepalive />
   </div>
   <UNotifications />
 </template>

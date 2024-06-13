@@ -30,19 +30,20 @@ const navClass = isMobile
           </ULink>
         </template>
       </div>
-      <div class="flex items-center space-x-4">
-        <a-product-search class="md:w-96 sm:w-11/12" />
-      </div>
+      <div class="flex items-center space-x-4"></div>
       <div class="flex flex-row gap-2">
-        <UChip :show="false" size="2xl">
-          <UButton
-            icon="i-heroicons-shopping-cart"
-            color="gray"
-            :to="{
-              name: 'login',
-            }"
-          />
-        </UChip>
+        <a-product-search />
+        <UTooltip text="ตะกร้าสินค้า" placement="bottom">
+          <UChip :show="false" size="2xl">
+            <UButton
+              icon="i-heroicons-shopping-cart"
+              color="gray"
+              :to="{
+                name: 'login',
+              }"
+            />
+          </UChip>
+        </UTooltip>
         <div class="flex items-center space-x-4">
           <UButton color="white" variant="solid" :to="{ name: 'login' }">
             เข้าสู่ระบบ

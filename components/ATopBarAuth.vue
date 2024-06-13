@@ -37,23 +37,24 @@ const navClass = isMobile
           </ULink>
         </template>
       </div>
-      <div class="flex items-center space-x-4">
-        <a-product-search class="md:w-96 sm:w-11/12" />
-      </div>
+      <div class="flex items-center space-x-4"></div>
       <div class="flex flex-row gap-4">
-        <UChip
-          :text="countCart > 99 ? '99+' : countCart"
-          :show="countCart > 0"
-          size="2xl"
-        >
-          <UButton
-            icon="i-heroicons-shopping-cart"
-            color="gray"
-            :to="{
-              name: 'cart',
-            }"
-          />
-        </UChip>
+        <a-product-search />
+        <UTooltip text="ตะกร้าสินค้า" placement="bottom">
+          <UChip
+            :text="countCart > 99 ? '99+' : countCart"
+            :show="countCart > 0"
+            size="2xl"
+          >
+            <UButton
+              icon="i-heroicons-shopping-cart"
+              color="gray"
+              :to="{
+                name: 'cart',
+              }"
+            />
+          </UChip>
+        </UTooltip>
         <AAccountMenu />
       </div>
     </nav>

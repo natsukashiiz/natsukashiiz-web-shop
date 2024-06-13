@@ -108,8 +108,8 @@ const fetchCountCart = async () => {
   }
 };
 
-onMounted(async () => {
-  await loadData();
+onActivated(() => {
+  loadData();
 });
 </script>
 <template>
@@ -118,28 +118,7 @@ onMounted(async () => {
       class="w-full max-w-3xl bg-white border border-gray-200 rounded-lg shadow pb-4"
     >
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-8 mb-3">
-        <UCarousel
-          v-slot="{ item }"
-          :items="product.images"
-          :ui="{
-            item: 'basis-full',
-            container: 'rounded-lg',
-          }"
-          :prev-button="{
-            color: 'gray',
-            icon: 'i-heroicons-arrow-left-20-solid',
-            class: '-left-12',
-          }"
-          :next-button="{
-            color: 'gray',
-            icon: 'i-heroicons-arrow-right-20-solid',
-            class: '-right-12',
-          }"
-          arrows
-          class="w-64 mx-auto"
-        >
-          <a-product-image :src="item" />
-        </UCarousel>
+        <AProductCarousel :items="product.images" preview />
         <div class="px-5 pb-5">
           <h5 class="text-xl font-semibold tracking-tight text-gray-900">
             {{ product.name }}
