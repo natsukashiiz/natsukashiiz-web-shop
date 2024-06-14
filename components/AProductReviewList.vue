@@ -2,12 +2,15 @@
 import { getProductReview } from "~/api/product";
 import type { ProductResponse, ProductReviewResponse } from "~/types";
 
+const authStore = useAuthStore();
+
 const props = defineProps({
   product: {
     type: Object as PropType<ProductResponse>,
     required: true,
   },
 });
+const emit = defineEmits(["loadProduct"]);
 
 const reviews = ref<ProductReviewResponse[]>([]);
 const pagination = reactive({
@@ -20,6 +23,7 @@ const loadReview = async () => {
   const res = await getProductReview(props.product.id, {
     page: pagination.page,
     size: pagination.limit,
+    sort: "createdAt,desc",
   });
 
   if (res.status === 200 && res.data) {
@@ -39,6 +43,11 @@ const isLastReview = (idx: number) => {
     pagination.page * pagination.limit - 1 !== idx &&
     idx !== reviews.value.length - 1
   );
+};
+
+const reloadReview = async () => {
+  await loadReview();
+  emit("loadProduct");
 };
 
 onMounted(() => {
@@ -62,6 +71,13 @@ onActivated(() => {
         class="flex justify-center my-4"
       />
     </div>
+    <template v-if="authStore.isAuth">
+      <UDivider label="เขียนรีวิว" color="gray" class="my-3" />
+      <AProductReviewForm
+        :product-id="product.id"
+        @load-review="reloadReview"
+      />
+    </template>
     <UDivider label="รีวิวล่าสุด" color="gray" class="my-3" />
     <template v-if="pagination.total > 0">
       <template v-for="(review, idx) in reviews" :key="review.id">
@@ -72,7 +88,7 @@ onActivated(() => {
           }"
           :date="review.createdAt"
           :rating="review.rating"
-          :content="review.review"
+          :content="review.content"
         />
         <UDivider v-if="isLastReview(idx)" />
       </template>

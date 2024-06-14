@@ -26,7 +26,7 @@
       <ACarousel />
     </div>
     <!-- category -->
-    <div class="max-w-3xl mx-auto mb-5">
+    <div class="mb-5">
       <UDivider
         label="หมวดหมู่"
         class="pb-4"

@@ -5,6 +5,7 @@ import type {
   PageResponse,
   QueryProductRequest,
   ProductReviewResponse,
+  CreateProductReviewRequest,
 } from "~/types";
 import client from "~/api/request";
 
@@ -30,10 +31,16 @@ const getProductReview = (
 ): ServerResponse<PageResponse<ProductReviewResponse>> =>
   client.get(`/v1/products/${id}/reviews`, { params });
 
+const createProductReview = (
+  id: number,
+  data: CreateProductReviewRequest
+): ServerResponse<void> => client.post(`/v1/products/${id}/reviews`, data);
+
 export {
   getAllProduct,
   getPageProduct,
   getOneProduct,
   getProduct,
   getProductReview,
+  createProductReview,
 };

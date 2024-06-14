@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import type {
-  OptionResponse,
-  PageResponse,
-  ProductResponse,
-  ProductReviewResponse,
-} from "~/types";
+import type { OptionResponse, ProductResponse } from "~/types";
 import { getOneProduct } from "~/api/product";
 import { useAuthStore } from "~/stores/authStore";
 import { addCart, getCountCart } from "~/api/cart";
@@ -235,6 +230,6 @@ onActivated(() => {
         />
       </div>
     </div>
-    <AProductReviewList :product="product" />
+    <AProductReviewList :product="product" @load-product="loadData" />
   </div>
 </template>

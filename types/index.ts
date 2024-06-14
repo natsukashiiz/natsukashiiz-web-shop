@@ -22,6 +22,7 @@ export interface PageResponse<T> {
 export interface Pagination {
   page?: number;
   size?: number;
+  sort?: string;
 }
 
 export interface LoginRequest {
@@ -214,8 +215,13 @@ export interface ProfileResponse {
 
 export interface ProductReviewResponse {
   id: number;
-  review: string;
+  content: string;
   rating: number;
   createdAt: string;
   profile: ProfileResponse;
+}
+
+export interface CreateProductReviewRequest {
+  content?: string;
+  rating: number;
 }
