@@ -4,6 +4,7 @@ import type {
   Pagination,
   PageResponse,
   QueryProductRequest,
+  ProductReviewResponse,
 } from "~/types";
 import client from "~/api/request";
 
@@ -23,4 +24,16 @@ const getProduct = (
 ): ServerResponse<PageResponse<ProductResponse>> =>
   client.get("/v1/products", { params });
 
-export { getAllProduct, getPageProduct, getOneProduct, getProduct };
+const getProductReview = (
+  id: number,
+  params: Pagination
+): ServerResponse<PageResponse<ProductReviewResponse>> =>
+  client.get(`/v1/products/${id}/reviews`, { params });
+
+export {
+  getAllProduct,
+  getPageProduct,
+  getOneProduct,
+  getProduct,
+  getProductReview,
+};

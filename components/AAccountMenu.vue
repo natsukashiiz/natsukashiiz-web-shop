@@ -55,7 +55,7 @@ const handleLogout = () => {
   />
   <UDropdown
     :items="items"
-    :ui="{ item: { disabled: 'cursor-text select-text' } }"
+    :ui="{ width: 'w-44', item: { disabled: 'cursor-text select-text' } }"
     :popper="{ placement: 'bottom-start' }"
   >
     <UAvatar
@@ -66,7 +66,7 @@ const handleLogout = () => {
     <template #account="{ item }">
       <div class="text-left">
         <p>เข้าสู่ระบบโดย</p>
-        <p class="font-medium text-gray-900 text-wrap">
+        <p class="font-medium text-black truncate w-40">
           {{ item.label }}
         </p>
       </div>
@@ -76,6 +76,9 @@ const handleLogout = () => {
       <ULink v-if="item.to" :to="item.to">
         {{ item.label }}
       </ULink>
+      <span v-else-if="item.onclick" @click="item.onclick" class="truncate">
+        {{ item.label }}
+      </span>
       <span v-else class="truncate">{{ item.label }}</span>
 
       <UIcon

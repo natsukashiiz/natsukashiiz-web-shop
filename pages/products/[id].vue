@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import type { OptionResponse, ProductResponse } from "~/types";
+import type {
+  OptionResponse,
+  PageResponse,
+  ProductResponse,
+  ProductReviewResponse,
+} from "~/types";
 import { getOneProduct } from "~/api/product";
 import { useAuthStore } from "~/stores/authStore";
 import { addCart, getCountCart } from "~/api/cart";
@@ -113,10 +118,11 @@ onActivated(() => {
 });
 </script>
 <template>
-  <div class="flex justify-center mt-10 p-2" v-if="product && currentOption">
-    <div
-      class="w-full max-w-3xl bg-white border border-gray-200 rounded-lg shadow pb-4"
-    >
+  <div
+    class="max-w-5xl mx-auto flex flex-col items-center justify-center space-y-2 mt-10 p-4"
+    v-if="product && currentOption"
+  >
+    <div class="bg-white border border-gray-200 rounded-lg shadow pb-4">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-8 mb-3">
         <AProductCarousel :items="product.images" preview />
         <div class="px-5 pb-5">
@@ -220,7 +226,7 @@ onActivated(() => {
         </p>
       </div>
       <UDivider label="แชร์สินค้านี้" color="gray" />
-      <div class="flex justify-center flex-row gap-10 mt-4">
+      <div class="flex justify-center flex-row gap-10 my-4">
         <SocialShare
           v-for="network in ['facebook', 'twitter', 'telegram']"
           :key="network"
@@ -229,5 +235,6 @@ onActivated(() => {
         />
       </div>
     </div>
+    <AProductReviewList :product="product" />
   </div>
 </template>

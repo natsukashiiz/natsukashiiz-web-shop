@@ -125,6 +125,8 @@ export interface ProductResponse {
   category: CategoryResponse;
   views: number;
   orders: number;
+  reviews: number;
+  rating: number;
   createdAt: string;
 }
 
@@ -202,4 +204,18 @@ export interface CategoryResponse {
   id: number;
   name: string;
   thumbnail: string;
+}
+
+export interface ProfileResponse {
+  id: number;
+  email: string;
+  createdAt: string;
+}
+
+export interface ProductReviewResponse {
+  id: number;
+  review: string;
+  rating: number;
+  createdAt: string;
+  profile: ProfileResponse;
 }
