@@ -13,17 +13,22 @@ const items = [
     {
       label: "ตะกร้าสินค้า",
       icon: "i-heroicons-shopping-cart",
-      to: "/cart",
+      to: "/profile/cart",
     },
     {
       label: "รายการสั่งซื้อ",
       icon: "i-heroicons-list-bullet",
-      to: "/orders/history",
+      to: "/profile/orders/history",
     },
     {
       label: "ที่อยู่จัดส่ง",
       icon: "i-heroicons-map-pin",
-      to: "/address",
+      to: "/profile/address",
+    },
+    {
+      label: "ประวัติการเข้าชมสินค้า",
+      icon: "i-heroicons-clock",
+      to: "/profile/products/history",
     },
   ],
   [

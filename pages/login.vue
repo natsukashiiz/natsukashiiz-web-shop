@@ -152,6 +152,7 @@ onMounted(() => {
             text="signin_with"
             logo-alignment="center"
             locale="th"
+            ux-mode="popup"
           ></GoogleSignInButton>
         </div>
 

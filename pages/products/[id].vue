@@ -53,7 +53,7 @@ const handleAddCart = async () => {
       description: "สินค้าถูกเพิ่มลงตะกร้าสำเร็จ",
       timeout: 2000,
       click: () => {
-        router.push("/cart");
+        router.push("/profile/cart");
         toast.remove("add-cart");
       },
     });
@@ -87,7 +87,7 @@ const handleCreateOrder = async () => {
   } catch (error: any) {
     if (error.response.status) {
       if (error.response.data.error === "address.invalid") {
-        router.push("/address");
+        router.push("/profile/address");
       } else {
         window.alert(error.response.data.error);
       }

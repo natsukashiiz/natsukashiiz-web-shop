@@ -23,7 +23,7 @@ await loadCategory();
         :to="{
           name: 'products-search',
           query: {
-            categoryName: item.name,
+            category: item.name,
           },
         }"
         variant="outline"

@@ -13,15 +13,15 @@ const pagination = reactive({
   total: 0,
 });
 const categoryName = ref<string | undefined>(undefined);
-const productName = ref<string | undefined>(undefined);
+const keyword = ref<string | undefined>(undefined);
 
 const loadData = async () => {
   loading.value = true;
   try {
     const res = await getProduct({
-      name: productName.value,
-      description: productName.value,
-      "category.name": categoryName.value,
+      name: keyword.value,
+      description: keyword.value,
+      "category.name": categoryName.value || keyword.value,
       page: pagination.page,
       size: pagination.limit,
     });
@@ -42,8 +42,11 @@ const loadData = async () => {
 };
 
 const loadDataFromQuery = (query: LocationQuery) => {
-  if (query.name) {
-    productName.value = query.name as string;
+  keyword.value = undefined;
+  categoryName.value = undefined;
+
+  if (query.keyword) {
+    keyword.value = query.keyword as string;
   }
   if (query.category) {
     categoryName.value = query.category as string;
@@ -66,7 +69,7 @@ onBeforeRouteUpdate((to, from, next) => {
 </script>
 <template>
   <UContainer class="flex flex-col gap-y-2 p-5">
-    <span v-if="productName" class="text-2xl"> ค้นหา: {{ productName }} </span>
+    <span v-if="keyword" class="text-2xl"> ค้นหา: {{ keyword }} </span>
     <span v-if="categoryName" class="text-2xl">
       <UBadge color="white" variant="solid" size="lg">
         หมวดหมู่: {{ categoryName }}

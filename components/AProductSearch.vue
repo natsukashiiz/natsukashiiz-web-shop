@@ -119,7 +119,7 @@ const handleSelect = (product: ProductResponse) => {
             </div>
             <div v-if="total > 10" class="text-center mt-4">
               <ULink
-                :to="{ name: 'products-search', query: { name: keyword } }"
+                :to="{ name: 'products-search', query: { keyword } }"
                 @click="isOpen = false"
                 class="text-blue-500"
               >

@@ -108,7 +108,7 @@ const handleCreateOrder = async () => {
   } catch (error: any) {
     if (error.response.status) {
       if (error.response.data.error === "address.invalid") {
-        router.push("/address");
+        router.push("/profile/address");
       } else {
         window.alert(error.response.data.error);
       }

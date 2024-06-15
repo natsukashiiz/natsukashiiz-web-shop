@@ -225,3 +225,9 @@ export interface CreateProductReviewRequest {
   content?: string;
   rating: number;
 }
+
+export interface ProductViewHistoryResponse {
+  id: number;
+  createdAt: string;
+  product: ProductResponse;
+}
