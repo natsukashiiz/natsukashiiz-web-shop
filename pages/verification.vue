@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { sendVerifyCode, confirmVerifyCode } from "~/api/account";
+import { sendVerifyCode, confirmVerifyCode } from "~/api/auth";
 import type { FormError } from "@nuxt/ui/dist/runtime/types";
 
 const authStore = useAuthStore();

@@ -3,9 +3,8 @@ import { getProduct } from "~/api/product";
 import type { ProductResponse } from "~/types";
 
 const router = useRouter();
-const loading = useLoading();
 const isOpen = ref(false);
-const keyword = ref("");
+const keyword = ref();
 const results = ref<ProductResponse[]>([]);
 const total = ref(0);
 
@@ -98,37 +97,33 @@ const handleSelect = (product: ProductResponse) => {
         </template>
       </UInput>
       <UDivider class="my-4" />
-      <ULoading v-model="loading">
-        <template #default>
-          <div v-if="results.length === 0" class="text-center text-gray-500">
-            ไม่พบสินค้าที่คุณค้นหา
-          </div>
-          <div v-else>
-            <!-- with tailwind css -->
-            <div class="grid grid-cols-1 gap-2">
-              <template v-for="product in results">
-                <div
-                  class="cursor-pointer hover:bg-gray-100 px-2 rounded-lg"
-                  @click="handleSelect(product)"
-                >
-                  <div class="text-sm text-gray-500 mt-2">
-                    {{ product.name }}
-                  </div>
-                </div>
-              </template>
+      <div v-if="results.length === 0" class="text-center text-gray-500">
+        ไม่พบสินค้าที่คุณค้นหา
+      </div>
+      <div v-else>
+        <!-- with tailwind css -->
+        <div class="grid grid-cols-1 gap-2">
+          <template v-for="product in results">
+            <div
+              class="cursor-pointer hover:bg-gray-100 px-2 rounded-lg"
+              @click="handleSelect(product)"
+            >
+              <div class="text-sm text-gray-500 mt-2">
+                {{ product.name }}
+              </div>
             </div>
-            <div v-if="total > 10" class="text-center mt-4">
-              <ULink
-                :to="{ name: 'products-search', query: { keyword } }"
-                @click="isOpen = false"
-                class="text-blue-500"
-              >
-                ดูสินค้าทั้งหมด
-              </ULink>
-            </div>
-          </div>
-        </template>
-      </ULoading>
+          </template>
+        </div>
+        <div v-if="total > 10" class="text-center mt-4">
+          <ULink
+            :to="{ name: 'products-search', query: { keyword } }"
+            @click="isOpen = false"
+            class="text-blue-500"
+          >
+            ดูสินค้าทั้งหมด
+          </ULink>
+        </div>
+      </div>
     </div>
   </UModal>
   <UTooltip text="ค้นหาสินค้า" placement="bottom">

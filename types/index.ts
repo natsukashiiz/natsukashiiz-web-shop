@@ -231,3 +231,12 @@ export interface ProductViewHistoryResponse {
   createdAt: string;
   product: ProductResponse;
 }
+
+export interface LoginHistoryResponse {
+  id: number;
+  ip: string;
+  userAgent: string;
+  device: string;
+  os: string;
+  createdAt: string;
+}

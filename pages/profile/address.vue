@@ -191,69 +191,70 @@ onActivated(() => {
 });
 </script>
 <template>
-  <div class="flex justify-center mt-10">
-    <AModal
-      :modal="modalDelete"
-      title="ลบที่อยู่"
-      description="คุณต้องการลบที่อยู่ใช่หรือไม่"
-      @close="
-        () => {
-          modalDelete = false;
-          currentId = null;
-        }
-      "
-      @confirm="() => handleDeleteAddress()"
-    />
-    <AModal
-      :modal="modalForm"
-      :title="formMode === 'add' ? 'เพิ่มที่อยู่' : 'แก้ไขที่อยู่'"
-      @close="
-        () => {
-          modalForm = false;
-          resetForm();
-        }
-      "
-      :footer="false"
+  <AModal
+    :modal="modalDelete"
+    title="ลบที่อยู่"
+    description="คุณต้องการลบที่อยู่ใช่หรือไม่"
+    @close="
+      () => {
+        modalDelete = false;
+        currentId = null;
+      }
+    "
+    @confirm="() => handleDeleteAddress()"
+  />
+  <AModal
+    :modal="modalForm"
+    :title="formMode === 'add' ? 'เพิ่มที่อยู่' : 'แก้ไขที่อยู่'"
+    @close="
+      () => {
+        modalForm = false;
+        resetForm();
+      }
+    "
+    :footer="false"
+  >
+    <UForm
+      :validate="validate"
+      :state="formState"
+      class="space-y-4"
+      @submit="handleSubmitForm"
     >
-      <UForm
-        :validate="validate"
-        :state="formState"
-        class="space-y-4"
-        @submit="handleSubmitForm"
-      >
-        <UFormGroup label="ชื่อ" name="firstName">
-          <UInput v-model="formState.firstName" />
-        </UFormGroup>
+      <UFormGroup label="ชื่อ" name="firstName">
+        <UInput v-model="formState.firstName" />
+      </UFormGroup>
 
-        <UFormGroup label="นามสกุล" name="lastName">
-          <UInput v-model="formState.lastName" />
-        </UFormGroup>
+      <UFormGroup label="นามสกุล" name="lastName">
+        <UInput v-model="formState.lastName" />
+      </UFormGroup>
 
-        <UFormGroup label="เบอร์โทร" name="mobile">
-          <UInput v-model="formState.mobile" />
-        </UFormGroup>
+      <UFormGroup label="เบอร์โทร" name="mobile">
+        <UInput v-model="formState.mobile" />
+      </UFormGroup>
 
-        <UFormGroup label="ที่อยู่" name="address">
-          <UTextarea v-model="formState.address" />
-        </UFormGroup>
+      <UFormGroup label="ที่อยู่" name="address">
+        <UTextarea v-model="formState.address" />
+      </UFormGroup>
 
-        <div class="flex justify-end">
-          <div></div>
-          <UButton type="submit"> บันทึก </UButton>
-        </div>
-      </UForm>
-    </AModal>
+      <div class="flex justify-end">
+        <div></div>
+        <UButton type="submit"> บันทึก </UButton>
+      </div>
+    </UForm>
+  </AModal>
+
+  <UContainer class="max-w-5xl py-5">
     <UCard>
       <template #header>
         <div class="flex justify-between items-center">
-          <h1 class="text-2xl font-bold">ที่อยู่</h1>
+          <span class="text-lg font-semibold text-gray-900"> ที่อยู่ </span>
           <UButton color="white" variant="solid" @click="modalForm = true">
             เพิ่ม
           </UButton>
         </div>
       </template>
 
-      <UTable :columns="columns" :rows="addresses" class="min-w-[700px]">
+      <UTable :columns="columns" :rows="addresses">
         <template #main-data="{ row }">
           <UButton
             color="pink"
@@ -285,5 +286,5 @@ onActivated(() => {
         </template>
       </UTable>
     </UCard>
-  </div>
+  </UContainer>
 </template>

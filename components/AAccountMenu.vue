@@ -28,7 +28,12 @@ const items = [
     {
       label: "ประวัติการเข้าชมสินค้า",
       icon: "i-heroicons-clock",
-      to: "/profile/products/history",
+      to: "/profile/history/products",
+    },
+    {
+      label: "ประวัติการเข้าสู่ระบบ",
+      icon: "i-heroicons-clock",
+      to: "/profile/history/login",
     },
   ],
   [

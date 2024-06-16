@@ -160,7 +160,9 @@ onMounted(() => {
           <p class="text-sm font-light text-gray-500">
             ยังไม่มีบัญชีใช่ไหม?
             <ULink
-              to="/register"
+              :to="{
+                name: 'register',
+              }"
               class="font-medium text-blue-600 hover:underline"
             >
               ลงทะเบียน
@@ -168,7 +170,9 @@ onMounted(() => {
           </p>
           <p class="text-sm font-light text-gray-500">
             <ULink
-              to="/forgot-password"
+              :to="{
+                name: 'forgot-password',
+              }"
               class="font-medium text-blue-600 hover:underline"
             >
               ลืมรหัสผ่านใช่ไหม

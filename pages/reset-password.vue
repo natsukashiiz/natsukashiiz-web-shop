@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { resetPassword } from "~/api/account";
+import { resetPassword } from "~/api/auth";
 import type { FormError } from "@nuxt/ui/dist/runtime/types";
 
 const authStore = useAuthStore();
