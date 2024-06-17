@@ -240,3 +240,9 @@ export interface LoginHistoryResponse {
   os: string;
   createdAt: string;
 }
+
+export interface ProductFavoriteResponse {
+  id: number;
+  createdAt: string;
+  product: ProductResponse;
+}

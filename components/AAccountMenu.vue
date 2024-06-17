@@ -26,6 +26,11 @@ const items = [
       to: "/profile/address",
     },
     {
+      label: "รายการโปรด",
+      icon: "i-heroicons-heart",
+      to: "/profile/favorite",
+    },
+    {
       label: "ประวัติการเข้าชมสินค้า",
       icon: "i-heroicons-clock",
       to: "/profile/history/products",

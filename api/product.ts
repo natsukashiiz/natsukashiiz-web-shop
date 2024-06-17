@@ -7,6 +7,7 @@ import type {
   ProductReviewResponse,
   CreateProductReviewRequest,
   ProductViewHistoryResponse,
+  ProductFavoriteResponse,
 } from "~/types";
 import client from "~/api/request";
 
@@ -42,6 +43,20 @@ const getViewHistory = (
 ): ServerResponse<PageResponse<ProductViewHistoryResponse>> =>
   client.get("/v1/products/view-history", { params });
 
+const getProductFavorite = (
+  params: Pagination
+): ServerResponse<PageResponse<ProductFavoriteResponse>> =>
+  client.get("/v1/products/favorites", { params });
+
+const isProductFavorite = (id: number): ServerResponse<boolean> =>
+  client.get(`/v1/products/${id}/favorites`);
+
+const createProductFavorite = (id: number): ServerResponse<void> =>
+  client.post(`/v1/products/${id}/favorites`);
+
+const deleteProductFavorite = (id: number): ServerResponse<void> =>
+  client.delete(`/v1/products/${id}/favorites`);
+
 export {
   getAllProduct,
   getPageProduct,
@@ -50,4 +65,8 @@ export {
   getProductReview,
   createProductReview,
   getViewHistory,
+  getProductFavorite,
+  isProductFavorite,
+  createProductFavorite,
+  deleteProductFavorite,
 };

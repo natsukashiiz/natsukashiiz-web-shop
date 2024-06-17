@@ -121,7 +121,13 @@ onActivated(() => {
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-8 mb-3">
         <AProductCarousel :items="product.images" preview />
         <div class="px-5 pb-5">
-          <h5 class="text-xl font-semibold tracking-tight text-gray-900">
+          <div class="flex items-center gap-2 mt-2">
+            <span class="text-sm text-gray-500"> หมวดหมู่: </span>
+            <UBadge color="white" variant="solid" size="sm">
+              {{ product.category.name }}
+            </UBadge>
+          </div>
+          <h5 class="text-xl font-semibold tracking-tight text-gray-900 mt-2">
             {{ product.name }}
           </h5>
           <div class="flex flex-wrap items-center gap-2 mt-2">
@@ -207,6 +213,19 @@ onActivated(() => {
               </div>
             </template>
           </div>
+          <div class="flex items-center gap-2 mt-4 justify-between">
+            <div class="flex gap-1">
+              <SocialShare
+                v-for="network in ['facebook', 'twitter', 'telegram']"
+                :key="network"
+                :network="network"
+                class="hover:text-rose-500 text-white"
+                :styled="true"
+                :label="false"
+              />
+            </div>
+            <AProductFavoriteButton :productId="product.id" />
+          </div>
         </div>
       </div>
       <UDivider label="สถิติ" color="gray" />
@@ -219,15 +238,6 @@ onActivated(() => {
         <p class="text-sm text-gray-700 text-pretty">
           {{ product.description }}
         </p>
-      </div>
-      <UDivider label="แชร์สินค้านี้" color="gray" />
-      <div class="flex justify-center flex-row gap-10 my-4">
-        <SocialShare
-          v-for="network in ['facebook', 'twitter', 'telegram']"
-          :key="network"
-          :network="network"
-          class="hover:text-rose-500"
-        />
       </div>
     </div>
     <AProductReviewList :product="product" @load-product="loadData" />
