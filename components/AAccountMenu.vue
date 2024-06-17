@@ -91,7 +91,7 @@ const handleLogout = () => {
       <ULink v-if="item.to" :to="item.to">
         {{ item.label }}
       </ULink>
-      <span v-else-if="item.onclick" @click="item.onclick" class="truncate">
+      <span v-else-if="item.onclick" @click="item.onclick()" class="truncate">
         {{ item.label }}
       </span>
       <span v-else class="truncate">{{ item.label }}</span>

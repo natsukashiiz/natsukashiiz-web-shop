@@ -6,3 +6,8 @@ export enum OrderStatus {
   SELF_CANCELED = "SELF_CANCELED",
   SYSTEM_CANCELED = "SYSTEM_CANCELED",
 }
+
+export enum DiscountType {
+  PERCENTAGE = "PERCENTAGE",
+  AMOUNT = "AMOUNT",
+}

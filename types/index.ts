@@ -1,4 +1,5 @@
 import type { AxiosResponse } from "axios";
+import type { DiscountType } from "./enum";
 
 export type ServerResponse<T> = Promise<AxiosResponse<T>>;
 
@@ -245,4 +246,20 @@ export interface ProductFavoriteResponse {
   id: number;
   createdAt: string;
   product: ProductResponse;
+}
+
+export interface VoucherResponse {
+  id: number;
+  code: string;
+  discount: number;
+  discountType: DiscountType;
+  maxDiscount: number;
+  minOrderPrice: number;
+  quantity: number;
+  description: string;
+  product: ProductResponse;
+  category: CategoryResponse;
+  beginAt: string;
+  expiredAt: string;
+  claimed: boolean;
 }
