@@ -15,9 +15,8 @@ const getAllOrder = (
 const getOneOrder = (id: string): ServerResponse<OrderResponse> =>
   client.get(`/v1/orders/${id}`);
 
-const createOrder = (
-  body: CreateOrderRequest[]
-): ServerResponse<OrderResponse> => client.post("/v1/orders", body);
+const createOrder = (body: CreateOrderRequest): ServerResponse<OrderResponse> =>
+  client.post("/v1/orders", body);
 
 const cancelOrder = (id: string): ServerResponse<void> =>
   client.put(`/v1/orders/cancel/${id}`);

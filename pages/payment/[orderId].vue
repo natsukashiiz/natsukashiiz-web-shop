@@ -59,7 +59,7 @@ const loadData = async () => {
       order.value = res.data;
 
       if (order.value.status !== "PENDING") {
-        router.replace(`/orders/detail/${order.value.orderId}`);
+        router.replace(`/profile/orders/detail/${order.value.orderId}`);
       }
     } else {
       window.alert("Error");
@@ -153,7 +153,7 @@ const handleCancel = async () => {
         description: "กรุณารอสักครู่",
         timeout: 1000,
       });
-      router.replace(`/orders/detail/${order.value.orderId}`);
+      router.replace(`/profile/orders/detail/${order.value.orderId}`);
     } else {
       window.alert("Error");
     }
@@ -186,7 +186,7 @@ onActivated(async () => {
     const expire = new Date(order.value.payExpire);
     const diff = expire.getTime() - now.getTime();
     setTimeout(() => {
-      router.push(`/orders/detail/${order.value?.orderId}`);
+      router.push(`/profile/orders/detail/${order.value?.orderId}`);
     }, diff);
   }
 });

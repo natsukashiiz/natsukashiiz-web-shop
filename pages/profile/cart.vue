@@ -9,6 +9,7 @@ const toast = useToast();
 
 const cart = ref<CartResponse[]>([]);
 const selected = ref<CartResponse[]>([]);
+const voucherId = ref<number | undefined>();
 
 const maxAmount = 150000;
 
@@ -92,14 +93,17 @@ const handleCreateOrder = async () => {
   }
 
   try {
-    const data = selected.value.map((item) => {
+    const items = selected.value.map((item) => {
       return {
         productId: item.id,
         optionId: item.optionId,
         quantity: item.quantity,
       };
     });
-    const res = await createOrder(data);
+    const res = await createOrder({
+      voucherId: voucherId.value,
+      orderItems: items,
+    });
     if (res.status === 200) {
       router.push(`/payment/${res.data.orderId}`);
     } else {
@@ -149,9 +153,17 @@ const isSelect = (item: CartResponse) => {
   return selected.value.findIndex((i) => i.id === item.id) !== -1;
 };
 
-onActivated(() => {
+const onLoad = () => {
   selected.value = [];
   loadData();
+};
+
+onActivated(() => {
+  onLoad();
+});
+
+onMounted(() => {
+  onLoad();
 });
 </script>
 <template>

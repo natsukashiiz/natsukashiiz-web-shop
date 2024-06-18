@@ -52,9 +52,8 @@ export interface PayOrderRequest {
 }
 
 export interface CreateOrderRequest {
-  productId: number;
-  optionId: number;
-  quantity: number;
+  voucherId?: number;
+  orderItems: CartRequest[];
 }
 
 export interface CreateAddressRequest {
@@ -147,6 +146,8 @@ export interface OrderResponse {
   mobile: string;
   address: string;
   totalPay: number;
+  totalDiscount: number;
+  actualPay: number;
   status: string;
   payUrl: string;
   payExpire: number;
@@ -171,6 +172,8 @@ export interface OrderItemResponse {
   productThumbnail: string;
   optionId: number;
   optionName: string;
+  categoryId: number;
+  categoryName: string;
   price: number;
   quantity: number;
   totalPrice: number;

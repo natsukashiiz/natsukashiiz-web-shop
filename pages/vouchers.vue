@@ -56,7 +56,7 @@ onActivated(() => {
         <UCard>
           <template #header>
             ส่วนลด {{ voucher.discount }}
-            {{ voucher.discountType === DiscountType.PERCENTAGE ? "%" : "บาท" }}
+            {{ voucher.discountType === DiscountType.PERCENT ? "%" : "บาท" }}
           </template>
 
           <template #default>

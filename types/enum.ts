@@ -8,6 +8,6 @@ export enum OrderStatus {
 }
 
 export enum DiscountType {
-  PERCENTAGE = "PERCENTAGE",
+  PERCENT = "PERCENT",
   AMOUNT = "AMOUNT",
 }
