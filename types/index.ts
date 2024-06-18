@@ -44,6 +44,7 @@ export interface CartRequest {
   productId: number;
   optionId: number;
   quantity: number;
+  selected: boolean;
 }
 
 export interface PayOrderRequest {
@@ -97,7 +98,7 @@ export interface TokenResponse {
   token: string;
 }
 
-export interface CartResponse {
+export interface CartItemResponse {
   id: number;
   productId: number;
   productName: string;
@@ -107,6 +108,15 @@ export interface CartResponse {
   quantity: number;
   maxQuantity: number;
   product: ProductResponse;
+  selected: boolean;
+}
+
+export interface CartResponse {
+  items: CartItemResponse[];
+  countSelected: number;
+  totalQuantity: number;
+  totalSelectedQuantity: number;
+  totalPrice: number;
 }
 
 export interface QueryProductRequest extends Pagination {
@@ -265,4 +275,8 @@ export interface VoucherResponse {
   beginAt: string;
   expiredAt: string;
   claimed: boolean;
+}
+
+export interface CheckoutRequest {
+  voucherId?: number;
 }

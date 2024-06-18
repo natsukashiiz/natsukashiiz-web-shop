@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import type { CartResponse } from "~/types";
+import type { CartItemResponse } from "~/types";
 
 const props = defineProps({
   item: {
-    type: Object as () => CartResponse,
-    required: true,
-  },
-  selected: {
-    type: Boolean,
+    type: Object as () => CartItemResponse,
     required: true,
   },
   maxQuantity: {
@@ -26,7 +22,7 @@ const disabled = computed(() => {
   >
     <div class="flex items-center">
       <UCheckbox
-        :model-value="selected"
+        :model-value="item.selected"
         @change="$emit('selected', item)"
         :disabled="disabled"
       />

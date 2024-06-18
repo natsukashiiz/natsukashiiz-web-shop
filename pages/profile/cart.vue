@@ -1,14 +1,19 @@
 <script setup lang="ts">
-import type { CartResponse } from "~/types";
-import { getAllCart, deleteCart, addCart, getCountCart } from "~/api/cart";
+import type { CartResponse, CartItemResponse, CartRequest } from "~/types";
+import { getAllCart, deleteCart, updateCart } from "~/api/cart";
 import { createOrder } from "~/api/order";
 
 const cartStore = useCartStore();
 const router = useRouter();
 const toast = useToast();
 
-const cart = ref<CartResponse[]>([]);
-const selected = ref<CartResponse[]>([]);
+const cart = ref<CartResponse>({
+  items: [],
+  countSelected: 0,
+  totalQuantity: 0,
+  totalSelectedQuantity: 0,
+  totalPrice: 0,
+});
 const voucherId = ref<number | undefined>();
 
 const maxAmount = 150000;
@@ -17,37 +22,18 @@ const loadData = async () => {
   const res = await getAllCart();
   if (res.status === 200 && res.data) {
     cart.value = res.data;
-    if (count.value === 1) selected.value = cart.value;
   } else {
     window.alert("เกิดข้อผิดพลาด");
   }
 };
 
-const fetchCountCart = async () => {
+const handleUpdateCart = async (data: CartRequest) => {
   try {
-    const res = await getCountCart();
-    if (res.status === 200) {
-      cartStore.setCount(res.data);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const handleUpdateCart = async (
-  productId: number,
-  optionId: number,
-  quantity: number
-) => {
-  try {
-    const res = await addCart({
-      productId,
-      optionId,
-      quantity,
-    });
+    const res = await updateCart(data);
 
     if (res.status === 200 && res.data) {
-      await fetchCountCart();
+      cart.value = res.data;
+      cartStore.setCount(cart.value.totalQuantity);
     } else {
       await loadData();
       window.alert("เกิดข้อผิดพลาด");
@@ -63,26 +49,19 @@ const handleUpdateCart = async (
 };
 
 const removeItem = async (id: number) => {
-  selected.value = selected.value.filter((item) => item.id !== id);
-
   const res = await deleteCart(id);
   if (res.status === 200) {
-    await loadData();
-    await fetchCountCart();
+    cart.value = res.data;
+    cartStore.setCount(cart.value.totalQuantity);
   } else {
     window.alert("เกิดข้อผิดพลาด");
   }
 };
 
-const totalPrice = computed(() => {
-  return selected.value.reduce((acc, item) => {
-    return acc + item.price * item.quantity;
-  }, 0);
-});
-
-const handleCreateOrder = async () => {
+const handleCreateOrder = () => {};
+const handleCreateOrderOld = async () => {
   // verify amount max
-  if (totalPrice.value > maxAmount) {
+  if (300 > maxAmount) {
     toast.clear();
     toast.add({
       title: "เกิดข้อผิดพลาด",
@@ -93,16 +72,16 @@ const handleCreateOrder = async () => {
   }
 
   try {
-    const items = selected.value.map((item) => {
-      return {
-        productId: item.id,
-        optionId: item.optionId,
-        quantity: item.quantity,
-      };
-    });
+    // const items = selected.value.map((item) => {
+    //   return {
+    //     productId: item.id,
+    //     optionId: item.optionId,
+    //     quantity: item.quantity,
+    //   };
+    // });
     const res = await createOrder({
       voucherId: voucherId.value,
-      orderItems: items,
+      orderItems: [],
     });
     if (res.status === 200) {
       router.push(`/payment/${res.data.orderId}`);
@@ -123,38 +102,24 @@ const handleCreateOrder = async () => {
 };
 
 const count = computed(() => {
-  return cart.value.filter((item) => item.maxQuantity > item.quantity).length;
+  return cart.value.items.filter((item) => item.maxQuantity > item.quantity)
+    .length;
 });
 
-const handleSelectAll = () => {
-  if (selected.value.length === count.value) {
-    selected.value = [];
-  } else {
-    selected.value = cart.value.filter(
-      (item) => item.maxQuantity > item.quantity
-    );
-  }
+const handleSelectAll = () => {};
+
+const handleSelect = async (item: CartItemResponse) => {
+  await handleUpdateCart({
+    productId: item.productId,
+    optionId: item.optionId,
+    quantity: item.quantity,
+    selected: !item.selected,
+  });
 };
 
-const handleSelect = (item: CartResponse) => {
-  const index = selected.value.findIndex((i) => i.id === item.id);
-  if (index === -1) {
-    selected.value.push(item);
-  } else {
-    selected.value = selected.value.filter((i) => i.id !== item.id);
-  }
-};
-
-const isSelectedAll = computed(() => {
-  return selected.value.length === count.value;
-});
-
-const isSelect = (item: CartResponse) => {
-  return selected.value.findIndex((i) => i.id === item.id) !== -1;
-};
+const isSelectedAll = computed(() => {});
 
 const onLoad = () => {
-  selected.value = [];
   loadData();
 };
 
@@ -168,16 +133,16 @@ onMounted(() => {
 </script>
 <template>
   <UContainer class="max-w-3xl py-8">
-    <UCard v-if="cart.length > 0">
+    <UCard v-if="cart.items.length > 0">
       <template #header>
         <div class="flex justify-between">
-          <div>จำนวนที่เลือก {{ selected.length }} รายการ</div>
+          <div>จำนวนที่เลือก {{ cart.countSelected }} รายการ</div>
           <div>
             <UButton
               color="primary"
               variant="outline"
               @click="handleSelectAll"
-              v-if="!isSelectedAll"
+              v-if="!false"
             >
               เลือกทั้งหมด
             </UButton>
@@ -193,15 +158,19 @@ onMounted(() => {
         </div>
       </template>
       <ul class="-my-8">
-        <template v-for="item in cart" :key="item.id">
+        <template v-for="item in cart.items" :key="item.id">
           <a-cart-item
             :item="item"
-            :selected="isSelect(item)"
             :max-quantity="item.maxQuantity"
             @selected="handleSelect(item)"
             @update="
               (quantity) =>
-                handleUpdateCart(item.productId, item.optionId, quantity)
+                handleUpdateCart({
+                  productId: item.productId,
+                  optionId: item.optionId,
+                  quantity,
+                  selected: item.selected,
+                })
             "
             @remove="removeItem(item.id)"
           />
@@ -211,7 +180,7 @@ onMounted(() => {
         <div class="flex items-center justify-between">
           <p class="text-sm text-gray-400">ยอดรวม</p>
           <p class="text-lg font-semibold text-gray-900">
-            ฿<ACurrency :amount="totalPrice" />
+            ฿<ACurrency :amount="cart.totalPrice" />
           </p>
         </div>
         <div class="flex items-center justify-between">
@@ -222,7 +191,7 @@ onMounted(() => {
       <div class="mt-6 flex items-center justify-between">
         <p class="text-sm font-medium text-gray-900">ยอดที่ต้องชำระ</p>
         <p class="text-2xl font-semibold text-gray-900">
-          <ACurrency :amount="totalPrice" /> บาท
+          <ACurrency :amount="cart.totalPrice" /> บาท
         </p>
       </div>
 
@@ -230,7 +199,7 @@ onMounted(() => {
         <UButton
           block
           @click="handleCreateOrder"
-          :disabled="selected.length === 0"
+          :disabled="cart.totalQuantity === 0"
         >
           ชำระเงิน
         </UButton>

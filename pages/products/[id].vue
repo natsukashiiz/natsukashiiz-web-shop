@@ -2,7 +2,7 @@
 import type { OptionResponse, ProductResponse } from "~/types";
 import { getOneProduct } from "~/api/product";
 import { useAuthStore } from "~/stores/authStore";
-import { addCart, getCountCart } from "~/api/cart";
+import { updateCart, getCountCart } from "~/api/cart";
 import { createOrder } from "~/api/order";
 
 const authStore = useAuthStore();
@@ -32,7 +32,7 @@ const changeOption = (option: OptionResponse) => {
   currentOption.value = option;
 };
 
-const handleAddCart = async () => {
+const handleUpdateCart = async () => {
   if (!authStore.isAuth) {
     router.push(`/login?redirect=${route.fullPath}`);
     return;
@@ -40,10 +40,11 @@ const handleAddCart = async () => {
 
   if (!product.value || !currentOption.value) return;
 
-  const res = await addCart({
+  const res = await updateCart({
     productId: product.value.id,
     optionId: currentOption.value?.id,
     quantity: quantity.value,
+    selected: false,
   });
 
   if (res.status === 200 && res.data) {
@@ -63,7 +64,8 @@ const handleAddCart = async () => {
   }
 };
 
-const handleCreateOrder = async () => {
+const handleCreateOrder = () => {};
+const handleCreateOrderOld = async () => {
   if (!authStore.isAuth) {
     router.push(`/login?redirect=${route.fullPath}`);
     return;
@@ -197,14 +199,14 @@ onActivated(() => {
             </span>
             <span
               class="text-white bg-red-600 font-medium rounded-lg text-sm px-3 py-1.5 text-center"
-              @click="handleAddCart"
+              @click="handleUpdateCart"
               v-if="currentOption.quantity <= 0"
             >
               สินค้าหมด
             </span>
             <template v-else-if="currentOption.quantity > 0">
               <div class="flex gap-2">
-                <UButton color="white" @click="handleAddCart">
+                <UButton color="white" @click="handleUpdateCart">
                   เพิ่มลงตะกร้า
                 </UButton>
                 <UButton color="blue" @click="handleCreateOrder">

@@ -14,7 +14,7 @@ const menus = [
     to: "/",
   },
   {
-    label: "ส่วนลด",
+    label: "รับส่วนลด",
     to: "/vouchers",
   },
 ];
