@@ -13,12 +13,12 @@ const items = [
     {
       label: "ตะกร้าสินค้า",
       icon: "i-heroicons-shopping-cart",
-      to: "/profile/cart",
+      to: "/cart",
     },
     {
       label: "รายการสั่งซื้อ",
       icon: "i-heroicons-list-bullet",
-      to: "/profile/orders/history",
+      to: "/profile/history/orders",
     },
     {
       label: "ที่อยู่จัดส่ง",

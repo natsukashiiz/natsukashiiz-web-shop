@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { forgotPassword } from "~/api/auth";
-import type { FormError } from "@nuxt/ui/dist/runtime/types";
+import type { FormError } from "#ui/types";
 import type { ForgotPasswordRequest } from "~/types";
 
 const toast = useToast();

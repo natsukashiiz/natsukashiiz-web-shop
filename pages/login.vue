@@ -5,7 +5,7 @@ import {
   GoogleSignInButton,
   type CredentialResponse,
 } from "vue3-google-signin";
-import type { FormError } from "@nuxt/ui/dist/runtime/types";
+import type { FormError } from "#ui/types";
 
 const turnstileToken = ref<string>();
 

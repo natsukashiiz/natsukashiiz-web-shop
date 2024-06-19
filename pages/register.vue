@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useAuthStore } from "~/stores/authStore";
 import { singup } from "~/api/auth";
-import type { FormError } from "@nuxt/ui/dist/runtime/types";
+import type { FormError } from "#ui/types";
 
 const route = useRoute();
 const router = useRouter();

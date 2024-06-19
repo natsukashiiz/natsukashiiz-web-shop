@@ -59,7 +59,12 @@ const loadData = async () => {
       order.value = res.data;
 
       if (order.value.status !== "PENDING") {
-        router.replace(`/profile/orders/detail/${order.value.orderId}`);
+        router.replace({
+          name: "profile-history-orders-orderId",
+          params: {
+            orderId: order.value.orderId,
+          },
+        });
       }
     } else {
       window.alert("Error");
@@ -153,7 +158,12 @@ const handleCancel = async () => {
         description: "กรุณารอสักครู่",
         timeout: 1000,
       });
-      router.replace(`/profile/orders/detail/${order.value.orderId}`);
+      router.replace({
+        name: "profile-history-orders-orderId",
+        params: {
+          orderId: order.value.orderId,
+        },
+      });
     } else {
       window.alert("Error");
     }
@@ -184,10 +194,15 @@ onActivated(async () => {
 
     const now = new Date();
     const expire = new Date(order.value.payExpire);
-    const diff = expire.getTime() - now.getTime();
+    const timeout = expire.getTime() - now.getTime();
     setTimeout(() => {
-      router.push(`/profile/orders/detail/${order.value?.orderId}`);
-    }, diff);
+      router.push({
+        name: "profile-history-orders-orderId",
+        params: {
+          orderId: order.value!!.orderId,
+        },
+      });
+    }, timeout);
   }
 });
 </script>

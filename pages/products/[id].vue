@@ -85,7 +85,7 @@ const handleCreateOrder = async () => {
 
   if (res.status === 200 && res.data) {
     router.push({
-      name: "profile-cart",
+      name: "cart",
     });
   } else {
     window.alert("เกิดข้อผิดพลาด");
@@ -219,7 +219,10 @@ onActivated(() => {
                 :label="false"
               />
             </div>
-            <AProductFavoriteButton :productId="product.id" />
+            <AProductFavoriteButton
+              :productId="product.id"
+              v-if="authStore.isAuth"
+            />
           </div>
         </div>
       </div>

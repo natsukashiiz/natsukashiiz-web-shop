@@ -54,7 +54,7 @@ const navClass = isMobile
               icon="i-heroicons-shopping-cart"
               color="gray"
               :to="{
-                name: 'profile-cart',
+                name: 'cart',
               }"
             />
           </UChip>

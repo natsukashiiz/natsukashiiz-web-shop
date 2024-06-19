@@ -13,6 +13,8 @@ import {
 import type { FormError, FormSubmitEvent } from "#ui/types";
 
 const tost = useToast();
+const route = useRoute();
+const router = useRouter();
 
 const addresses = ref<AddressResponse[]>([]);
 const modalForm = ref(false);
@@ -150,6 +152,10 @@ const handleAddAddress = async (data: CreateAddressRequest) => {
       title: "เพิ่มที่อยู่สำเร็จ",
       description: "ที่อยู่ของคุณถูกเพิ่มสำเร็จ",
     });
+
+    if (route.query.redirect) {
+      router.push(route.query.redirect as string);
+    }
   } else {
     window.alert("Error");
   }

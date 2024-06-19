@@ -67,9 +67,10 @@ const disabled = computed(() => {
           <div class="sm:order-1">
             <div class="mx-auto flex h-8 items-stretch text-gray-600">
               <UButton
-                label="-"
+                icon="i-heroicons-minus"
                 color="white"
-                class="rounded-r-none"
+                size="xs"
+                class="rounded-r-none ring-0 border disabled:bg-gray-100"
                 @click="
                   item.quantity > 1 ? $emit('update', --item.quantity) : null
                 "
@@ -77,13 +78,23 @@ const disabled = computed(() => {
               />
               <UInput
                 v-model="item.quantity"
-                disabled
-                :ui="{ rounded: 'rounded-none' }"
+                @change="$emit('update', $event)"
+                variant="none"
+                :ui="{
+                  base: 'w-12 text-center',
+                  rounded: 'rounded-none',
+                  color: {
+                    white: {
+                      outline: 'ring-0 focus:ring0',
+                    },
+                  },
+                }"
               />
               <UButton
-                label="+"
+                icon="i-heroicons-plus"
                 color="white"
-                class="rounded-l-none"
+                size="xs"
+                class="rounded-l-none ring-0 border disabled:bg-gray-100"
                 @click="$emit('update', ++item.quantity)"
                 :disabled="item.quantity >= item.maxQuantity || disabled"
               />

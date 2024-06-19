@@ -11,7 +11,9 @@ const divClass = isMobile ? "pt-24 min-h-screen" : "pt-14 min-h-screen";
   <div :class="divClass">
     <NuxtPage keepalive />
   </div>
-  <UNotifications />
+  <UNotifications
+    :ui="{ position: 'top-12 bottom-auto right-0 left-0 mx-auto' }"
+  />
 </template>
 <style>
 body {

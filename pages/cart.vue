@@ -5,6 +5,7 @@ import { getAllCart, deleteCart, updateCart } from "~/api/cart";
 const cartStore = useCartStore();
 const router = useRouter();
 const toast = useToast();
+const loading = useLoading();
 
 const cart = ref<CartResponse>({
   items: [],
@@ -24,6 +25,7 @@ const loadData = async () => {
 };
 
 const handleUpdateCart = async (data: CartRequest[]) => {
+  loading.value = true;
   try {
     const res = await updateCart(data);
 
@@ -42,6 +44,7 @@ const handleUpdateCart = async (data: CartRequest[]) => {
       window.alert("เกิดข้อผิดพลาด");
     }
   }
+  loading.value = false;
 };
 
 const removeItem = async (id: number) => {
@@ -67,7 +70,7 @@ const handleCheckout = () => {
     return;
   }
 
-  router.push({ name: "profile-orders-checkout" });
+  router.push({ name: "orders-checkout" });
 };
 
 const isSelectAll = computed(() => {
@@ -156,7 +159,10 @@ onMounted(() => {
                   {
                     productId: item.productId,
                     optionId: item.optionId,
-                    quantity,
+                    quantity: Math.min(
+                      Math.max(Number(quantity), 1),
+                      item.maxQuantity
+                    ),
                     selected: item.selected,
                   },
                 ])
@@ -199,7 +205,7 @@ onMounted(() => {
         <div class="flex flex-col items-center justify-center">
           <p class="text-xl font-semibold text-gray-900">ไม่มีสินค้าในตะกร้า</p>
           <UButton to="/" color="white" variant="solid" class="mt-4">
-            กลับไปหน้าแรก
+            กลับไปหน้าหลัก
           </UButton>
         </div>
       </div>

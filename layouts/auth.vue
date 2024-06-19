@@ -27,9 +27,9 @@ const subscribeServer = () => {
       timeout: 2500,
       click: () => {
         router.replace({
-          name: "profile-orders-detail-id",
+          name: "orders-detail-orderId",
           params: {
-            id: data.eventId,
+            orderId: data.eventId,
           },
         });
       },
@@ -37,14 +37,14 @@ const subscribeServer = () => {
 
     if (route.name === "payment-orderId") {
       router.replace({
-        name: "profile-orders-detail-id",
+        name: "orders-detail-orderId",
         params: {
-          id: data.eventId,
+          orderId: data.eventId,
         },
       });
     }
 
-    if (route.name === "profile-orders-detail-id") {
+    if (route.name === "orders-detail-orderId") {
       router.go(0);
     }
   });

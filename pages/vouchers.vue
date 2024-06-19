@@ -82,7 +82,7 @@ onActivated(() => {
                 @click="handleClaimVoucher(voucher.id)"
                 :disabled="voucher.claimed"
               >
-                รับส่วนลด
+                {{ voucher.claimed ? "รับส่วนลดแล้ว" : "รับส่วนลด" }}
               </UButton>
             </div>
           </template>

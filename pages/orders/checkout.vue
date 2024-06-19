@@ -59,7 +59,12 @@ const loadData = async () => {
     if (error.response.status === 417) {
       const err = error.response.data.error;
       if (err === "cart.selected.empty") {
-        router.replace({ name: "profile-cart" });
+        router.replace({ name: "cart" });
+      } else if (err === "address.invalid") {
+        router.push({
+          name: "profile-address",
+          query: { redirect: "/orders/checkout" },
+        });
       }
     }
   }
@@ -90,7 +95,10 @@ const handleCreateOrder = async () => {
   } catch (error: any) {
     if (error.response.status) {
       if (error.response.data.error === "address.invalid") {
-        router.push("/profile/address");
+        router.push({
+          name: "profile-address",
+          query: { redirect: "/orders/checkout" },
+        });
       } else {
         window.alert(error.response.data.error);
       }
