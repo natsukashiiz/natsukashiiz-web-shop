@@ -1,13 +1,19 @@
 <script setup lang="ts">
 const rating = defineModel<number>({ default: 0 });
 const hoverRating = ref(0);
+const isHovering = ref(false);
 
 function rate(star: number) {
   rating.value = star;
 }
-function hover(star: number) {
+const handleHover = (star: number) => {
+  isHovering.value = true;
   hoverRating.value = star;
-}
+};
+const handleLeave = () => {
+  isHovering.value = false;
+  hoverRating.value = 0;
+};
 </script>
 <template>
   <div class="flex items-center space-x-1">
@@ -15,13 +21,11 @@ function hover(star: number) {
       v-for="star in 5"
       :key="star"
       @click="rate(star)"
-      @mouseover="hover(star)"
-      @mouseleave="hover(0)"
+      @mouseover="handleHover(star)"
+      @mouseleave="handleLeave()"
       :class="{
-        'text-yellow-400': rating >= star,
-        'text-gray-300': rating < star,
-        'text-yellow-400/95': hoverRating > 0 && hoverRating >= star,
-        'text-gray-300/95': hoverRating > 0 && hoverRating < star,
+        'text-yellow-400': isHovering ? hoverRating >= star : rating >= star,
+        'text-gray-300': isHovering ? hoverRating < star : rating < star,
       }"
       class="w-4 h-4 star cursor-pointer transition-colors duration-200"
       aria-hidden="true"

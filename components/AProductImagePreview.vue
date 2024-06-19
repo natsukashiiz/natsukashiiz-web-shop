@@ -6,6 +6,8 @@ defineProps({
   },
 });
 import placeholder from "~/assets/img/image-placeholder.svg";
+
+const { isMobile } = useDevice();
 </script>
 <template>
   <UCarousel
@@ -25,7 +27,7 @@ import placeholder from "~/assets/img/image-placeholder.svg";
       icon: 'i-heroicons-arrow-right-20-solid',
       class: '-right-12',
     }"
-    arrows
+    :arrows="!isMobile"
     class="w-92 mx-auto"
   >
     <NuxtImg

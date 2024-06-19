@@ -4,9 +4,10 @@ import type { ProductResponse } from "~/types";
 
 const router = useRouter();
 const isOpen = ref(false);
-const keyword = ref();
+const keyword = ref<string>("");
 const results = ref<ProductResponse[]>([]);
 const total = ref(0);
+const searching = ref(false);
 
 watch(isOpen, (value) => {
   results.value = [];
@@ -39,6 +40,7 @@ const loadData = async () => {
     return;
   }
 
+  searching.value = true;
   try {
     const res = await getProduct({
       name: keyword.value,
@@ -58,6 +60,7 @@ const loadData = async () => {
     console.error(error);
     window.alert("เกิดข้อผิดพลาด");
   }
+  searching.value = false;
 };
 
 const handleClear = () => {
@@ -96,10 +99,14 @@ const handleSelect = (product: ProductResponse) => {
           />
         </template>
       </UInput>
-      <UDivider class="my-4" />
-      <div v-if="results.length === 0" class="text-center text-gray-500">
-        ไม่พบสินค้าที่คุณค้นหา
-      </div>
+      <template v-if="searching">
+        <UDivider class="my-4" />
+        <div class="text-center text-gray-500">กำลังค้นหา...</div>
+      </template>
+      <template v-else-if="keyword.length > 0 && results.length === 0">
+        <UDivider class="my-4" />
+        <div class="text-center text-gray-500">ไม่พบสินค้าที่คุณค้นหา</div>
+      </template>
       <div v-else>
         <!-- with tailwind css -->
         <div class="grid grid-cols-1 gap-2">

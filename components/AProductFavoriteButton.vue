@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import {
-  createProductFavorite,
-  deleteProductFavorite,
-  isProductFavorite,
-} from "~/api/product";
+import { favoriteProduct, isProductFavorite } from "~/api/product";
 
 const props = defineProps({
   productId: {
@@ -14,7 +10,6 @@ const props = defineProps({
 
 const toast = useToast();
 
-const favorite = ref<boolean | null>(null);
 const isFavorite = ref(false);
 
 const loadData = async () => {
@@ -22,27 +17,7 @@ const loadData = async () => {
     const res = await isProductFavorite(props.productId);
     if (res.status === 200) {
       isFavorite.value = res.data;
-
-      if (favorite.value === null) {
-        favorite.value = res.data;
-      }
     }
-  } catch (error) {
-    alert("เกิดข้อผิดพลาด");
-  }
-};
-
-const handleAddFavorite = async () => {
-  try {
-    await createProductFavorite(props.productId);
-  } catch (error) {
-    alert("เกิดข้อผิดพลาด");
-  }
-};
-
-const handleRemoveFavorite = async () => {
-  try {
-    await deleteProductFavorite(props.productId);
   } catch (error) {
     alert("เกิดข้อผิดพลาด");
   }
@@ -50,42 +25,27 @@ const handleRemoveFavorite = async () => {
 
 const handleToggleFavorite = async () => {
   toast.clear();
-  if (isFavorite.value) {
-    toast.add({
-      title: "เพิ่มสินค้าลงรายการโปรดแล้ว",
-    });
-  } else {
-    toast.add({
-      title: "ลบสินค้าออกจากรายการโปรดแล้ว",
-    });
+  try {
+    const res = await favoriteProduct(props.productId);
+    if (res.status === 200) {
+      isFavorite.value = res.data;
+      toast.add({
+        title: isFavorite.value
+          ? "เพิ่มไปยังรายการโปรดแล้ว"
+          : "ลบออกจากรายการโปรดแล้ว",
+      });
+    }
+  } catch (error) {
+    alert("เกิดข้อผิดพลาด");
   }
-  isFavorite.value = !isFavorite.value;
 };
 
 onMounted(() => {
   loadData();
-
-  window.onbeforeunload = async () => {
-    console.log("onbeforeunload");
-    if (favorite.value !== null && isFavorite.value !== favorite.value) {
-      if (isFavorite.value) {
-        await handleAddFavorite();
-      } else {
-        await handleRemoveFavorite();
-      }
-    }
-  };
 });
 
-onDeactivated(() => {
-  if (favorite.value !== null && isFavorite.value !== favorite.value) {
-    if (isFavorite.value) {
-      handleAddFavorite();
-    } else {
-      handleRemoveFavorite();
-    }
-  }
-  window.onbeforeunload = null;
+onActivated(() => {
+  loadData();
 });
 </script>
 

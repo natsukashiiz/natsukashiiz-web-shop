@@ -45,7 +45,13 @@ const handlePreview = () => {
       />
     </UTooltip>
   </UCarousel>
-  <UModal v-model="isOpen" :ui="{ overlay: { background: 'bg-gray-200/80' } }">
-    <AProductImagePreview :items="items" />
+  <UModal
+    v-model="isOpen"
+    :ui="{
+      overlay: { background: 'bg-gray-200/80' },
+      container: 'items-center',
+    }"
+  >
+    <LazyAProductImagePreview :items="items" />
   </UModal>
 </template>

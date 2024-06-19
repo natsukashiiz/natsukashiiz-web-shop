@@ -27,7 +27,7 @@ const subscribeServer = () => {
       timeout: 2500,
       click: () => {
         router.replace({
-          name: "orders-detail-orderId",
+          name: "profile-history-orders-orderId",
           params: {
             orderId: data.eventId,
           },
@@ -37,14 +37,14 @@ const subscribeServer = () => {
 
     if (route.name === "payment-orderId") {
       router.replace({
-        name: "orders-detail-orderId",
+        name: "profile-history-orders-orderId",
         params: {
           orderId: data.eventId,
         },
       });
     }
 
-    if (route.name === "orders-detail-orderId") {
+    if (route.name === "profile-history-orders-orderId") {
       router.go(0);
     }
   });
@@ -68,11 +68,12 @@ onBeforeMount(async () => {
 });
 
 const { isMobile } = useDevice();
-const divClass = isMobile ? "pt-24 min-h-screen" : "pt-14 min-h-screen";
+const divClass = isMobile ? "pb-24 min-h-screen" : "pt-14 min-h-screen";
 </script>
 <template>
   <NuxtLoadingBar />
-  <a-top-bar-auth :countCart="cartStore.count" />
+  <a-bottom-bar-auth v-if="isMobile" />
+  <a-top-bar-auth :countCart="cartStore.count" v-else />
   <div :class="divClass">
     <UNotifications
       :ui="{ position: 'top-12 bottom-auto right-0 left-0 mx-auto' }"

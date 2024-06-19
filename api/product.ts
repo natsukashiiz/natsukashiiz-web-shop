@@ -51,11 +51,8 @@ const getProductFavorite = (
 const isProductFavorite = (id: number): ServerResponse<boolean> =>
   client.get(`/v1/products/${id}/favorites`);
 
-const createProductFavorite = (id: number): ServerResponse<void> =>
+const favoriteProduct = (id: number): ServerResponse<boolean> =>
   client.post(`/v1/products/${id}/favorites`);
-
-const deleteProductFavorite = (id: number): ServerResponse<void> =>
-  client.delete(`/v1/products/${id}/favorites`);
 
 export {
   getAllProduct,
@@ -67,6 +64,5 @@ export {
   getViewHistory,
   getProductFavorite,
   isProductFavorite,
-  createProductFavorite,
-  deleteProductFavorite,
+  favoriteProduct,
 };

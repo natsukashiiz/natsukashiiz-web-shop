@@ -50,13 +50,16 @@ const handleUpdateCart = async () => {
   ]);
 
   if (res.status === 200 && res.data) {
+    toast.clear();
     toast.add({
       id: "add-cart",
       title: "เพิ่มสินค้าลงตะกร้าสำเร็จ",
       description: "สินค้าถูกเพิ่มลงตะกร้าสำเร็จ",
       timeout: 2000,
       click: () => {
-        router.push("/profile/cart");
+        router.push({
+          name: "cart",
+        });
         toast.remove("add-cart");
       },
     });
