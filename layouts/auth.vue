@@ -11,9 +11,6 @@ const toast = useToast();
 const router = useRouter();
 const route = useRoute();
 
-const { isMobile } = useDevice();
-const divClass = isMobile ? "pt-24 min-h-screen" : "pt-14 min-h-screen";
-
 const subscribeServer = () => {
   const event = new EventSource(
     `${
@@ -69,14 +66,19 @@ onBeforeMount(async () => {
 
   subscribeServer();
 });
+
+const { isMobile } = useDevice();
+const divClass = isMobile ? "pt-24 min-h-screen" : "pt-14 min-h-screen";
 </script>
 <template>
   <NuxtLoadingBar />
   <a-top-bar-auth :countCart="cartStore.count" />
   <div :class="divClass">
+    <UNotifications
+      :ui="{ position: 'top-12 bottom-auto right-0 left-0 mx-auto' }"
+    />
     <NuxtPage keepalive />
   </div>
-  <UNotifications />
 </template>
 <style>
 body {

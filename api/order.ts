@@ -6,6 +6,7 @@ import type {
   PayOrderResponse,
   QueryOrderRequest,
   CheckoutRequest,
+  CheckoutResponse,
 } from "~/types";
 import client from "~/api/request";
 
@@ -25,7 +26,7 @@ const cancelOrder = (id: string): ServerResponse<void> =>
 const payOrder = (body: PayOrderRequest): ServerResponse<PayOrderResponse> =>
   client.put(`/v1/orders/pay`, body);
 
-const checkout = (body: CheckoutRequest): ServerResponse<OrderResponse> =>
+const checkout = (body: CheckoutRequest): ServerResponse<CheckoutResponse> =>
   client.post("/v1/orders/checkout", body);
 
 export {

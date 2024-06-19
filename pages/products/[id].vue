@@ -40,12 +40,14 @@ const handleUpdateCart = async () => {
 
   if (!product.value || !currentOption.value) return;
 
-  const res = await updateCart({
-    productId: product.value.id,
-    optionId: currentOption.value?.id,
-    quantity: quantity.value,
-    selected: false,
-  });
+  const res = await updateCart([
+    {
+      productId: product.value.id,
+      optionId: currentOption.value?.id,
+      quantity: quantity.value,
+      selected: false,
+    },
+  ]);
 
   if (res.status === 200 && res.data) {
     toast.add({
@@ -64,8 +66,7 @@ const handleUpdateCart = async () => {
   }
 };
 
-const handleCreateOrder = () => {};
-const handleCreateOrderOld = async () => {
+const handleCreateOrder = async () => {
   if (!authStore.isAuth) {
     router.push(`/login?redirect=${route.fullPath}`);
     return;
@@ -73,29 +74,21 @@ const handleCreateOrderOld = async () => {
 
   if (!product.value || !currentOption.value) return;
 
-  try {
-    const res = await createOrder([
-      {
-        productId: product.value.id,
-        optionId: currentOption.value.id,
-        quantity: quantity.value,
-      },
-    ]);
-    if (res.status === 200) {
-      router.push(`/payment/${res.data.orderId}`);
-    } else {
-      window.alert("เกิดข้อผิดพลาด");
-    }
-  } catch (error: any) {
-    if (error.response.status) {
-      if (error.response.data.error === "address.invalid") {
-        router.push("/profile/address");
-      } else {
-        window.alert(error.response.data.error);
-      }
-    } else {
-      window.alert("เกิดข้อผิดพลาด");
-    }
+  const res = await updateCart([
+    {
+      productId: product.value.id,
+      optionId: currentOption.value?.id,
+      quantity: quantity.value,
+      selected: true,
+    },
+  ]);
+
+  if (res.status === 200 && res.data) {
+    router.push({
+      name: "profile-cart",
+    });
+  } else {
+    window.alert("เกิดข้อผิดพลาด");
   }
 };
 

@@ -8,7 +8,7 @@ const route = useRoute();
 const order = ref<OrderResponse>();
 
 const loadData = async () => {
-  const res = await getOneOrder((route.params as any).id as string);
+  const res = await getOneOrder((route.params as any).orderId as string);
 
   if (res.status === 200 && res.data) {
     order.value = res.data;

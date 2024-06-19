@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { CartResponse, CartItemResponse, CartRequest } from "~/types";
 import { getAllCart, deleteCart, updateCart } from "~/api/cart";
-import { createOrder } from "~/api/order";
 
 const cartStore = useCartStore();
 const router = useRouter();
@@ -14,9 +13,6 @@ const cart = ref<CartResponse>({
   totalSelectedQuantity: 0,
   totalPrice: 0,
 });
-const voucherId = ref<number | undefined>();
-
-const maxAmount = 150000;
 
 const loadData = async () => {
   const res = await getAllCart();
@@ -27,7 +23,7 @@ const loadData = async () => {
   }
 };
 
-const handleUpdateCart = async (data: CartRequest) => {
+const handleUpdateCart = async (data: CartRequest[]) => {
   try {
     const res = await updateCart(data);
 
@@ -58,10 +54,10 @@ const removeItem = async (id: number) => {
   }
 };
 
-const handleCreateOrder = () => {};
-const handleCreateOrderOld = async () => {
+const maxAmount = 150000;
+const handleCheckout = () => {
   // verify amount max
-  if (300 > maxAmount) {
+  if (cart.value.totalPrice > maxAmount) {
     toast.clear();
     toast.add({
       title: "เกิดข้อผิดพลาด",
@@ -71,53 +67,44 @@ const handleCreateOrderOld = async () => {
     return;
   }
 
-  try {
-    // const items = selected.value.map((item) => {
-    //   return {
-    //     productId: item.id,
-    //     optionId: item.optionId,
-    //     quantity: item.quantity,
-    //   };
-    // });
-    const res = await createOrder({
-      voucherId: voucherId.value,
-      orderItems: [],
-    });
-    if (res.status === 200) {
-      router.push(`/payment/${res.data.orderId}`);
-    } else {
-      window.alert("เกิดข้อผิดพลาด");
-    }
-  } catch (error: any) {
-    if (error.response.status) {
-      if (error.response.data.error === "address.invalid") {
-        router.push("/profile/address");
-      } else {
-        window.alert(error.response.data.error);
-      }
-    } else {
-      window.alert("เกิดข้อผิดพลาด");
-    }
+  router.push({ name: "profile-orders-checkout" });
+};
+
+const isSelectAll = computed(() => {
+  return cart.value.items.length === cart.value.countSelected;
+});
+const handleSelectAll = async () => {
+  if (isSelectAll.value) {
+    await handleUpdateCart(
+      cart.value.items.map((item) => ({
+        productId: item.productId,
+        optionId: item.optionId,
+        quantity: item.quantity,
+        selected: false,
+      }))
+    );
+  } else {
+    await handleUpdateCart(
+      cart.value.items.map((item) => ({
+        productId: item.productId,
+        optionId: item.optionId,
+        quantity: item.quantity,
+        selected: true,
+      }))
+    );
   }
 };
 
-const count = computed(() => {
-  return cart.value.items.filter((item) => item.maxQuantity > item.quantity)
-    .length;
-});
-
-const handleSelectAll = () => {};
-
 const handleSelect = async (item: CartItemResponse) => {
-  await handleUpdateCart({
-    productId: item.productId,
-    optionId: item.optionId,
-    quantity: item.quantity,
-    selected: !item.selected,
-  });
+  await handleUpdateCart([
+    {
+      productId: item.productId,
+      optionId: item.optionId,
+      quantity: item.quantity,
+      selected: !item.selected,
+    },
+  ]);
 };
-
-const isSelectedAll = computed(() => {});
 
 const onLoad = () => {
   loadData();
@@ -142,7 +129,7 @@ onMounted(() => {
               color="primary"
               variant="outline"
               @click="handleSelectAll"
-              v-if="!false"
+              v-if="!isSelectAll"
             >
               เลือกทั้งหมด
             </UButton>
@@ -165,12 +152,14 @@ onMounted(() => {
             @selected="handleSelect(item)"
             @update="
               (quantity) =>
-                handleUpdateCart({
-                  productId: item.productId,
-                  optionId: item.optionId,
-                  quantity,
-                  selected: item.selected,
-                })
+                handleUpdateCart([
+                  {
+                    productId: item.productId,
+                    optionId: item.optionId,
+                    quantity,
+                    selected: item.selected,
+                  },
+                ])
             "
             @remove="removeItem(item.id)"
           />
@@ -180,7 +169,7 @@ onMounted(() => {
         <div class="flex items-center justify-between">
           <p class="text-sm text-gray-400">ยอดรวม</p>
           <p class="text-lg font-semibold text-gray-900">
-            ฿<ACurrency :amount="cart.totalPrice" />
+            <ACurrency :amount="cart.totalPrice" /> บาท
           </p>
         </div>
         <div class="flex items-center justify-between">
@@ -198,8 +187,8 @@ onMounted(() => {
       <div class="mt-6 text-center">
         <UButton
           block
-          @click="handleCreateOrder"
-          :disabled="cart.totalQuantity === 0"
+          @click="handleCheckout"
+          :disabled="cart.totalSelectedQuantity === 0"
         >
           ชำระเงิน
         </UButton>

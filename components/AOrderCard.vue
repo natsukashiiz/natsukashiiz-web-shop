@@ -46,7 +46,10 @@ defineProps({
       </div>
     </div>
     <NuxtLink
-      :to="`/orders/detail/${item.orderId}`"
+      :to="{
+        name: 'profile-orders-detail-orderId',
+        params: { orderId: item.orderId },
+      }"
       class="absolute bottom-2 right-0 text-sm text-gray-400 hover:text-blue-500"
     >
       ดูรายละเอียดเพิ่มเติม

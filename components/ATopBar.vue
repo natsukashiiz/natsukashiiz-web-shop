@@ -14,7 +14,7 @@ const navClass = isMobile
   : "flex justify-around items-center bg-slate-50 bg-opacity-60 py-2 px-5 h-16 border-b-[1.5px] border-slate-200";
 </script>
 <template>
-  <div class="fixed z-[9999] w-full backdrop-blur-sm">
+  <div class="fixed z-[20] w-full backdrop-blur-sm">
     <nav :class="navClass">
       <div class="flex items-center space-x-4">
         <ULink to="/">

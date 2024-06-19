@@ -280,3 +280,20 @@ export interface VoucherResponse {
 export interface CheckoutRequest {
   voucherId?: number;
 }
+
+export interface CheckoutResponse {
+  address: AddressResponse;
+  vouchers: VoucherResponse[];
+  items: CheckoutItem[];
+  totalQuantity: number;
+  totalPay: number;
+  totalDiscount: number;
+  totalShipping: number;
+  actualPay: number;
+}
+
+export interface CheckoutItem {
+  product: ProductResponse;
+  option: OptionResponse;
+  quantity: number;
+}
