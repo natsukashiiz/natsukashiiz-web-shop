@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { CheckoutResponse } from "~/types";
+import type { CheckoutResponse, VoucherResponse } from "~/types";
 import { checkout, createOrder } from "~/api/order";
 
 const toast = useToast();
@@ -45,7 +45,7 @@ const loadData = async () => {
 
     voucherOptions.value = [{ name: "ไม่มีส่วนลด", value: 0 }];
     voucherOptions.value.push(
-      ...response.data.vouchers.map((voucher) => {
+      ...response.data.vouchers.map((voucher: VoucherResponse) => {
         return {
           name:
             voucher.discountType === "PERCENT"

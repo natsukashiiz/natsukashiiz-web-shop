@@ -58,7 +58,7 @@ const loadData = async () => {
     if (res.status === 200 && res.data) {
       order.value = res.data;
 
-      if (order.value.status !== "PENDING") {
+      if (order.value && order.value.status !== "PENDING") {
         router.replace({
           name: "profile-history-orders-orderId",
           params: {
