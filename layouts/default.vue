@@ -1,20 +1,17 @@
 <script setup lang="ts">
 const colorMode = useColorMode();
 colorMode.preference = "light";
-
-const { isMobile } = useDevice();
-const divClass = isMobile ? "pb-24 min-h-screen" : "pt-14 min-h-screen";
 </script>
 <template>
   <NuxtLoadingBar />
-  <a-bottom-bar v-if="isMobile" />
-  <a-top-bar v-else />
-  <div :class="divClass">
+  <UNotifications
+    :ui="{ position: '-top-2 md:top-12 bottom-auto right-0 left-0 mx-auto' }"
+  />
+  <a-top-bar />
+  <div class="pb-24 md:pt-14 min-h-screen">
     <NuxtPage keepalive />
   </div>
-  <UNotifications
-    :ui="{ position: 'top-12 bottom-auto right-0 left-0 mx-auto' }"
-  />
+  <a-bottom-bar />
 </template>
 <style>
 body {

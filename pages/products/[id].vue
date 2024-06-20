@@ -3,7 +3,6 @@ import type { OptionResponse, ProductResponse } from "~/types";
 import { getOneProduct } from "~/api/product";
 import { useAuthStore } from "~/stores/authStore";
 import { updateCart, getCountCart } from "~/api/cart";
-import { createOrder } from "~/api/order";
 
 const authStore = useAuthStore();
 const cartStore = useCartStore();
@@ -11,10 +10,13 @@ const cartStore = useCartStore();
 const route = useRoute();
 const router = useRouter();
 const toast = useToast();
+const loading = useLoading();
 
 const product = ref<ProductResponse>();
 const currentOption = ref<OptionResponse>();
 const quantity = ref(1);
+
+const adding = ref(false);
 
 const loadData = async () => {
   const res = await getOneProduct(Number((route.params as any).id));
@@ -40,33 +42,39 @@ const handleUpdateCart = async () => {
 
   if (!product.value || !currentOption.value) return;
 
-  const res = await updateCart([
-    {
-      productId: product.value.id,
-      optionId: currentOption.value?.id,
-      quantity: quantity.value,
-      selected: false,
-    },
-  ]);
-
-  if (res.status === 200 && res.data) {
-    toast.clear();
-    toast.add({
-      id: "add-cart",
-      title: "เพิ่มสินค้าลงตะกร้าสำเร็จ",
-      description: "สินค้าถูกเพิ่มลงตะกร้าสำเร็จ",
-      timeout: 2000,
-      click: () => {
-        router.push({
-          name: "cart",
-        });
-        toast.remove("add-cart");
+  adding.value = true;
+  try {
+    const res = await updateCart([
+      {
+        productId: product.value.id,
+        optionId: currentOption.value?.id,
+        quantity: quantity.value,
+        selected: false,
       },
-    });
-    await fetchCountCart();
-  } else {
-    window.alert("เกิดข้อผิดพลาด");
+    ]);
+
+    if (res.status === 200 && res.data) {
+      toast.clear();
+      toast.add({
+        id: "add-cart",
+        title: "เพิ่มสินค้าลงตะกร้าสำเร็จ",
+        description: "สินค้าถูกเพิ่มลงตะกร้าสำเร็จ",
+        timeout: 2000,
+        click: () => {
+          router.push({
+            name: "cart",
+          });
+          toast.remove("add-cart");
+        },
+      });
+      await fetchCountCart();
+    } else {
+      window.alert("เกิดข้อผิดพลาด");
+    }
+  } catch (error) {
+    console.error(error);
   }
+  adding.value = false;
 };
 
 const handleCreateOrder = async () => {
@@ -77,22 +85,28 @@ const handleCreateOrder = async () => {
 
   if (!product.value || !currentOption.value) return;
 
-  const res = await updateCart([
-    {
-      productId: product.value.id,
-      optionId: currentOption.value?.id,
-      quantity: quantity.value,
-      selected: true,
-    },
-  ]);
+  loading.value = true;
+  try {
+    const res = await updateCart([
+      {
+        productId: product.value.id,
+        optionId: currentOption.value?.id,
+        quantity: quantity.value,
+        selected: true,
+      },
+    ]);
 
-  if (res.status === 200 && res.data) {
-    router.push({
-      name: "cart",
-    });
-  } else {
-    window.alert("เกิดข้อผิดพลาด");
+    if (res.status === 200 && res.data) {
+      router.push({
+        name: "cart",
+      });
+    } else {
+      window.alert("เกิดข้อผิดพลาด");
+    }
+  } catch (error) {
+    console.error(error);
   }
+  loading.value = false;
 };
 
 const fetchCountCart = async () => {
@@ -115,6 +129,17 @@ onActivated(() => {
     class="max-w-5xl mx-auto flex flex-col items-center justify-center space-y-2 p-4"
     v-if="product && currentOption"
   >
+    <Head>
+      <title>{{ product.name }}</title>
+      <meta name="description" :content="product.description" />
+      <meta property="og:title" :content="product.name" />
+      <meta property="og:description" :content="product.description" />
+      <meta property="og:image" :content="product.thumbnail" />
+      <meta property="og:url" :content="$route.fullPath" />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="shop.natsukashiiz.online" />
+      <meta property="og:locale" content="th_TH" />
+    </Head>
     <div class="bg-white border border-gray-200 rounded-lg shadow pb-4">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-8 mb-3">
         <AProductCarousel :items="product.images" preview />
@@ -135,7 +160,7 @@ onActivated(() => {
                 size="xs"
                 @click="changeOption(option)"
               >
-                {{ option.name }}
+                {{ option.name.toUpperCase() }}
               </UButton>
             </template>
           </div>
@@ -202,10 +227,14 @@ onActivated(() => {
             </span>
             <template v-else-if="currentOption.quantity > 0">
               <div class="flex gap-2">
-                <UButton color="white" @click="handleUpdateCart">
+                <UButton
+                  color="white"
+                  @click="handleUpdateCart"
+                  :loading="adding"
+                >
                   เพิ่มลงตะกร้า
                 </UButton>
-                <UButton color="blue" @click="handleCreateOrder">
+                <UButton @click="handleCreateOrder" :disabled="loading">
                   ซื้อสินค้า
                 </UButton>
               </div>
@@ -214,10 +243,10 @@ onActivated(() => {
           <div class="flex items-center gap-2 mt-4 justify-between">
             <div class="flex gap-1">
               <SocialShare
-                v-for="network in ['facebook', 'twitter', 'telegram']"
+                v-for="network in ['facebook', 'twitter']"
                 :key="network"
                 :network="network"
-                class="hover:text-rose-500 text-white"
+                class="text-white"
                 :styled="true"
                 :label="false"
               />

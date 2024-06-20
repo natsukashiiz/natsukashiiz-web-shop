@@ -66,20 +66,17 @@ onBeforeMount(async () => {
 
   subscribeServer();
 });
-
-const { isMobile } = useDevice();
-const divClass = isMobile ? "pb-24 min-h-screen" : "pt-14 min-h-screen";
 </script>
 <template>
   <NuxtLoadingBar />
-  <a-bottom-bar-auth v-if="isMobile" />
-  <a-top-bar-auth :countCart="cartStore.count" v-else />
-  <div :class="divClass">
-    <UNotifications
-      :ui="{ position: 'top-12 bottom-auto right-0 left-0 mx-auto' }"
-    />
+  <UNotifications
+    :ui="{ position: '-top-2 md:top-12 bottom-auto right-0 left-0 mx-auto' }"
+  />
+  <a-top-bar-auth :countCart="cartStore.count" />
+  <div class="pb-24 md:pt-14 min-h-screen">
     <NuxtPage keepalive />
   </div>
+  <a-bottom-bar-auth />
 </template>
 <style>
 body {

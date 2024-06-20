@@ -16,12 +16,18 @@ const cart = ref<CartResponse>({
 });
 
 const loadData = async () => {
-  const res = await getAllCart();
-  if (res.status === 200 && res.data) {
-    cart.value = res.data;
-  } else {
-    window.alert("เกิดข้อผิดพลาด");
+  loading.value = true;
+  try {
+    const res = await getAllCart();
+    if (res.status === 200 && res.data) {
+      cart.value = res.data;
+    } else {
+      window.alert("เกิดข้อผิดพลาด");
+    }
+  } catch (error) {
+    console.log(error);
   }
+  loading.value = false;
 };
 
 const handleUpdateCart = async (data: CartRequest[]) => {
@@ -48,13 +54,19 @@ const handleUpdateCart = async (data: CartRequest[]) => {
 };
 
 const removeItem = async (id: number) => {
-  const res = await deleteCart(id);
-  if (res.status === 200) {
-    cart.value = res.data;
-    cartStore.setCount(cart.value.totalQuantity);
-  } else {
-    window.alert("เกิดข้อผิดพลาด");
+  loading.value = true;
+  try {
+    const res = await deleteCart(id);
+    if (res.status === 200) {
+      cart.value = res.data;
+      cartStore.setCount(cart.value.totalQuantity);
+    } else {
+      window.alert("เกิดข้อผิดพลาด");
+    }
+  } catch (error) {
+    console.log(error);
   }
+  loading.value = false;
 };
 
 const maxAmount = 150000;
@@ -122,8 +134,11 @@ onMounted(() => {
 });
 </script>
 <template>
+  <Head>
+    <title>ตะกร้าสินค้า</title>
+  </Head>
   <UContainer class="max-w-3xl py-8">
-    <UCard v-if="cart.items.length > 0">
+    <UCard v-if="cart.items.length > 0" :ui="{ body: { padding: 'px-2' } }">
       <template #header>
         <div class="flex justify-between items-center">
           <div class="text-sm sm:text-base">
@@ -134,6 +149,7 @@ onMounted(() => {
               color="primary"
               variant="outline"
               @click="handleSelectAll"
+              :loading="loading"
               v-if="!isSelectAll"
             >
               เลือกทั้งหมด
@@ -142,6 +158,7 @@ onMounted(() => {
               color="red"
               variant="outline"
               @click="handleSelectAll"
+              :loading="loading"
               v-else
             >
               ยกเลิก

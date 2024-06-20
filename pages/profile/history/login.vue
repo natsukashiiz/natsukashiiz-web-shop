@@ -66,6 +66,9 @@ onActivated(() => {
 </script>
 
 <template>
+  <Head>
+    <title>ประวัติการเข้าสู่ระบบ</title>
+  </Head>
   <UContainer class="max-w-5xl py-5">
     <UCard class="py-2">
       <template #header>

@@ -118,17 +118,13 @@ watch(
     }
   }
 );
-
-const { isMobile } = useDevice();
 </script>
 
 <template>
   <div
-    class="nuxt-progress"
+    class="nuxt-progress top-0 md:top-[62px]"
     :class="{
       'nuxt-progress-failed': !data.canSucceed,
-      'top-0': isMobile,
-      'top-[62px]': !isMobile,
     }"
     :style="{
       width: data.percent + '%',

@@ -120,6 +120,9 @@ onActivated(() => {
 </script>
 
 <template>
+  <Head>
+    <title>สรุปรายการสั่งซื้อ</title>
+  </Head>
   <UContainer class="max-w-4xl my-4">
     <div class="flex flex-col space-y-4">
       <h1 class="text-lg sm:text-2xl font-semibold">สรุปรายการสั่งซื้อ</h1>

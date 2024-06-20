@@ -3,6 +3,7 @@ import { getProductReview } from "~/api/product";
 import type { ProductResponse, ProductReviewResponse } from "~/types";
 
 const authStore = useAuthStore();
+const loading = useLoading();
 
 const props = defineProps({
   product: {
@@ -20,18 +21,24 @@ const pagination = reactive({
 });
 
 const loadReview = async () => {
-  const res = await getProductReview(props.product.id, {
-    page: pagination.page,
-    size: pagination.limit,
-    sort: "createdAt,desc",
-  });
+  loading.value = true;
+  try {
+    const res = await getProductReview(props.product.id, {
+      page: pagination.page,
+      size: pagination.limit,
+      sort: "createdAt,desc",
+    });
 
-  if (res.status === 200 && res.data) {
-    reviews.value = res.data.list;
-    pagination.total = res.data.total;
-  } else {
+    if (res.status === 200 && res.data) {
+      reviews.value = res.data.list;
+      pagination.total = res.data.total;
+    } else {
+      window.alert("เกิดข้อผิดพลาด");
+    }
+  } catch (error) {
     window.alert("เกิดข้อผิดพลาด");
   }
+  loading.value = false;
 };
 
 const changePage = async () => {
@@ -82,7 +89,7 @@ onActivated(() => {
     <template v-if="pagination.total > 0">
       <template v-for="(review, idx) in reviews" :key="review.id">
         <ARatingComment
-          class="p-5"
+          class="py-4"
           :account="{
             name: review.profile.email,
           }"

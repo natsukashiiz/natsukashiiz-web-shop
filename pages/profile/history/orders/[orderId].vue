@@ -27,6 +27,9 @@ onActivated(() => {
     class="mx-auto max-w-2xl pb-24 pt-8 sm:px-6 sm:pt-16 lg:max-w-7xl lg:px-8"
     v-if="order"
   >
+    <Head>
+      <title>ออเดอร์ #{{ order.orderId }}</title>
+    </Head>
     <div
       class="space-y-2 px-4 sm:flex sm:items-baseline sm:justify-between sm:space-y-0 sm:px-0"
     >

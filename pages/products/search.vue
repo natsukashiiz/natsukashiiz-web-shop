@@ -69,6 +69,11 @@ onBeforeRouteUpdate((to, from, next) => {
 });
 </script>
 <template>
+  <Head>
+    <title>
+      {{ keyword ? `ค้นหา: ${keyword}` : `หมวดหมู่: ${categoryName}` }}
+    </title>
+  </Head>
   <UContainer class="flex flex-col gap-y-2 p-5">
     <span v-if="keyword" class="text-2xl"> ค้นหา: {{ keyword }} </span>
     <span v-if="categoryName" class="text-2xl">

@@ -60,6 +60,9 @@ onActivated(() => {
 </script>
 
 <template>
+  <Head>
+    <title>ประวัติการเข้าชมสินค้า</title>
+  </Head>
   <UContainer class="max-w-3xl py-5">
     <UCard class="py-2" v-if="products.length > 0">
       <template #header>

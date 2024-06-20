@@ -20,6 +20,9 @@
 // };
 </script>
 <template>
+  <Head>
+    <title>หน้าหลัก</title>
+  </Head>
   <UContainer class="flex flex-col gap-y-2 p-5">
     <div class="max-w-3xl mx-auto mb-5">
       <!-- carousel -->

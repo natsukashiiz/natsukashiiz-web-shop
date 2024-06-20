@@ -99,6 +99,9 @@ onMounted(() => {
 });
 </script>
 <template>
+  <Head>
+    <title>เข้าสู่ระบบ</title>
+  </Head>
   <UContainer class="flex justify-center">
     <UCard class="mt-24 w-11/12 md:w-96">
       <template #header>

@@ -73,6 +73,9 @@ if (route.query.email && route.query.code) {
 }
 </script>
 <template>
+  <Head>
+    <title>รีเซ็ตรหัสผ่าน</title>
+  </Head>
   <UContainer class="flex justify-center">
     <UCard class="mt-24">
       <template #header>

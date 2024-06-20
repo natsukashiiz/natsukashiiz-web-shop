@@ -207,6 +207,9 @@ onActivated(async () => {
 });
 </script>
 <template>
+  <Head>
+    <title>ชำระเงิน</title>
+  </Head>
   <template v-if="order && address">
     <AModal
       :modal="modalPayImage"

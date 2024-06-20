@@ -26,7 +26,7 @@ defineProps({
       <UAvatar
         :alt="account.name.toUpperCase()"
         size="md"
-        class="border-2 border-rose-500 hover:border-rose-300 cursor-pointer mr-4"
+        class="border-2 border-primary-500 hover:border-primary-400 cursor-pointer mr-4"
       />
       <div class="font-medium dark:text-white">
         <p>

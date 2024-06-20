@@ -108,6 +108,9 @@ if (route.query.code) {
 }
 </script>
 <template>
+  <Head>
+    <title>ยืนยันตัวตน</title>
+  </Head>
   <UContainer class="flex justify-center">
     <UCard class="mt-24">
       <template #header>

@@ -57,6 +57,9 @@ const disabled = computed(() => {
 });
 </script>
 <template>
+  <Head>
+    <title>ลืมรหัสผ่าน</title>
+  </Head>
   <UContainer class="flex justify-center">
     <UCard class="mt-24">
       <template #header>

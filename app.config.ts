@@ -5,5 +5,10 @@ export default defineAppConfig({
       wrapper: "z-[99999]",
       container: "items-start",
     },
+    button: {
+      default: {
+        loadingIcon: "i-heroicons-cog",
+      },
+    },
   },
 });

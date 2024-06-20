@@ -16,19 +16,16 @@ const menus = [
     to: "/",
   },
   {
-    label: "รับส่วนลด",
+    label: "ส่วนลด",
     to: "/vouchers",
   },
 ];
-
-const { isMobile } = useDevice();
-const navClass = isMobile
-  ? "flex flex-col space-y-2 justify-between items-center bg-slate-50 bg-opacity-60 py-2 px-2 h-26 border-b-[1.5px] border-slate-200"
-  : "flex justify-around items-center bg-slate-50 bg-opacity-60 py-2 px-5 h-16 border-b-[1.5px] border-slate-200";
 </script>
 <template>
-  <div class="fixed z-[20] w-full backdrop-blur-sm">
-    <nav :class="navClass">
+  <div class="fixed z-[20] w-full backdrop-blur-sm hidden md:block">
+    <nav
+      class="flex justify-around items-center bg-slate-50 bg-opacity-60 py-2 px-5 h-16 border-b-[1.5px] border-slate-200"
+    >
       <div class="flex items-center space-x-4">
         <ULink to="/">
           <img :src="icon" class="w-8 h-8" />

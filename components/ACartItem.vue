@@ -56,10 +56,10 @@ const disabled = computed(() => {
         </div>
 
         <div
-          class="mt-4 flex items-end justify-between sm:mt-0 sm:items-start sm:justify-end"
+          class="flex flex-row items-center sm:items-start justify-between mt-2 sm:mt-0 sm:justify-end"
         >
           <p
-            class="shrink-0 w-20 text-base font-semibold text-gray-900 sm:order-2 sm:ml-8 sm:text-right"
+            class="shrink-0 w-20 text-sm sm:text-base font-semibold text-gray-900 sm:order-2 sm:ml-8 sm:text-right"
           >
             ฿<ACurrency :amount="item.price * item.quantity" />
           </p>

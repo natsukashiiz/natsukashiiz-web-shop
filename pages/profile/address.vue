@@ -197,6 +197,9 @@ onActivated(() => {
 });
 </script>
 <template>
+  <Head>
+    <title>ที่อยู่</title>
+  </Head>
   <AModal
     :modal="modalDelete"
     title="ลบที่อยู่"

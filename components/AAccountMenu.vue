@@ -80,7 +80,7 @@ const handleLogout = () => {
     </template>
 
     <template #item="{ item }">
-      <ULink v-if="item.to" :to="item.to">
+      <ULink v-if="item.to" :to="item.to" class="truncate">
         {{ item.label }}
       </ULink>
       <span v-else-if="item.onclick" @click="item.onclick()" class="truncate">
@@ -90,7 +90,7 @@ const handleLogout = () => {
 
       <UIcon
         :name="item.icon"
-        class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500 ms-auto"
+        class="flex-shrink-0 h-4 w-4 text-gray-400 ms-auto"
       />
     </template>
   </UDropdown>

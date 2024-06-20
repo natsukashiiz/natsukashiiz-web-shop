@@ -63,6 +63,9 @@ onActivated(() => {
 });
 </script>
 <template>
+  <Head>
+    <title>ประวัติการสั่งซื้อ</title>
+  </Head>
   <UContainer class="max-w-5xl py-8">
     <UTabs :items="items" @change="onChange" :default-index="0" />
     <UCard class="py-2" v-if="orders.length > 0">
