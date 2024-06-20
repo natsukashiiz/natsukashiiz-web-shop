@@ -11,11 +11,6 @@ const items = [
   ],
   [
     {
-      label: "ตะกร้าสินค้า",
-      icon: "i-heroicons-shopping-cart",
-      to: "/cart",
-    },
-    {
       label: "รายการสั่งซื้อ",
       icon: "i-heroicons-list-bullet",
       to: "/profile/history/orders",
@@ -73,10 +68,7 @@ const handleLogout = () => {
     :ui="{ width: 'w-44', item: { disabled: 'cursor-text select-text' } }"
     :popper="{ placement: 'bottom-start' }"
   >
-    <UAvatar
-      :alt="authStore.payload.email.toUpperCase()"
-      class="border-2 border-rose-500 hover:border-rose-300 cursor-pointer"
-    />
+    <slot name="button" />
 
     <template #account="{ item }">
       <div class="text-left">

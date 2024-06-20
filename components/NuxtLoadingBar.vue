@@ -118,6 +118,8 @@ watch(
     }
   }
 );
+
+const { isMobile } = useDevice();
 </script>
 
 <template>
@@ -125,6 +127,8 @@ watch(
     class="nuxt-progress"
     :class="{
       'nuxt-progress-failed': !data.canSucceed,
+      'top-0': isMobile,
+      'top-[62px]': !isMobile,
     }"
     :style="{
       width: data.percent + '%',
@@ -139,7 +143,7 @@ watch(
 <style>
 .nuxt-progress {
   position: fixed;
-  top: 0px;
+  /* top: 62px; */
   left: 0px;
   right: 0px;
   width: 0%;
@@ -147,9 +151,9 @@ watch(
   transition: width 0.1s, height 0.4s, opacity 0.4s;
   background: repeating-linear-gradient(
     to right,
-    #fd79bb 0%,
-    #fc59aa 50%,
-    #ff3198 100%
+    #ffa500 0%,
+    #ff8c00 50%,
+    #ff4500 100%
   );
   z-index: 999999;
 }

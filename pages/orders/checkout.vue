@@ -122,17 +122,19 @@ onActivated(() => {
 <template>
   <UContainer class="max-w-4xl my-4">
     <div class="flex flex-col space-y-4">
-      <h1 class="text-2xl font-semibold">สรุปรายการสั่งซื้อ</h1>
-      <UCard
-        class="flex flex-col cursor-pointer hover:bg-gray-100/50"
-        @click="$router.push({ name: 'profile-address' })"
-      >
-        <span>ที่อยู่สำหรับจัดส่ง</span>
-        <div>
-          {{ order.address.firstName + " " + order.address.lastName }} |
-          {{ order.address.mobile }}
-        </div>
-        <div>{{ order.address.address }}</div>
+      <h1 class="text-lg sm:text-2xl font-semibold">สรุปรายการสั่งซื้อ</h1>
+      <UCard>
+        <ULink
+          :to="{ name: 'profile-address' }"
+          class="flex flex-col cursor-pointer hover:bg-gray-100/50"
+        >
+          <span>ที่อยู่สำหรับจัดส่ง</span>
+          <div>
+            {{ order.address.firstName + " " + order.address.lastName }} |
+            {{ order.address.mobile }}
+          </div>
+          <div>{{ order.address.address }}</div>
+        </ULink>
       </UCard>
       <UCard>
         <div class="flex flex-col gap-2">
@@ -192,6 +194,7 @@ onActivated(() => {
               label="สั่งซื้อ"
               variant="solid"
               @click="handleCreateOrder"
+              block
             />
           </div>
         </template>

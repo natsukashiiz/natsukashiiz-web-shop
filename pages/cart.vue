@@ -125,8 +125,10 @@ onMounted(() => {
   <UContainer class="max-w-3xl py-8">
     <UCard v-if="cart.items.length > 0">
       <template #header>
-        <div class="flex justify-between">
-          <div>จำนวนที่เลือก {{ cart.countSelected }} รายการ</div>
+        <div class="flex justify-between items-center">
+          <div class="text-sm sm:text-base">
+            จำนวนที่เลือก {{ cart.countSelected }} รายการ
+          </div>
           <div>
             <UButton
               color="primary"
@@ -184,8 +186,8 @@ onMounted(() => {
         </div>
       </div>
       <div class="mt-6 flex items-center justify-between">
-        <p class="text-sm font-medium text-gray-900">ยอดที่ต้องชำระ</p>
-        <p class="text-2xl font-semibold text-gray-900">
+        <p class="text-sm font-bold text-gray-900">ยอดที่ต้องชำระ</p>
+        <p class="text-lg sm:text-2xl font-semibold text-gray-900">
           <ACurrency :amount="cart.totalPrice" /> บาท
         </p>
       </div>

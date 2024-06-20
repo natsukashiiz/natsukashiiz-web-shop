@@ -50,7 +50,7 @@ onActivated(() => {
 <template>
   <UContainer class="flex flex-col gap-y-2 p-5">
     <div
-      class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 grid-rows-2 gap-3"
+      class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 grid-rows-2 gap-2"
     >
       <template v-for="voucher in vouchers" :key="voucher.id">
         <UCard>
@@ -61,13 +61,32 @@ onActivated(() => {
 
           <template #default>
             <li v-if="voucher.product" class="text-sm text-gray-500">
-              สำหรับสินค้า {{ voucher.product.name }} เท่านั้น
+              สำหรับสินค้า
+              <ULink
+                :to="{
+                  name: 'products-id',
+                  params: { id: voucher.product.id },
+                }"
+                class="text-blue-500"
+              >
+                {{ voucher.product.name }}
+              </ULink>
             </li>
             <li v-if="voucher.category" class="text-sm text-gray-500">
-              สำหรับสินค้าหมวดหมู่ {{ voucher.category.name }} เท่านั้น
+              สำหรับหมวดหมู่
+              <ULink
+                :to="{
+                  name: 'products-search',
+                  query: { category: voucher.category.name },
+                }"
+                class="text-blue-500"
+              >
+                {{ voucher.category.name }}
+              </ULink>
             </li>
             <li v-if="voucher.minOrderPrice" class="text-sm text-gray-500">
-              สำหรับการซื้อขั้นต่ำ {{ voucher.minOrderPrice }} บาท
+              สำหรับการซื้อขั้นต่ำ
+              <ACurrency :amount="voucher.minOrderPrice" /> บาท
             </li>
             <li class="text-sm text-gray-500">
               หมดอายุ {{ voucher.expiredAt }}
@@ -78,7 +97,7 @@ onActivated(() => {
             <div class="flex justify-between items-center">
               <span>CODE: {{ voucher.code }}</span>
               <UButton
-                :color="voucher.claimed ? 'gray' : 'blue'"
+                :color="voucher.claimed ? 'gray' : 'primary'"
                 @click="handleClaimVoucher(voucher.id)"
                 :disabled="voucher.claimed"
               >

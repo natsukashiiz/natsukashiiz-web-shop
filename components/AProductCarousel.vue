@@ -15,14 +15,18 @@ const handlePreview = () => {
     isOpen.value = true;
   }
 };
+
+const { isMobile } = useDevice();
 </script>
 <template>
   <UCarousel
-    v-slot="{ item, index }"
     :items="items"
     :ui="{
       item: 'basis-full',
       container: 'rounded-lg',
+      indicators: {
+        wrapper: 'relative bottom-0 mt-4',
+      },
     }"
     :prev-button="{
       color: 'gray',
@@ -34,16 +38,30 @@ const handlePreview = () => {
       icon: 'i-heroicons-arrow-right-20-solid',
       class: '-right-12',
     }"
-    arrows
+    :arrows="!isMobile"
+    :indicators="isMobile"
     class="w-64 mx-auto"
+    :class="{ 'w-80': isMobile }"
   >
-    <UTooltip text="คลิกเพื่อดูรูป">
-      <a-product-image
-        :src="item"
-        @click="handlePreview"
-        class="cursor-pointer hover:opacity-80 transition-opacity duration-300"
+    <template #default="{ item }">
+      <UTooltip text="คลิกเพื่อดูรูป">
+        <a-product-image
+          :src="item"
+          @click="handlePreview"
+          class="cursor-pointer hover:opacity-80 transition-opacity duration-300"
+        />
+      </UTooltip>
+    </template>
+
+    <template #indicator="{ onClick, page, active }">
+      <UButton
+        :label="String(page)"
+        :variant="active ? 'solid' : 'outline'"
+        size="2xs"
+        class="rounded-full min-w-6 justify-center"
+        @click="onClick(page)"
       />
-    </UTooltip>
+    </template>
   </UCarousel>
   <UModal
     v-model="isOpen"

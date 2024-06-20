@@ -18,7 +18,7 @@ const disabled = computed(() => {
 </script>
 <template>
   <li
-    class="flex flex-col space-y-3 py-6 text-left sm:flex-row sm:space-x-5 sm:space-y-0"
+    class="flex flex-row space-y-3 space-x-4 py-6 text-left sm:space-x-5 sm:space-y-0"
   >
     <div class="flex items-center">
       <UCheckbox
@@ -38,7 +38,7 @@ const disabled = computed(() => {
     <div class="relative flex flex-1 flex-col justify-between">
       <div class="sm:col-gap-5 sm:grid sm:grid-cols-2">
         <div class="pr-8 sm:pr-5">
-          <p class="text-base font-semibold text-gray-900">
+          <p class="text-base font-semibold text-gray-900 line-clamp-1">
             {{ item.productName }}
           </p>
           <p class="mx-0 mt-1 mb-0 text-sm text-gray-400">

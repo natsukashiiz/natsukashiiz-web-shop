@@ -5,11 +5,12 @@ import type { LocationQuery } from "vue-router";
 
 const loading = useLoading();
 const route = useRoute();
+const { isMobile } = useDevice();
 
 const products = ref<ProductResponse[]>([]);
 const pagination = reactive({
   page: 1,
-  limit: 20,
+  limit: isMobile ? 10 : 20,
   total: 0,
 });
 const categoryName = ref<string | undefined>(undefined);
@@ -79,7 +80,7 @@ onBeforeRouteUpdate((to, from, next) => {
     <template v-if="!loading">
       <template v-if="products.length > 0">
         <div
-          class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 grid-rows-2 gap-3"
+          class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2"
         >
           <template v-for="item in products" :key="item.id">
             <AProductCard :product="item" />

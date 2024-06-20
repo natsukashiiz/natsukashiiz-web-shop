@@ -112,7 +112,7 @@ onActivated(() => {
 </script>
 <template>
   <div
-    class="max-w-5xl mx-auto flex flex-col items-center justify-center space-y-2 mt-10 p-4"
+    class="max-w-5xl mx-auto flex flex-col items-center justify-center space-y-2 p-4"
     v-if="product && currentOption"
   >
     <div class="bg-white border border-gray-200 rounded-lg shadow pb-4">

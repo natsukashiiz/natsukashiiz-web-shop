@@ -8,6 +8,8 @@ defineProps({
   },
 });
 
+const authStore = useAuthStore();
+
 const menus = [
   {
     label: "หน้าหลัก",
@@ -59,7 +61,14 @@ const navClass = isMobile
             />
           </UChip>
         </UTooltip>
-        <AAccountMenu />
+        <AAccountMenu>
+          <template #button>
+            <UAvatar
+              :alt="authStore.payload?.email.toUpperCase()"
+              class="border-2 border-primary-500 hover:border-primary-400 cursor-pointer"
+            />
+          </template>
+        </AAccountMenu>
       </div>
     </nav>
   </div>

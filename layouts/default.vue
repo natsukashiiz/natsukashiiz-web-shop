@@ -3,11 +3,12 @@ const colorMode = useColorMode();
 colorMode.preference = "light";
 
 const { isMobile } = useDevice();
-const divClass = isMobile ? "pt-24 min-h-screen" : "pt-14 min-h-screen";
+const divClass = isMobile ? "pb-24 min-h-screen" : "pt-14 min-h-screen";
 </script>
 <template>
   <NuxtLoadingBar />
-  <a-top-bar />
+  <a-bottom-bar v-if="isMobile" />
+  <a-top-bar v-else />
   <div :class="divClass">
     <NuxtPage keepalive />
   </div>

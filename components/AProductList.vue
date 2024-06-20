@@ -5,11 +5,12 @@ import { getPageProduct } from "~/api/product";
 const loading = useLoading();
 const route = useRoute();
 const router = useRouter();
+const { isMobile } = useDevice();
 
 const products = ref<ProductResponse[]>([]);
 const pagination = reactive({
   page: 1,
-  limit: 8,
+  limit: isMobile ? 10 : 50,
   total: 0,
 });
 
@@ -48,7 +49,7 @@ await loadData();
 </script>
 <template>
   <div
-    class="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 grid-rows-2 gap-3"
+    class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2"
   >
     <template v-for="item in products" :key="item.id">
       <AProductCard :product="item" />

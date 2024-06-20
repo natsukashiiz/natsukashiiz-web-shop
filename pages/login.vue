@@ -100,7 +100,7 @@ onMounted(() => {
 </script>
 <template>
   <UContainer class="flex justify-center">
-    <UCard class="mt-24 md:w-96 sm:w-11/12">
+    <UCard class="mt-24 w-11/12 md:w-96">
       <template #header>
         <h1
           class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl"
@@ -156,7 +156,7 @@ onMounted(() => {
           ></GoogleSignInButton>
         </div>
 
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row items-center justify-between">
           <p class="text-sm font-light text-gray-500">
             ยังไม่มีบัญชีใช่ไหม?
             <ULink

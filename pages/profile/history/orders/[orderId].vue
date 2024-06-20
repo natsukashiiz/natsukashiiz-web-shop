@@ -70,7 +70,7 @@ onActivated(() => {
               </div>
 
               <div class="mt-6 sm:ml-6 sm:mt-0">
-                <h3 class="text-base font-medium text-gray-900">
+                <h3 class="text-base font-medium text-gray-900 line-clamp-1">
                   {{ item.productName }}
                 </h3>
                 <p class="mt-2 text-sm font-medium text-gray-900">
@@ -103,13 +103,19 @@ onActivated(() => {
                 <span class="font-medium text-gray-900">
                   ยอดที่ต้องชำระ : <a-currency :amount="order.totalPay" /> บาท
                 </span>
-                <UButton :to="`/payment/${order.orderId}`" block class="mt-2">
+                <UButton
+                  :to="`/payment/${order.orderId}`"
+                  color="green"
+                  block
+                  class="mt-2"
+                >
                   ชำระเงิน
                 </UButton>
                 <UButton
                   :to="`/payment/${order.orderId}`"
+                  color="gray"
                   block
-                  class="mt-2 bg-red-500 hover:bg-red-600"
+                  class="mt-2"
                 >
                   ยกเลิกออเดอร์
                 </UButton>

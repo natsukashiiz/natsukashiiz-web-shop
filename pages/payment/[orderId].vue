@@ -269,13 +269,15 @@ onActivated(async () => {
               :alt="item.productName"
             />
             <div class="flex w-full flex-col px-4 py-4">
-              <span class="font-semibold">{{ item.productName }}</span>
-              <span class="float-right text-gray-400">{{
-                item.optionName
-              }}</span>
-              <span class="float-right text-gray-400"
-                >จำนวน {{ item.quantity }} ชิ้น</span
-              >
+              <span class="font-semibold line-clamp-1">
+                {{ item.productName }}
+              </span>
+              <span class="float-right text-gray-400 line-clamp-1">
+                {{ item.optionName }}
+              </span>
+              <span class="float-right text-gray-400">
+                จำนวน {{ item.quantity }} ชิ้น
+              </span>
               <p class="font-bold">฿<ACurrency :amount="item.price" /></p>
             </div>
           </div>
@@ -351,17 +353,17 @@ onActivated(async () => {
           </div>
           <div class="mt-6 flex items-center justify-between">
             <p class="text-sm font-medium text-gray-900">ยอดที่ต้องชำระ</p>
-            <p class="text-2xl font-semibold text-gray-900">
+            <p class="text-lg sm:text-2xl font-semibold text-gray-900">
               <ACurrency :amount="order?.totalPay" /> บาท
             </p>
           </div>
         </div>
         <div class="flex flex-col space-y-2 mt-4">
-          <UButton block @click="handelPay" :loading="loading">
+          <UButton color="green" block @click="handelPay" :loading="loading">
             ชำระเงิน
           </UButton>
           <UButton
-            color="red"
+            color="gray"
             block
             @click="modalCancel = true"
             :disabled="loading"
