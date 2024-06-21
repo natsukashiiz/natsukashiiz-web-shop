@@ -24,9 +24,9 @@ const isCurrent = (to: string) => route.name.includes(to);
 
 <template>
   <div
-    class="fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t border-gray-200 block md:hidden"
+    class="fixed bottom-0 left-0 z-[51] w-full h-24 bg-white border-t border-gray-200 block md:hidden"
   >
-    <div class="grid h-full max-w-lg grid-cols-4 mx-auto font-medium">
+    <div class="grid h-full max-w-lg grid-cols-4 mx-auto font-medium pb-8">
       <template v-for="menu in items" :key="menu.to">
         <button
           type="button"

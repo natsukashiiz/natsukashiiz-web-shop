@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import icon from "~/assets/img/shop-icon.png";
-
 const menus = [
   {
     label: "หน้าหลัก",
@@ -15,7 +13,7 @@ const menus = [
     >
       <div class="flex items-center space-x-4">
         <ULink to="/">
-          <img :src="icon" class="w-8 h-8" />
+          <img src="/icons/favicon.ico" class="w-8 h-8" />
         </ULink>
         <template v-for="menu in menus" :key="menu.to">
           <ULink

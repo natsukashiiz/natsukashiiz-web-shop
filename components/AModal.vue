@@ -19,7 +19,7 @@ const props = defineProps({
   confirmColor: {
     type: String,
     required: false,
-    default: "red",
+    default: "primary",
   },
   cancelColor: {
     type: String,

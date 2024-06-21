@@ -15,7 +15,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
 
   // ตรวจสอบว่าเข้ามายังหน้าที่ไม่ได้เป็นหน้ายืนยันตัวตนหรือไม่
   if (isLogin) {
-    to.meta.layout = "auth";
+    to.meta.layout = "authenticated";
 
     // ถ้ายังไม่ได้ยืนยันตัวตน และเข้ามายังหน้าที่ไม่ได้เป็นหน้ายืนยันตัวตน ให้เด้งไปยังหน้ายืนยันตัวตน
     if (to.name !== "verification" && !authStore.payload?.verified) {
@@ -27,6 +27,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
       return navigateTo({ name: "index" });
     }
   } else {
+    to.meta.layout = "anonymous";
+
     if (to.name === "verification") {
       return navigateTo({ name: "login", query: { redirect: to.fullPath } });
     }

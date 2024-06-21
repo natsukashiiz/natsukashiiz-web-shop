@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     "@stefanobartoletti/nuxt-social-share",
     "@nuxtjs/turnstile",
     "@nuxt/image",
+    "@vite-pwa/nuxt",
     [
       "@nuxtjs/google-fonts",
       {
@@ -45,10 +46,17 @@ export default defineNuxtConfig({
             "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
         },
       ],
+      link: [
+        {
+          rel: "icon",
+          type: "image/x-icon",
+          href: "icons/favicon.ico",
+        },
+      ],
     },
   },
   routeRules: {
-    "/": { prerender: true },
+    // "/": { prerender: true },
     "/orders/**": { ssr: false },
     "/payment/**": { ssr: false },
     "/cart/**": { ssr: false },
@@ -69,5 +77,42 @@ export default defineNuxtConfig({
   },
   turnstile: {
     siteKey: "1x00000000000000000000BB",
+  },
+  pwa: {
+    manifest: {
+      name: "NATSUKASHIIZ",
+      short_name: "N",
+      description: "natsukashiiz shop for develop only",
+      theme_color: "#ffffff",
+      icons: [
+        {
+          src: "icons/icon_64x64.png",
+          sizes: "64x64",
+          type: "image/png",
+        },
+        {
+          src: "icons/icon_144x144.png",
+          sizes: "144x144",
+          type: "image/png",
+        },
+        {
+          src: "icons/icon_192x192.png",
+          sizes: "192x192",
+          type: "image/png",
+        },
+        {
+          src: "icons/icon_512x512.png",
+          sizes: "512x512",
+          type: "image/png",
+        },
+      ],
+    },
+    workbox: {
+      navigateFallback: "/",
+    },
+    devOptions: {
+      enabled: true,
+      type: "module",
+    },
   },
 });
