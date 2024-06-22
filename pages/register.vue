@@ -46,7 +46,7 @@ const handleRegister = async () => {
         timeout: 3000,
       });
 
-      authStore.setToken(res.data.token);
+      await authStore.transfer(res.data);
       router.push({ name: "verification" });
     } else {
       window.alert("มีบางอย่างผิดพลาด");
@@ -81,7 +81,7 @@ const disabled = computed(() => {
 });
 
 onMounted(() => {
-  if (authStore.isAuth) {
+  if (authStore.authenticated) {
     redirect();
   }
 });

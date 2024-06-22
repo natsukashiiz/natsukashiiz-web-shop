@@ -6,6 +6,7 @@ import type {
   TokenResponse,
   ForgotPasswordRequest,
   ResetPasswordRequest,
+  RefreshTokenRequest,
 } from "~/types";
 import { create } from "~/api/request";
 
@@ -20,6 +21,9 @@ const google = (body: GoogleLoginRequest): ServerResponse<TokenResponse> =>
 const singup = (body: SignupRequest): ServerResponse<TokenResponse> =>
   client.post("/v1/auth/sign-up", body);
 
+const refresh = (body: RefreshTokenRequest): ServerResponse<TokenResponse> =>
+  client.post("/v1/auth/refresh", body);
+
 const sendVerifyCode = (): ServerResponse<string> =>
   client.post("/v1/auth/code");
 
@@ -32,12 +36,13 @@ const forgotPassword = (data: ForgotPasswordRequest): ServerResponse<void> =>
 const resetPassword = (
   data: ResetPasswordRequest
 ): ServerResponse<TokenResponse> =>
-  client.patch("/v1/account/reset-password", data);
+  client.patch("/v1/auth/reset-password", data);
 
 export {
   login,
   google,
   singup,
+  refresh,
   sendVerifyCode,
   confirmVerifyCode,
   forgotPassword,

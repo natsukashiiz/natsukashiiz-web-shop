@@ -35,7 +35,9 @@ const redirect = () => {
   if (route.query.redirect) {
     router.replace(route.query.redirect as string);
   } else {
-    router.replace("/");
+    router.replace({
+      name: "index",
+    });
   }
 };
 
@@ -47,7 +49,7 @@ const handleLogin = async () => {
     const res = await login(form);
 
     if (res.status === 200 && res.data) {
-      authStore.setToken(res.data.token);
+      await authStore.transfer(res.data);
       redirect();
     } else {
       window.alert("มีบางอย่างผิดพลาด");
@@ -70,14 +72,31 @@ const handleLogin = async () => {
 };
 
 const handleGoogle = async (idToken: string) => {
-  const res = await google({ idToken });
+  loading.value = true;
+  try {
+    const res = await google({ idToken });
 
-  if (res.status === 200 && res.data) {
-    authStore.setToken(res.data.token);
-    redirect();
-  } else {
-    window.alert("มีบางอย่างผิดพลาด");
+    if (res.status === 200 && res.data) {
+      await authStore.transfer(res.data);
+      redirect();
+    } else {
+      window.alert("มีบางอย่างผิดพลาด");
+    }
+  } catch (error: any) {
+    if (error.response.status) {
+      if (error.response.data.error === "login.invalid") {
+        toast.add({
+          title: "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+          timeout: 3000,
+        });
+      } else {
+        window.alert(error.response.data.error);
+      }
+    } else {
+      window.alert("มีบางอย่างผิดพลาด");
+    }
   }
+  loading.value = false;
 };
 
 const validate = (state: any): FormError[] => {
@@ -89,11 +108,12 @@ const validate = (state: any): FormError[] => {
 };
 
 const disabled = computed(() => {
-  return !form.email || !form.password || !turnstileToken.value;
+  return !form.email || !form.password;
+  //   || !turnstileToken.value;
 });
 
 onMounted(() => {
-  if (authStore.isAuth) {
+  if (authStore.authenticated) {
     redirect();
   }
 });

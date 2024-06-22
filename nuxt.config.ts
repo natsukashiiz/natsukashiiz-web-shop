@@ -1,9 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
-  devServer: {
-    port: 4200,
-  },
   modules: [
     "@pinia/nuxt",
     "@nuxt/ui",
@@ -28,6 +24,10 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  devtools: { enabled: true },
+  devServer: {
+    port: 4500,
+  },
   runtimeConfig: {
     public: {
       apiUrl: process.env.API_BASE_URL,
@@ -56,16 +56,16 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    // "/": { prerender: true },
+    "/": { ssr: true },
     "/orders/**": { ssr: false },
     "/payment/**": { ssr: false },
     "/cart/**": { ssr: false },
-    "/login/**": { ssr: false },
-    "/register/**": { ssr: false },
-    "/forgot-password/**": { ssr: false },
-    "/reset-password/**": { ssr: false },
-    "/verification/**": { ssr: false },
-    "/vouchers/**": { ssr: false },
+    "/login/**": { prerender: true },
+    "/register/**": { prerender: true },
+    "/forgot-password/**": { prerender: true },
+    "/reset-password/**": { prerender: true },
+    "/verification/**": { prerender: true },
+    "/vouchers/**": { ssr: true },
     "/profile/**": { ssr: false },
   },
   colorMode: {

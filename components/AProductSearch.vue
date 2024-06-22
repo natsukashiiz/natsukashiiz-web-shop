@@ -2,6 +2,13 @@
 import { getProduct } from "~/api/product";
 import type { ProductResponse } from "~/types";
 
+defineProps({
+  type: {
+    type: String as PropType<"icon" | "input">,
+    default: "icon",
+  },
+});
+
 const router = useRouter();
 const isOpen = ref(false);
 const keyword = ref<string>("");
@@ -133,11 +140,36 @@ const handleSelect = (product: ProductResponse) => {
       </div>
     </div>
   </UModal>
-  <UTooltip text="ค้นหาสินค้า" placement="bottom">
-    <UButton
+  <template v-if="type === 'icon'">
+    <UTooltip text="ค้นหาสินค้า" placement="bottom">
+      <UButton
+        icon="i-heroicons-magnifying-glass-20-solid"
+        color="gray"
+        @click="isOpen = true"
+      />
+    </UTooltip>
+  </template>
+  <template v-else-if="type === 'input'">
+    <UInput
+      v-model="keyword"
+      name="keyword"
+      placeholder="ค้นหาสินค้าที่คุณต้องการ..."
       icon="i-heroicons-magnifying-glass-20-solid"
-      color="gray"
-      @click="isOpen = true"
-    />
-  </UTooltip>
+      autocomplete="off"
+      :ui="{ icon: { trailing: { pointer: '' } } }"
+      class="w-full border-2 rounded-md hover:border-primary"
+      variant="none"
+    >
+      <template #trailing>
+        <UButton
+          v-show="keyword"
+          color="gray"
+          variant="link"
+          icon="i-heroicons-x-mark-20-solid"
+          :padded="false"
+          @click="handleClear"
+        />
+      </template>
+    </UInput>
+  </template>
 </template>

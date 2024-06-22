@@ -36,7 +36,7 @@ const handleResetPassword = async () => {
         title: "ยืนยันบัญชีสำเร็จ",
         timeout: 3000,
       });
-      authStore.setToken(res.data.token);
+      await authStore.transfer(res.data);
       router.push("/");
     } else {
       toast.add({

@@ -8,6 +8,11 @@ const items = [
     to: "index",
   },
   {
+    label: "ส่วนลด",
+    icon: "i-heroicons-tag",
+    to: "vouchers",
+  },
+  {
     label: "เข้าสู่ระบบ",
     icon: "i-heroicons-arrow-right-end-on-rectangle",
     to: "login",
@@ -21,7 +26,7 @@ const isCurrent = (to: string) => route.name.includes(to);
   <div
     class="fixed bottom-0 left-0 z-50 w-full h-24 bg-white border-t border-gray-200 block md:hidden"
   >
-    <div class="grid h-full max-w-lg grid-cols-2 mx-auto font-medium pb-8">
+    <div class="grid h-full max-w-lg grid-cols-3 mx-auto font-medium pb-8">
       <template v-for="menu in items" :key="menu.to">
         <button
           type="button"

@@ -15,7 +15,7 @@ const subscribeServer = () => {
   const event = new EventSource(
     `${
       import.meta.env.VITE_API_BASEURL
-    }/v1/notifications/subscribe?Authorization=${authStore.token}`
+    }/v1/notifications/subscribe?Authorization=${authStore.accessToken}`
   );
   event.addEventListener("ORDER", async function (event) {
     const data = JSON.parse(event.data) as NotificationResponse;
@@ -61,7 +61,7 @@ const fetchCountCart = async () => {
   }
 };
 
-onBeforeMount(async () => {
+onMounted(async () => {
   await fetchCountCart();
 
   subscribeServer();

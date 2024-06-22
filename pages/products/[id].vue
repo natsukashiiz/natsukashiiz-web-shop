@@ -35,8 +35,11 @@ const changeOption = (option: OptionResponse) => {
 };
 
 const handleUpdateCart = async () => {
-  if (!authStore.isAuth) {
-    router.push(`/login?redirect=${route.fullPath}`);
+  if (!authStore.authenticated) {
+    router.push({
+      name: "login",
+      query: { redirect: router.currentRoute.value.fullPath },
+    });
     return;
   }
 
@@ -78,8 +81,11 @@ const handleUpdateCart = async () => {
 };
 
 const handleCreateOrder = async () => {
-  if (!authStore.isAuth) {
-    router.push(`/login?redirect=${route.fullPath}`);
+  if (!authStore.authenticated) {
+    router.push({
+      name: "login",
+      query: { redirect: router.currentRoute.value.fullPath },
+    });
     return;
   }
 
@@ -253,7 +259,7 @@ onActivated(() => {
             </div>
             <AProductFavoriteButton
               :productId="product.id"
-              v-if="authStore.isAuth"
+              v-if="authStore.authenticated"
             />
           </div>
         </div>

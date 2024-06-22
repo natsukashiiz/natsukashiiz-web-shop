@@ -11,11 +11,21 @@ const props = defineProps({
 });
 const emit = defineEmits(["refresh"]);
 
+const authStore = useAuthStore();
+const router = useRouter();
 const toast = useToast();
 const loading = ref(false);
 const data = ref<VoucherResponse>(props.voucher);
 
 const handleClaimVoucher = async (voucherId: number) => {
+  if (!authStore.authenticated) {
+    router.push({
+      name: "login",
+      query: { redirect: router.currentRoute.value.fullPath },
+    });
+    return;
+  }
+
   toast.clear();
   loading.value = true;
   try {

@@ -28,6 +28,9 @@
       <!-- carousel -->
       <ACarousel />
     </div>
+    <div class="mb-5 sm:hidden">
+      <a-product-search type="input" />
+    </div>
     <!-- category -->
     <div class="mb-5">
       <UDivider

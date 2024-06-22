@@ -78,7 +78,7 @@ onActivated(() => {
         class="flex justify-center my-4"
       />
     </div>
-    <template v-if="authStore.isAuth">
+    <template v-if="authStore.authenticated">
       <UDivider label="เขียนรีวิว" color="gray" class="my-3" />
       <AProductReviewForm
         :product-id="product.id"

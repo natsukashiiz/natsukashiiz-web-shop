@@ -40,6 +40,10 @@ export interface GoogleLoginRequest {
   idToken: string;
 }
 
+export interface RefreshTokenRequest {
+  refreshToken: string;
+}
+
 export interface CartRequest {
   productId: number;
   optionId: number;
@@ -95,7 +99,8 @@ export interface ResetPasswordRequest {
 // response
 
 export interface TokenResponse {
-  token: string;
+  accessToken: string;
+  refreshToken: string;
 }
 
 export interface CartItemResponse {

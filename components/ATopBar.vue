@@ -4,6 +4,10 @@ const menus = [
     label: "หน้าหลัก",
     to: "/",
   },
+  {
+    label: "ส่วนลด",
+    to: "/vouchers",
+  },
 ];
 </script>
 <template>

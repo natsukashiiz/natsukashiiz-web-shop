@@ -28,7 +28,7 @@ await loadCategory();
         }"
         variant="outline"
         color="gray"
-        class="rounded-full hover:text-rose-400"
+        class="rounded-full hover:text-primary-400 transition-colors"
         size="sm"
       >
         <template #leading> <UAvatar :src="item.thumbnail" /> </template

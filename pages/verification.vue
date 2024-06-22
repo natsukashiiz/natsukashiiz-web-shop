@@ -74,7 +74,7 @@ const handleConfirmVerifyCode = async () => {
         title: "ยืนยันบัญชีสำเร็จ",
         timeout: 3000,
       });
-      authStore.setToken(res.data.token);
+      await authStore.transfer(res.data);
       redirect();
     } else {
       toast.add({
