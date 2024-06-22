@@ -83,7 +83,10 @@ const handleSelect = (product: ProductResponse) => {
 };
 </script>
 <template>
-  <UModal v-model="isOpen">
+  <UModal
+    v-model="isOpen"
+    :ui="{ container: 'md:items-center sm:items-start' }"
+  >
     <div class="p-4">
       <UInput
         v-model="keyword"
@@ -159,6 +162,7 @@ const handleSelect = (product: ProductResponse) => {
       :ui="{ icon: { trailing: { pointer: '' } } }"
       class="w-full border-2 rounded-md hover:border-primary"
       variant="none"
+      @click="isOpen = true"
     >
       <template #trailing>
         <UButton

@@ -28,7 +28,7 @@
       <!-- carousel -->
       <ACarousel />
     </div>
-    <div class="mb-5 sm:hidden">
+    <div class="mb-5 md:hidden">
       <a-product-search type="input" />
     </div>
     <!-- category -->

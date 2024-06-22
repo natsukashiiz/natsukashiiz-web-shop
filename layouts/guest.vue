@@ -1,6 +1,17 @@
 <script setup lang="ts">
 const colorMode = useColorMode();
 colorMode.preference = "light";
+
+onNuxtReady(() => {
+  const { $pwa } = useNuxtApp();
+  if ($pwa) {
+    if ($pwa.isPWAInstalled) {
+      console.log("PWA is installed");
+    } else {
+      console.log("PWA is not installed");
+    }
+  }
+});
 </script>
 <template>
   <VitePwaManifest />
