@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { preview } = defineProps({
+const props = defineProps({
   items: {
     type: Array as PropType<string[]>,
     required: true,
@@ -8,18 +8,33 @@ const { preview } = defineProps({
     type: Boolean,
     default: true,
   },
+  current: {
+    type: Number,
+    default: 0,
+  },
 });
+
 const isOpen = ref(false);
 const handlePreview = () => {
-  if (preview) {
+  if (props.preview) {
     isOpen.value = true;
   }
 };
 
 const { isMobile } = useDevice();
+const carouselRef = ref();
+
+watch(
+  () => props.current,
+  (newValue, oldValue) => {
+    if (!carouselRef.value) return;
+    carouselRef.value.select(newValue);
+  }
+);
 </script>
 <template>
   <UCarousel
+    ref="carouselRef"
     :items="items"
     :ui="{
       item: 'basis-full',

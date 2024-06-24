@@ -151,6 +151,7 @@ export interface OptionResponse {
   name: string;
   price: number;
   quantity: number;
+  imageIndex: number;
 }
 
 export interface OrderResponse {
@@ -280,6 +281,7 @@ export interface VoucherResponse {
   beginAt: string;
   expiredAt: string;
   claimed: boolean;
+  thumbnail: string;
 }
 
 export interface CheckoutRequest {

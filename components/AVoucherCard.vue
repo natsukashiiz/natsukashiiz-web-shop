@@ -59,11 +59,20 @@ const handleClaimVoucher = async (voucherId: number) => {
 <template>
   <UCard>
     <template #header>
-      ส่วนลด {{ voucher.discount }}
-      {{ voucher.discountType === DiscountType.PERCENT ? "%" : "บาท" }}
+      ส่วนลด
+      <span v-if="data.discountType === DiscountType.PERCENT">
+        {{ data.discount }}% สูงสุด <ACurrency :amount="data.maxDiscount" /> บาท
+      </span>
+      <span v-else> <ACurrency :amount="data.discount" /> บาท </span>
     </template>
 
     <template #default>
+      <NuxtImg
+        :src="voucher.thumbnail"
+        :alt="voucher.thumbnail"
+        class="w-full h-40 object-cover mb-2"
+      />
+
       <li v-if="voucher.product" class="text-sm text-gray-500">
         สำหรับสินค้า
         <ULink

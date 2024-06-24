@@ -15,8 +15,8 @@ const loading = useLoading();
 const product = ref<ProductResponse>();
 const currentOption = ref<OptionResponse>();
 const quantity = ref(1);
-
 const adding = ref(false);
+const currentImage = ref<number>(0);
 
 const loadData = async () => {
   const res = await getOneProduct(Number((route.params as any).id));
@@ -32,6 +32,7 @@ const loadData = async () => {
 const changeOption = (option: OptionResponse) => {
   quantity.value = 1;
   currentOption.value = option;
+  currentImage.value = option.imageIndex;
 };
 
 const handleUpdateCart = async () => {
@@ -148,7 +149,11 @@ onActivated(() => {
     </Head>
     <div class="bg-white border border-gray-200 rounded-lg shadow pb-4">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-8 mb-3">
-        <AProductCarousel :items="product.images" preview />
+        <AProductCarousel
+          :items="product.images"
+          preview
+          :current="currentImage"
+        />
         <div class="px-5 pb-5">
           <div class="flex items-center gap-2 mt-2">
             <span class="text-sm text-gray-500"> หมวดหมู่: </span>
