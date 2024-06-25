@@ -11,6 +11,11 @@ const items = [
   ],
   [
     {
+      label: "ข้อมูลส่วนตัว",
+      icon: "i-heroicons-user-circle",
+      to: "/profile",
+    },
+    {
       label: "รายการสั่งซื้อ",
       icon: "i-heroicons-list-bullet",
       to: "/profile/history/orders",

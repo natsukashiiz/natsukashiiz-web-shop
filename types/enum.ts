@@ -11,3 +11,8 @@ export enum DiscountType {
   PERCENT = "PERCENT",
   AMOUNT = "AMOUNT",
 }
+
+export enum SocialProviders {
+  FACEBOOK = "FACEBOOK",
+  GOOGLE = "GOOGLE",
+}

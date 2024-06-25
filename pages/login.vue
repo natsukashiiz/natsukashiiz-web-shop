@@ -84,9 +84,15 @@ const handleGoogle = async (idToken: string) => {
     }
   } catch (error: any) {
     if (error.response.status) {
-      if (error.response.data.error === "login.invalid") {
+      const err = error.response.data.error;
+      if (err === "login.invalid") {
         toast.add({
           title: "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+          timeout: 3000,
+        });
+      } else if (err === "account.deleted") {
+        toast.add({
+          title: "บัญชีนี้เพิ่งถูกลบ",
           timeout: 3000,
         });
       } else {

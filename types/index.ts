@@ -1,5 +1,5 @@
 import type { AxiosResponse } from "axios";
-import type { DiscountType } from "./enum";
+import type { DiscountType, SocialProviders } from "./enum";
 
 export type ServerResponse<T> = Promise<AxiosResponse<T>>;
 
@@ -230,6 +230,16 @@ export interface CategoryResponse {
 export interface ProfileResponse {
   id: number;
   email: string;
+  nickName: string;
+  avatar: string;
+  createdAt: string;
+  socials: AccountSocialResponse[];
+}
+
+export interface AccountSocialResponse {
+  id: number;
+  email: string;
+  provider: SocialProviders;
   createdAt: string;
 }
 
