@@ -314,3 +314,7 @@ export interface CheckoutItem {
   option: OptionResponse;
   quantity: number;
 }
+
+export interface FileStoreRequest {
+  file: FormData;
+}
