@@ -1,3 +1,5 @@
+import client from "~/api/request";
+
 const allows = [
   "login",
   "register",
@@ -20,6 +22,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   // ตรวจสอบว่าเข้ามายังหน้าที่ไม่ได้เป็นหน้ายืนยันตัวตนหรือไม่
   if (authStore.authenticated) {
     to.meta.layout = "authenticated";
+
+    client.defaults.headers.common.Authorization = `Bearer ${authStore.accessToken}`;
 
     // ถ้ายังไม่ได้ยืนยันตัวตน และเข้ามายังหน้าที่ไม่ได้เป็นหน้ายืนยันตัวตน ให้เด้งไปยังหน้ายืนยันตัวตน
     if (to.name !== "verification" && !authStore.payload?.verified) {

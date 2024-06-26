@@ -62,17 +62,17 @@ export const useAuthStore = defineStore("auth", () => {
         handleRefresh();
       }, timeout);
 
-      client.interceptors.request.use(
-        (config) => {
-          if (accessToken.value) {
-            config.headers.Authorization = `Bearer ${accessToken.value}`;
-          }
-          return config;
-        },
-        (error) => {
-          return Promise.reject(error);
-        }
-      );
+      //   client.interceptors.request.use(
+      //     (config) => {
+      //       if (accessToken.value) {
+      //         config.headers.Authorization = `Bearer ${accessToken.value}`;
+      //       }
+      //       return config;
+      //     },
+      //     (error) => {
+      //       return Promise.reject(error);
+      //     }
+      //   );
 
       return;
     } else {

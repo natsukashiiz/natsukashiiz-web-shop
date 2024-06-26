@@ -7,6 +7,7 @@ defineProps({
 });
 
 const authStore = useAuthStore();
+const profileStore = useProfileStore();
 
 const menus = [
   {
@@ -59,8 +60,9 @@ const menus = [
         <AAccountMenu>
           <template #button>
             <UAvatar
-              :alt="authStore.payload?.email.toUpperCase()"
-              class="border-2 border-primary-500 hover:border-primary-400 cursor-pointer"
+              :src="profileStore.profile?.avatar"
+              :alt="profileStore.profile?.nickName.toUpperCase()"
+              class="outline outline-2 outline-primary-400 hover:outline-primary-300 cursor-pointer text-xl"
             />
           </template>
         </AAccountMenu>

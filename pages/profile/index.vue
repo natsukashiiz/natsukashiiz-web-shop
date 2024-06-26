@@ -4,6 +4,7 @@ import type { ProfileResponse } from "~/types";
 import { SocialProviders } from "~/types/enum";
 
 const authStore = useAuthStore();
+const profileStore = useProfileStore();
 const loading = useLoading();
 const profile = ref<ProfileResponse | null>(null);
 
@@ -13,6 +14,7 @@ const loadData = async () => {
     const res = await queryProfile();
     if (res.status === 200 && res.data) {
       profile.value = res.data;
+      profileStore.setProfile(res.data);
     }
   } catch (error) {
     console.error(error);
@@ -49,6 +51,11 @@ const handleDeleteSocial = async (provider: SocialProviders) => {
   console.log(provider);
 };
 
+const updateProfile = (newProfile: ProfileResponse) => {
+  profile.value = newProfile;
+  profileStore.setProfile(newProfile);
+};
+
 await loadData();
 onActivated(() => {
   loadData();
@@ -81,10 +88,7 @@ onActivated(() => {
     confirmColor="red"
   />
   <UContainer v-if="profile" class="max-w-xl py-5 flex flex-col space-y-4">
-    <AProfileForm
-      :profile="profile"
-      @update-profile="(newProfile) => (profile = newProfile)"
-    />
+    <AProfileForm :profile="profile" @update-profile="updateProfile" />
 
     <UCard>
       <template #header>

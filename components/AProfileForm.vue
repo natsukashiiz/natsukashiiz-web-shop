@@ -25,7 +25,6 @@ const handleFileChange = async (files: File[]) => {
   const file = files[0];
   if (file) {
     currentFile.value = file;
-
     const url = URL.createObjectURL(file);
     avatar.value = url;
   }
@@ -38,13 +37,6 @@ const handleUploadFile = async () => {
       const res = await uploadFile(formData);
       if (res.status === 200) {
         avatar.value = res.data.url;
-
-        toast.add({
-          title: "อัพโหลดรูปภาพสำเร็จ",
-          color: "green",
-          icon: "i-heroicons-check-circle",
-          timeout: 3000,
-        });
       }
     } catch (error) {
       console.error(error);
@@ -102,6 +94,7 @@ const handleDeleteAvatar = async () => {
     if (res.status === 200) {
       emit("updateProfile", res.data);
       avatar.value = null;
+      currentFile.value = null;
       toast.add({
         title: "ลบรูปภาพสำเร็จ",
         color: "green",
@@ -130,7 +123,7 @@ const handleDeleteAvatar = async () => {
       >
         <div class="flex flex-row justify-center">
           <UAvatar
-            :src="avatar"
+            :src="avatar || profile.avatar"
             :alt="profile.nickName.toUpperCase()"
             size="3xl"
           />
@@ -165,7 +158,7 @@ const handleDeleteAvatar = async () => {
         <UFormGroup
           label="ชื่อผู้ใช้งาน"
           name="nickName"
-          help="ต้องเป็นตัวอักษรหรือตัวเลข 4-20 ตัว"
+          help="ตัวอักษรหรือตัวเลข 4-20 ตัว"
         >
           <UInput
             icon="i-heroicons-user"
