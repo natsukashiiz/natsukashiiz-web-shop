@@ -17,6 +17,7 @@
         "@nuxtjs/turnstile": "^0.6.3",
         "@stefanobartoletti/nuxt-social-share": "^0.4.0",
         "@types/qs": "^6.9.10",
+        "@types/vue-cropperjs": "^4.1.6",
         "@vite-pwa/nuxt": "^0.8.0",
         "nuxt": "^3.8.0",
         "nuxt-icon": "^0.6.1",
@@ -29,8 +30,10 @@
         "@nuxt/ui": "^2.16.0",
         "@pinia/nuxt": "^0.5.1",
         "axios": "^1.6.2",
+        "cropperjs": "^1.6.2",
         "nuxt-vue3-google-signin": "^0.0.10",
         "pinia": "^2.1.7",
-        "qs": "^6.11.2"
+        "qs": "^6.11.2",
+        "vue-cropperjs": "^5.0.0"
     }
 }

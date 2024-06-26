@@ -24,6 +24,7 @@ export default defineNuxtConfig({
       },
     ],
   ],
+  plugins: [{ src: "~/plugins/vue-cropperjs.ts", mode: "client" }],
   devtools: { enabled: true },
   devServer: {
     port: 4500,

@@ -91,6 +91,10 @@ async function onError(event: FormErrorEvent) {
   element?.focus();
   element?.scrollIntoView({ behavior: "smooth", block: "center" });
 }
+
+const disabledChagePassword = computed(() => {
+  return validateForm(form).length > 0;
+});
 </script>
 
 <template>
@@ -128,7 +132,14 @@ async function onError(event: FormErrorEvent) {
             v-model="form.confirmPassword"
           />
         </UFormGroup>
-        <UButton type="submit" color="white" block> เปลี่ยนรหัสผ่าน </UButton>
+        <UButton
+          type="submit"
+          color="white"
+          block
+          :disabled="disabledChagePassword"
+        >
+          เปลี่ยนรหัสผ่าน
+        </UButton>
       </UForm>
     </template>
   </UCard>
