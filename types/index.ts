@@ -243,6 +243,11 @@ export interface AccountSocialResponse {
   createdAt: string;
 }
 
+export interface UpdateProfileRequest {
+  nickName: string | null;
+  avatar: string | null;
+}
+
 export interface ProductReviewResponse {
   id: number;
   content: string;
@@ -317,4 +322,10 @@ export interface CheckoutItem {
 
 export interface FileStoreRequest {
   file: FormData;
+}
+
+export interface FileStoreResponse {
+  name: string;
+  type: string;
+  url: string;
 }

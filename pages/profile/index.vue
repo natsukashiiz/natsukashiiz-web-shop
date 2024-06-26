@@ -81,7 +81,10 @@ onActivated(() => {
     confirmColor="red"
   />
   <UContainer v-if="profile" class="max-w-xl py-5 flex flex-col space-y-4">
-    <AProfileForm :profile="profile" />
+    <AProfileForm
+      :profile="profile"
+      @update-profile="(newProfile) => (profile = newProfile)"
+    />
 
     <UCard>
       <template #header>

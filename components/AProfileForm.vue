@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import type { ProfileResponse } from "~/types";
+import type { ProfileResponse, UpdateProfileRequest } from "~/types";
 import { uploadFile } from "~/api/file";
+import { updateProfile, deleteAvatar } from "~/api/profile";
+import type { FormError, FormSubmitEvent } from "#ui/types";
 
 const props = defineProps({
   profile: {
@@ -9,21 +11,34 @@ const props = defineProps({
   },
 });
 
-const toast = useToast();
+const emit = defineEmits(["updateProfile"]);
 
-const currentAvatar = ref<string | null>(props.profile.avatar);
-const handleUploadFile = async (files: File[]) => {
+const toast = useToast();
+const avatar = ref<string | null>(props.profile.avatar);
+const form = reactive<UpdateProfileRequest>({
+  nickName: props.profile.nickName,
+  avatar: null,
+});
+const currentFile = ref<File | null>(null);
+
+const handleFileChange = async (files: File[]) => {
   const file = files[0];
   if (file) {
-    const url = URL.createObjectURL(file);
-    currentAvatar.value = url;
+    currentFile.value = file;
 
-    // Upload file to server
+    const url = URL.createObjectURL(file);
+    avatar.value = url;
+  }
+};
+const handleUploadFile = async () => {
+  if (currentFile.value) {
     try {
       const formData = new FormData();
-      formData.append("file", file);
+      formData.append("file", currentFile.value);
       const res = await uploadFile(formData);
       if (res.status === 200) {
+        avatar.value = res.data.url;
+
         toast.add({
           title: "อัพโหลดรูปภาพสำเร็จ",
           color: "green",
@@ -36,6 +51,68 @@ const handleUploadFile = async (files: File[]) => {
     }
   }
 };
+
+const validate = (state: UpdateProfileRequest): FormError[] => {
+  const errors = [];
+  if (
+    !state.nickName ||
+    state.nickName.length < 4 ||
+    state.nickName.length > 20
+  )
+    errors.push({
+      path: "nickName",
+      message: "กรุณากรอกชื่อผู้ใช้งานให้ถูกต้อง",
+    });
+  return errors;
+};
+
+const handleUpdateProfile = async (
+  event: FormSubmitEvent<UpdateProfileRequest>
+) => {
+  if (currentFile.value) {
+    await handleUploadFile();
+  }
+
+  try {
+    const res = await updateProfile({
+      nickName: event.data.nickName,
+      avatar: avatar.value,
+    });
+
+    if (res.status === 200) {
+      emit("updateProfile", res.data);
+      toast.add({
+        title: "แก้ไขข้อมูลส่วนตัวสำเร็จ",
+        color: "green",
+        icon: "i-heroicons-check-circle",
+        timeout: 3000,
+      });
+    }
+  } catch (error) {}
+};
+
+const resetAvatar = () => {
+  avatar.value = props.profile.avatar;
+  form.avatar = null;
+};
+
+const handleDeleteAvatar = async () => {
+  try {
+    const res = await deleteAvatar();
+    if (res.status === 200) {
+      emit("updateProfile", res.data);
+      avatar.value = null;
+      toast.add({
+        title: "ลบรูปภาพสำเร็จ",
+        color: "green",
+        icon: "i-heroicons-check-circle",
+        timeout: 3000,
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
 </script>
 
 <template>
@@ -45,10 +122,15 @@ const handleUploadFile = async (files: File[]) => {
     </template>
 
     <template #default>
-      <UForm class="space-y-4">
+      <UForm
+        class="space-y-4"
+        :validate="validate"
+        :state="form"
+        @submit="handleUpdateProfile"
+      >
         <div class="flex flex-row justify-center">
           <UAvatar
-            :src="!!currentAvatar"
+            :src="avatar"
             :alt="profile.nickName.toUpperCase()"
             size="3xl"
           />
@@ -56,23 +138,23 @@ const handleUploadFile = async (files: File[]) => {
         <UFormGroup label="รูปโปรไฟล์">
           <div class="flex space-x-2">
             <UInput
-              :value="profile.avatar"
+              v-model="form.avatar"
               type="file"
-              @change="handleUploadFile"
+              @change="handleFileChange"
               class="w-full"
             />
             <UTooltip text="ล้างอัพโหลดรูป">
               <UButton
                 icon="i-heroicons-arrow-path"
                 color="white"
-                @click="currentAvatar = profile.avatar"
+                @click="resetAvatar"
               />
             </UTooltip>
             <UTooltip text="ลบรูปภาพ">
               <UButton
                 icon="i-heroicons-trash"
                 color="white"
-                @click="currentAvatar = null"
+                @click="handleDeleteAvatar"
               />
             </UTooltip>
           </div>
@@ -80,8 +162,16 @@ const handleUploadFile = async (files: File[]) => {
         <UFormGroup label="อีเมล">
           <UInput icon="i-heroicons-envelope" :value="profile.email" disabled />
         </UFormGroup>
-        <UFormGroup label="ชื่อผู้ใช้งาน">
-          <UInput icon="i-heroicons-user" :value="profile.nickName" />
+        <UFormGroup
+          label="ชื่อผู้ใช้งาน"
+          name="nickName"
+          help="ต้องเป็นตัวอักษรหรือตัวเลข 4-20 ตัว"
+        >
+          <UInput
+            icon="i-heroicons-user"
+            v-model="form.nickName"
+            oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'')"
+          />
         </UFormGroup>
         <UButton type="submit" color="white" block>
           แก้ไขข้อมูลส่วนตัว
