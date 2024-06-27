@@ -3,7 +3,6 @@ import type { ProfileResponse, UpdateProfileRequest } from "~/types";
 import { uploadFile } from "~/api/file";
 import { updateProfile, deleteAvatar } from "~/api/profile";
 import type { FormError, FormSubmitEvent } from "#ui/types";
-import type { VueCropperMethods } from "vue-cropperjs";
 
 const props = defineProps({
   profile: {
@@ -26,6 +25,28 @@ const handleFileChange = async (event: Event) => {
   const target = event.target as HTMLInputElement;
   const file = target.files?.[0];
   if (file) {
+    // validate file extension and size 512KB
+    const validExtensions = ["image/jpeg", "image/png"];
+    if (!validExtensions.includes(file.type)) {
+      toast.add({
+        title: "ไฟล์รูปภาพไม่รองรับ รองรับเฉพาะ jpeg และ png",
+        color: "red",
+        icon: "i-heroicons-x-circle",
+        timeout: 3000,
+      });
+      return;
+    }
+
+    if (file.size > (1024 * 1024) / 2) {
+      toast.add({
+        title: "ไฟล์รูปภาพมีขนาดใหญ่เกิน 512KB",
+        color: "red",
+        icon: "i-heroicons-x-circle",
+        timeout: 3000,
+      });
+      return;
+    }
+
     currentFile.value = file;
     const url = URL.createObjectURL(file);
     avatar.value = url;
@@ -110,43 +131,6 @@ const handleDeleteAvatar = async () => {
   }
 };
 
-const modalCropper = ref(false);
-const handleShowCropper = () => {
-  if (currentFile.value && form.avatar) modalCropper.value = true;
-};
-const handleCloseCropper = () => {
-  modalCropper.value = false;
-  if (cropper.value) {
-    cropper.value.destroy();
-  }
-  resetAvatar();
-};
-
-const cropper = ref<VueCropperMethods | null>(null);
-const handleCropImage = () => {
-  if (cropper.value) {
-    cropper.value
-      .getCroppedCanvas({
-        width: 300,
-        height: 300,
-        fillColor: "#fff",
-        imageSmoothingEnabled: false,
-        imageSmoothingQuality: "high",
-      })
-      .toBlob((blob: Blob | null) => {
-        if (blob) {
-          const file = new File([blob], "cropped-avatar.png", {
-            type: "image/png",
-          });
-          currentFile.value = file;
-          avatar.value = URL.createObjectURL(file);
-        }
-      }, "image/png");
-  }
-  modalCropper.value = false;
-  form.avatar = null;
-};
-
 const fileInputRef = ref<HTMLInputElement | null>(null);
 const handleFileInput = () => {
   if (fileInputRef.value) {
@@ -161,46 +145,29 @@ const disabledUpdateProfile = computed(() => {
       form.nickName == props.profile.nickName)
   );
 });
+
+const modalCropper = ref(false);
+const handleCloseCropper = () => {
+  modalCropper.value = false;
+  resetAvatar();
+};
+const handleSubmitCropper = (file: File) => {
+  currentFile.value = file;
+  avatar.value = URL.createObjectURL(file);
+  modalCropper.value = false;
+  form.avatar = null;
+};
 </script>
 
 <template>
   <UModal v-model="modalCropper">
-    <UCard>
-      <div class="h-full">
-        <VueCropper
-          ref="cropper"
-          :src="avatar"
-          :aspect-ratio="1"
-          :view-mode="2"
-          auto-crop-area="1"
-        />
-      </div>
-      <template #footer>
-        <div class="flex justify-between">
-          <div class="flex space-x-1">
-            <UTooltip text="รีเซ็ต">
-              <UButton @click="resetAvatar" color="white">
-                <Icon name="i-heroicons-arrow-path" class="w-4 h-4" />
-              </UButton>
-            </UTooltip>
-            <UTooltip text="หมุนซ้าย">
-              <UButton @click="() => cropper?.rotate(-90)" color="white">
-                <Icon name="grommet-icons:rotate-left" class="w-4 h-4" />
-              </UButton>
-            </UTooltip>
-            <UTooltip text="หมุนขวา">
-              <UButton @click="() => cropper?.rotate(90)" color="white">
-                <Icon name="grommet-icons:rotate-right" class="w-4 h-4" />
-              </UButton>
-            </UTooltip>
-          </div>
-          <div class="flex space-x-1">
-            <UButton @click="handleCloseCropper" color="white">ยกเลิก</UButton>
-            <UButton @click="handleCropImage">บันทึก</UButton>
-          </div>
-        </div>
-      </template>
-    </UCard>
+    <AImageCropper
+      v-if="avatar"
+      :image-url="avatar"
+      :circle="true"
+      @submit="handleSubmitCropper"
+      @cancel="handleCloseCropper"
+    />
   </UModal>
 
   <UCard>
@@ -215,7 +182,7 @@ const disabledUpdateProfile = computed(() => {
         :state="form"
         @submit="handleUpdateProfile"
       >
-        <UFormGroup help="ไฟล์ jpeg, png และขนาดไม่เกิน 1MB">
+        <UFormGroup help="รองรับเฉพาะ jpeg, png และขนาดไม่เกิน 512KB">
           <div class="flex flex-row justify-center">
             <UTooltip text="คลิกเพื่อเลือกรูป" @click="handleFileInput">
               <UAvatar
@@ -278,16 +245,3 @@ const disabledUpdateProfile = computed(() => {
     </template>
   </UCard>
 </template>
-<style>
-.cropper-view-box {
-  box-shadow: 0 0 0 1px #39f;
-  border-radius: 50%;
-  outline: 0;
-}
-.cropper-face {
-  background-color: inherit !important;
-}
-.cropper-view-box {
-  outline: inherit !important;
-}
-</style>
