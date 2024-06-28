@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { sendVerifyCode, confirmVerifyCode } from "~/api/auth";
+import { sendVerifyCode, confirmVerifyCode } from "~/api/profile";
 import type { FormError } from "#ui/types";
 
 const authStore = useAuthStore();

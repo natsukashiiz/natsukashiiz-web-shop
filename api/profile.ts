@@ -6,6 +6,7 @@ import type {
   Pagination,
   ProfileResponse,
   UpdateProfileRequest,
+  TokenResponse,
 } from "~/types";
 import client from "~/api/request";
 
@@ -28,6 +29,12 @@ const deleteAccount = (): ServerResponse<void> => client.delete("/v1/profile");
 const deleteAvatar = (): ServerResponse<ProfileResponse> =>
   client.delete("/v1/profile/avatar");
 
+const sendVerifyCode = (): ServerResponse<string> =>
+  client.post("/v1/profile/code");
+
+const confirmVerifyCode = (code: string): ServerResponse<TokenResponse> =>
+  client.post("/v1/profile/verify/" + code);
+
 export {
   queryProfile,
   updateProfile,
@@ -35,4 +42,6 @@ export {
   getLoginHistory,
   deleteAccount,
   deleteAvatar,
+  sendVerifyCode,
+  confirmVerifyCode,
 };

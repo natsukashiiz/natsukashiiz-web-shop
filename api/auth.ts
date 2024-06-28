@@ -24,12 +24,6 @@ const singup = (body: SignupRequest): ServerResponse<TokenResponse> =>
 const refresh = (body: RefreshTokenRequest): ServerResponse<TokenResponse> =>
   client.post("/v1/auth/refresh", body);
 
-const sendVerifyCode = (): ServerResponse<string> =>
-  client.post("/v1/auth/code");
-
-const confirmVerifyCode = (code: string): ServerResponse<TokenResponse> =>
-  client.post("/v1/auth/verify/" + code);
-
 const forgotPassword = (data: ForgotPasswordRequest): ServerResponse<void> =>
   client.post("/v1/auth/forgot-password", data);
 
@@ -38,13 +32,4 @@ const resetPassword = (
 ): ServerResponse<TokenResponse> =>
   client.patch("/v1/auth/reset-password", data);
 
-export {
-  login,
-  google,
-  singup,
-  refresh,
-  sendVerifyCode,
-  confirmVerifyCode,
-  forgotPassword,
-  resetPassword,
-};
+export { login, google, singup, refresh, forgotPassword, resetPassword };
