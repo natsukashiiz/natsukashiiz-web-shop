@@ -61,7 +61,7 @@ const menus = [
           <template #button>
             <UAvatar
               :src="profileStore.profile?.avatar"
-              :alt="profileStore.profile?.nickName.toUpperCase()"
+              :alt="authStore.payload?.email.toUpperCase()"
               class="outline outline-2 outline-primary-400 hover:outline-primary-300 cursor-pointer text-xl"
             />
           </template>
