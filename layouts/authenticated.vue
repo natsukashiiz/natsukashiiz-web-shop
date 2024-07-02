@@ -1,28 +1,15 @@
 <script setup lang="ts">
 import { getCountCart } from "~/api/cart";
-import { queryProfile } from "~/api/profile";
 import { useAuthStore } from "~/stores/authStore";
 import type { NotificationResponse } from "~/types";
 import { OrderStatus } from "~/types/enum";
 
 const authStore = useAuthStore();
-const profileStore = useProfileStore();
 const cartStore = useCartStore();
 
 const toast = useToast();
 const router = useRouter();
 const route = useRoute();
-
-const loadProfile = async () => {
-  try {
-    const res = await queryProfile();
-    if (res.status === 200 && res.data) {
-      profileStore.setProfile(res.data);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
 
 const subscribeServer = () => {
   const event = new EventSource(
@@ -74,8 +61,8 @@ const fetchCountCart = async () => {
   }
 };
 
-onMounted(() => {
-  Promise.all([loadProfile(), fetchCountCart()]);
+onMounted(async () => {
+  await fetchCountCart();
   subscribeServer();
 });
 </script>

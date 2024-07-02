@@ -15,8 +15,12 @@ export const useAuthStore = defineStore("auth", () => {
   const payload = ref<TokenPayload>();
   const authenticated = computed(() => !!accessToken.value);
 
-  const cookieAccessToken = useCookie<string | null>("access_token");
-  const cookieRefreshToken = useCookie<string | null>("refresh_token");
+  const cookieAccessToken = useCookie<string | null>("access_token", {
+    maxAge: 60 * 60 * 24 * 1,
+  });
+  const cookieRefreshToken = useCookie<string | null>("refresh_token", {
+    maxAge: 60 * 60 * 24 * 7,
+  });
 
   const removeToken = () => {
     accessToken.value = null;
@@ -50,29 +54,27 @@ export const useAuthStore = defineStore("auth", () => {
         return;
       }
 
-      // check expiration
-      if (payload.value.exp < Date.now() / 1000) {
-        logout();
-        return;
-      }
-
       const timeout = (payload.value.exp - Date.now() / 1000) * 1000 - 10000;
 
-      setTimeout(() => {
+      if (timeout < 0) {
         handleRefresh();
-      }, timeout);
+      } else {
+        setTimeout(() => {
+          handleRefresh();
+        }, timeout);
+      }
 
-      //   client.interceptors.request.use(
-      //     (config) => {
-      //       if (accessToken.value) {
-      //         config.headers.Authorization = `Bearer ${accessToken.value}`;
-      //       }
-      //       return config;
-      //     },
-      //     (error) => {
-      //       return Promise.reject(error);
-      //     }
-      //   );
+      client.interceptors.request.use(
+        (config) => {
+          if (accessToken.value) {
+            config.headers.Authorization = `Bearer ${accessToken.value}`;
+          }
+          return config;
+        },
+        (error) => {
+          return Promise.reject(error);
+        }
+      );
 
       return;
     } else {
@@ -82,6 +84,7 @@ export const useAuthStore = defineStore("auth", () => {
         const refreshPayload = JSON.parse(
           atob(refreshTokenText.split(".")[1])
         ) as TokenPayload;
+
         // check expiration
         if (refreshPayload.exp < Date.now() / 1000) {
           logout();
