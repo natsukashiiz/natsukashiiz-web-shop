@@ -16,10 +16,10 @@ export const useAuthStore = defineStore("auth", () => {
   const authenticated = computed(() => !!accessToken.value);
 
   const cookieAccessToken = useCookie<string | null>("access_token", {
-    maxAge: 60 * 60 * 24 * 1,
+    maxAge: 60 * 60 * 1,
   });
   const cookieRefreshToken = useCookie<string | null>("refresh_token", {
-    maxAge: 60 * 60 * 24 * 7,
+    maxAge: 60 * 60 * 24,
   });
 
   const removeToken = () => {
@@ -57,7 +57,7 @@ export const useAuthStore = defineStore("auth", () => {
       const timeout = (payload.value.exp - Date.now() / 1000) * 1000 - 10000;
 
       if (timeout < 0) {
-        handleRefresh();
+        await handleRefresh();
       } else {
         setTimeout(() => {
           handleRefresh();
@@ -87,7 +87,8 @@ export const useAuthStore = defineStore("auth", () => {
 
         // check expiration
         if (refreshPayload.exp < Date.now() / 1000) {
-          logout();
+          removeToken();
+          window.location.href = "/login";
           return;
         }
 
@@ -98,7 +99,8 @@ export const useAuthStore = defineStore("auth", () => {
 
   const handleRefresh = async () => {
     if (!refreshToken.value) {
-      logout();
+      removeToken();
+      window.location.href = "/login";
       return;
     }
 
@@ -111,7 +113,8 @@ export const useAuthStore = defineStore("auth", () => {
       }
     } catch (error) {
       console.error("Error refreshing token", error);
-      logout();
+      removeToken();
+      window.location.href = "/login";
     }
   };
 
