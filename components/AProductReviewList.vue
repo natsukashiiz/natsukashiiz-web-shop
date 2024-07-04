@@ -57,9 +57,7 @@ const reloadReview = async () => {
   emit("loadProduct");
 };
 
-onMounted(() => {
-  loadReview();
-});
+await loadReview();
 
 onActivated(() => {
   loadReview();

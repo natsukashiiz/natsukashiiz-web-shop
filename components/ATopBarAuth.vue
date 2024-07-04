@@ -59,12 +59,11 @@ const menus = [
         </UTooltip>
         <AAccountMenu>
           <template #button>
-            <ClientOnly v-if="profileStore.profile">
-              <UAvatar
-                :src="profileStore.profile?.avatar"
-                class="outline outline-2 outline-primary-400 hover:outline-primary-300 cursor-pointer text-md"
-              />
-            </ClientOnly>
+            <UAvatar
+              v-if="profileStore.profile?.avatar"
+              :src="profileStore.profile.avatar"
+              class="outline outline-2 outline-primary-400 hover:outline-primary-300 cursor-pointer text-md"
+            />
             <UAvatar
               v-else
               :alt="authStore.payload?.email.toUpperCase()"

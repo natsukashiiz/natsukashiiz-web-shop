@@ -1,3 +1,5 @@
+import { getCountCart } from "~/api/cart";
+
 export const useCartStore = defineStore("cart", () => {
   const count = ref<number>(0);
 
@@ -13,10 +15,22 @@ export const useCartStore = defineStore("cart", () => {
     count.value -= value;
   };
 
+  const loadCountCart = async () => {
+    try {
+      const res = await getCountCart();
+      if (res.status === 200) {
+        count.value = res.data;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return {
     count,
     setCount,
     increment,
     decrement,
+    loadCountCart,
   };
 });

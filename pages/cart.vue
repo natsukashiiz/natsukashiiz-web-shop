@@ -15,7 +15,9 @@ const cart = ref<CartResponse>({
   totalPrice: 0,
 });
 
+const dataLoaded = ref(false);
 const loadData = async () => {
+  dataLoaded.value = true;
   loading.value = true;
   try {
     const res = await getAllCart();
@@ -86,27 +88,36 @@ const handleCheckout = () => {
 };
 
 const isSelectAll = computed(() => {
-  return cart.value.items.length === cart.value.countSelected;
+  return (
+    cart.value.items.filter((item) => item.maxQuantity >= item.quantity)
+      .length === cart.value.countSelected
+  );
 });
 const handleSelectAll = async () => {
   if (isSelectAll.value) {
-    await handleUpdateCart(
-      cart.value.items.map((item) => ({
+    const selectedItems = cart.value.items
+      .filter((item) => item.maxQuantity >= item.quantity)
+      .map((item) => ({
         productId: item.productId,
         optionId: item.optionId,
         quantity: item.quantity,
         selected: false,
-      }))
-    );
+      }));
+    if (selectedItems.length > 0) {
+      await handleUpdateCart(selectedItems);
+    }
   } else {
-    await handleUpdateCart(
-      cart.value.items.map((item) => ({
+    const selectedItems = cart.value.items
+      .filter((item) => item.maxQuantity >= item.quantity)
+      .map((item) => ({
         productId: item.productId,
         optionId: item.optionId,
         quantity: item.quantity,
         selected: true,
-      }))
-    );
+      }));
+    if (selectedItems.length > 0) {
+      await handleUpdateCart(selectedItems);
+    }
   }
 };
 
@@ -121,16 +132,27 @@ const handleSelect = async (item: CartItemResponse) => {
   ]);
 };
 
-const onLoad = () => {
-  loadData();
+const updateCartQuantity = async (item: CartItemResponse, quantity: number) => {
+  await handleUpdateCart([
+    {
+      productId: item.productId,
+      optionId: item.optionId,
+      quantity,
+      selected: item.selected,
+    },
+  ]);
 };
 
+await loadData();
+
 onActivated(() => {
-  onLoad();
+  if (!dataLoaded.value) {
+    loadData();
+  }
 });
 
-onMounted(() => {
-  onLoad();
+onDeactivated(() => {
+  dataLoaded.value = false;
 });
 </script>
 <template>
@@ -172,20 +194,7 @@ onMounted(() => {
             :item="item"
             :max-quantity="item.maxQuantity"
             @selected="handleSelect(item)"
-            @update="
-              (quantity) =>
-                handleUpdateCart([
-                  {
-                    productId: item.productId,
-                    optionId: item.optionId,
-                    quantity: Math.min(
-                      Math.max(Number(quantity), 1),
-                      item.maxQuantity
-                    ),
-                    selected: item.selected,
-                  },
-                ])
-            "
+            @update="(quantity) => updateCartQuantity(item, quantity)"
             @remove="removeItem(item.id)"
           />
         </template>

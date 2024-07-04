@@ -36,7 +36,9 @@ const voucherIdValue = computed(() =>
   voucherId.value == 0 ? undefined : voucherId.value
 );
 
+const dataLoaded = ref(false);
 const loadData = async () => {
+  dataLoaded.value = true;
   try {
     const response = await checkout({
       voucherId: voucherIdValue.value,
@@ -65,6 +67,20 @@ const loadData = async () => {
           name: "profile-address",
           query: { redirect: "/orders/checkout" },
         });
+      } else if (err === "product.quantity.insufficient") {
+        toast.add({
+          title: "สินค้าไม่เพียงพอ",
+          description: "สินค้าบางรายการมีจำนวนไม่เพียงพอ",
+          timeout: 5000,
+        });
+        router.replace({ name: "cart" });
+      } else {
+        toast.add({
+          title: "เกิดข้อผิดพลาด",
+          description: "กรุณาลองใหม่อีกครั้ง",
+          timeout: 5000,
+        });
+        router.replace({ name: "cart" });
       }
     }
   }
@@ -112,10 +128,16 @@ watch(voucherId, () => {
   loadData();
 });
 
-loadData();
+await loadData();
 
 onActivated(() => {
-  loadData();
+  if (!dataLoaded.value) {
+    loadData();
+  }
+});
+
+onDeactivated(() => {
+  dataLoaded.value = false;
 });
 </script>
 

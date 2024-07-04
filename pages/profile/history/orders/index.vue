@@ -70,7 +70,7 @@ onActivated(() => {
     <UTabs :items="items" @change="onChange" :default-index="0" />
     <UCard class="py-2" v-if="orders.length > 0">
       <ul class="-my-8">
-        <template v-for="(item, index) in orders" :key="item.id">
+        <template v-for="(item, index) in orders" :key="index">
           <a-order-card :item="item" />
           <UDivider v-if="index != orders.length - 1" />
         </template>

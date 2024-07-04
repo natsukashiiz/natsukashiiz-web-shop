@@ -40,9 +40,7 @@ const handleToggleFavorite = async () => {
   }
 };
 
-onMounted(() => {
-  loadData();
-});
+await loadData();
 
 onActivated(() => {
   loadData();

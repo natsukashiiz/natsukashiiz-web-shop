@@ -11,10 +11,38 @@ const props = defineProps({
     required: true,
   },
 });
+const emit = defineEmits(["update", "remove", "selected"]);
 
-const disabled = computed(() => {
-  return props.maxQuantity < props.item.quantity;
-});
+const insufficient = computed(() => props.maxQuantity < props.item.quantity);
+const plusDisabled = computed(() => props.item.quantity >= props.maxQuantity);
+const minusDisabled = computed(() => props.item.quantity <= 1);
+
+const inputChange = (value: string) => {
+  const quantity = parseInt(value);
+  if (quantity < 1) {
+    emit("update", 1);
+  } else if (quantity > props.maxQuantity) {
+    emit("update", props.maxQuantity);
+  } else {
+    emit("update", quantity);
+  }
+};
+
+const handleMinus = () => {
+  if (props.item.quantity > 1) {
+    if (props.item.quantity > props.maxQuantity) {
+      emit("update", props.maxQuantity);
+    } else {
+      emit("update", props.item.quantity - 1);
+    }
+  }
+};
+
+const handlePlus = () => {
+  if (props.item.quantity < props.maxQuantity) {
+    emit("update", props.item.quantity + 1);
+  }
+};
 </script>
 <template>
   <li
@@ -24,7 +52,7 @@ const disabled = computed(() => {
       <UCheckbox
         :model-value="item.selected"
         @change="$emit('selected', item)"
-        :disabled="disabled"
+        :disabled="insufficient"
       />
     </div>
     <div class="shrink-0">
@@ -50,7 +78,10 @@ const disabled = computed(() => {
           >
             สินค้าหมด
           </p>
-          <p class="mx-0 mt-1 mb-0 text-sm text-red-500" v-else-if="disabled">
+          <p
+            class="mx-0 mt-1 mb-0 text-sm text-red-500"
+            v-else-if="insufficient"
+          >
             สินค้าไม่เพียงพอ
           </p>
         </div>
@@ -71,14 +102,13 @@ const disabled = computed(() => {
                 color="white"
                 size="xs"
                 class="rounded-r-none ring-0 border disabled:bg-gray-100"
-                @click="
-                  item.quantity > 1 ? $emit('update', --item.quantity) : null
-                "
-                :disabled="item.quantity <= 1 || disabled"
+                @click="handleMinus"
+                :disabled="minusDisabled"
               />
               <UInput
                 v-model="item.quantity"
-                @change="$emit('update', $event)"
+                min="1"
+                @change="inputChange($event)"
                 variant="none"
                 :ui="{
                   base: 'w-12 text-center',
@@ -95,8 +125,8 @@ const disabled = computed(() => {
                 color="white"
                 size="xs"
                 class="rounded-l-none ring-0 border disabled:bg-gray-100"
-                @click="$emit('update', ++item.quantity)"
-                :disabled="item.quantity >= item.maxQuantity || disabled"
+                @click="handlePlus"
+                :disabled="plusDisabled"
               />
             </div>
           </div>

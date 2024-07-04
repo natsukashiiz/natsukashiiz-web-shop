@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { getCountCart } from "~/api/cart";
 import { useAuthStore } from "~/stores/authStore";
 import type { NotificationResponse } from "~/types";
 import { OrderStatus } from "~/types/enum";
@@ -50,19 +49,7 @@ const subscribeServer = () => {
   });
 };
 
-const fetchCountCart = async () => {
-  try {
-    const res = await getCountCart();
-    if (res.status === 200) {
-      cartStore.setCount(res.data);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-onMounted(async () => {
-  await fetchCountCart();
+onNuxtReady(() => {
   subscribeServer();
 });
 </script>
