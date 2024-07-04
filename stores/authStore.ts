@@ -88,7 +88,6 @@ export const useAuthStore = defineStore("auth", () => {
         // check expiration
         if (refreshPayload.exp < Date.now() / 1000) {
           removeToken();
-          window.location.href = "/login";
           return;
         }
 
@@ -100,7 +99,6 @@ export const useAuthStore = defineStore("auth", () => {
   const handleRefresh = async () => {
     if (!refreshToken.value) {
       removeToken();
-      window.location.href = "/login";
       return;
     }
 
@@ -114,7 +112,6 @@ export const useAuthStore = defineStore("auth", () => {
     } catch (error) {
       console.error("Error refreshing token", error);
       removeToken();
-      window.location.href = "/login";
     }
   };
 

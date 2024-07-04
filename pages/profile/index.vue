@@ -46,7 +46,15 @@ onActivated(() => {
       </template>
 
       <template #default>
-        <UButton class="mt-2" color="white" block to="/forgot-password">
+        <UButton
+          class="mt-2"
+          color="white"
+          block
+          :to="{
+            name: 'forgot-password',
+            query: { email: profile.email },
+          }"
+        >
           ลืมรหัสผ่าน
         </UButton>
       </template>

@@ -5,6 +5,7 @@ import type { ForgotPasswordRequest } from "~/types";
 
 const toast = useToast();
 const loading = useLoading();
+const route = useRoute();
 
 const form = reactive<ForgotPasswordRequest>({
   email: "",
@@ -54,6 +55,13 @@ const handleForgotPassword = async () => {
 
 const disabled = computed(() => {
   return !form.email;
+});
+
+onMounted(() => {
+  const email = route.query.email as string;
+  if (email) {
+    form.email = email;
+  }
 });
 </script>
 <template>
