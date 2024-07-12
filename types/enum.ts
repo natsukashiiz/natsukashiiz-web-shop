@@ -1,18 +1,18 @@
 export enum OrderStatus {
-  PENDING = "PENDING",
-  PAID = "PAID",
-  SUCCESSFUL = "SUCCESSFUL",
-  FAILED = "FAILED",
-  SELF_CANCELED = "SELF_CANCELED",
-  SYSTEM_CANCELED = "SYSTEM_CANCELED",
+  PENDING = "pending",
+  PAID = "paid",
+  SUCCESSFUL = "successful",
+  FAILED = "failed",
+  SELF_CANCELED = "self_canceled",
+  SYSTEM_CANCELED = "system_canceled",
 }
 
 export enum DiscountType {
-  PERCENT = "PERCENT",
-  AMOUNT = "AMOUNT",
+  PERCENT = "percent",
+  AMOUNT = "amount",
 }
 
 export enum SocialProviders {
-  FACEBOOK = "FACEBOOK",
-  GOOGLE = "GOOGLE",
+  FACEBOOK = "facebook",
+  GOOGLE = "google",
 }
