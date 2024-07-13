@@ -32,7 +32,7 @@ const handleClaimVoucher = async (voucherId: number) => {
     const res = await claimVoucher(voucherId);
     if (res.status === 200) {
       toast.add({
-        title: "รับส่วนลดแล้ว",
+        title: "เก็บส่วนลดแล้ว",
         timeout: 3000,
       });
       data.value.claimed = true;
