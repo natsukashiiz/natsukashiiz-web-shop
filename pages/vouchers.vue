@@ -23,9 +23,7 @@ onActivated(() => {
     <title>ส่วนลด</title>
   </Head>
   <UContainer class="flex flex-col gap-y-2 p-5">
-    <div
-      class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 grid-rows-2 gap-2"
-    >
+    <div class="grid grid-cols-1 lg:grid-cols-2 grid-rows-2 gap-2">
       <template v-for="voucher in vouchers" :key="voucher.id">
         <AVoucherCard :voucher="voucher" @refresh="loadData" />
       </template>

@@ -61,55 +61,105 @@ const handleClaimVoucher = async (voucherId: number) => {
     <NuxtImg
       :src="voucher.thumbnail"
       :alt="voucher.thumbnail"
-      class="aspect-square rounded-l-md"
-      :width="156"
-      :height="156"
+      class="aspect-square rounded-l-md w-[78px] h-[78px] md:w-[156px] md:h-[156px]"
     />
-    <div class="flex flex-col flex-1 px-4 justify-center">
-      <div class="flex items-center space-x-2 text-xl font-bold">
+    <div class="flex flex-col flex-1 px-2 md:px-4 justify-center">
+      <div
+        class="flex items-center space-x-1 text-sm font-thin md:text-xl md:font-light"
+      >
         <span>ส่วนลด</span>
         <span v-if="voucher.discountType === DiscountType.PERCENT">
           {{ voucher.discount }}%
         </span>
         <span v-else> <ACurrency :amount="data.discount" /> บาท </span>
       </div>
-      <ul class="list-none">
-        <li
-          v-if="voucher.discountType === DiscountType.PERCENT"
-          class="text-sm text-gray-500"
+      <span
+        v-if="voucher.discountType === DiscountType.PERCENT"
+        class="text-xs md:text-sm text-gray-500"
+      >
+        สูงสุด {{ voucher.maxDiscount }} บาท
+      </span>
+      <span
+        v-if="voucher.minOrderPrice"
+        class="text-xs md:text-sm text-gray-500"
+      >
+        ขั้นต่ำ
+        <ACurrency :amount="voucher.minOrderPrice" /> บาท
+      </span>
+      <span class="hidden md:block text-xs md:text-sm text-gray-500">
+        ถึง {{ voucher.expiredAt }}
+      </span>
+      <span
+        v-if="voucher.product"
+        class="hidden md:block text-xs md:text-sm text-gray-500"
+      >
+        เฉพาะสินค้า
+        <ULink
+          :to="{
+            name: 'products-id',
+            params: { id: voucher.product.id },
+          }"
+          class="text-blue-500"
         >
-          สูงสุด {{ voucher.maxDiscount }} บาท
-        </li>
-        <li v-if="voucher.product" class="text-sm text-gray-500">
-          สำหรับสินค้า
-          <ULink
-            :to="{
-              name: 'products-id',
-              params: { id: voucher.product.id },
-            }"
-            class="text-blue-500"
-          >
-            {{ voucher.product.name }}
-          </ULink>
-        </li>
-        <li v-if="voucher.category" class="text-sm text-gray-500">
-          สำหรับหมวดหมู่
-          <ULink
-            :to="{
-              name: 'products-search',
-              query: { category: voucher.category.name },
-            }"
-            class="text-blue-500"
-          >
-            {{ voucher.category.name }}
-          </ULink>
-        </li>
-        <li v-if="voucher.minOrderPrice" class="text-sm text-gray-500">
-          สำหรับการซื้อขั้นต่ำ
-          <ACurrency :amount="voucher.minOrderPrice" /> บาท
-        </li>
-        <li class="text-sm text-gray-500">หมดอายุ {{ voucher.expiredAt }}</li>
-      </ul>
+          {{ voucher.product.name }}
+        </ULink>
+      </span>
+      <span
+        v-if="voucher.category"
+        class="hidden md:block text-xs md:text-sm text-gray-500"
+      >
+        เฉพาะหมวดหมู่
+        <ULink
+          :to="{
+            name: 'products-search',
+            query: { category: voucher.category.name },
+          }"
+          class="text-blue-500"
+        >
+          {{ voucher.category.name }}
+        </ULink>
+      </span>
+      <UPopover class="block md:hidden">
+        <a
+          slot="trigger"
+          class="text-xs text-blue-600 cursor-pointer"
+          @click="() => {}"
+        >
+          รายละเอียดเพิ่มเติม
+        </a>
+
+        <template #panel>
+          <div class="flex flex-col p-2">
+            <span class="text-xs text-gray-500">
+              ถึง {{ voucher.expiredAt }}
+            </span>
+            <span v-if="voucher.product" class="text-xs text-gray-500">
+              เฉพาะสินค้า
+              <ULink
+                :to="{
+                  name: 'products-id',
+                  params: { id: voucher.product.id },
+                }"
+                class="text-blue-500"
+              >
+                {{ voucher.product.name }}
+              </ULink>
+            </span>
+            <span v-if="voucher.category" class="text-xs text-gray-500">
+              เฉพาะหมวดหมู่
+              <ULink
+                :to="{
+                  name: 'products-search',
+                  query: { category: voucher.category.name },
+                }"
+                class="text-blue-500"
+              >
+                {{ voucher.category.name }}
+              </ULink>
+            </span>
+          </div>
+        </template>
+      </UPopover>
     </div>
     <div class="flex flex-col items-center justify-center">
       <UButton
@@ -117,11 +167,11 @@ const handleClaimVoucher = async (voucherId: number) => {
         @click="handleClaimVoucher(voucher.id)"
         :disabled="data.claimed || data.quantity === 0"
         :loading="loading"
-        class="self-end mr-4"
+        class="self-end mr-2 md:mr-4 text-xs md:text-sm px-2 md:px-2.5 py-1 md:py-1.5"
       >
-        <span v-if="data.claimed" class="text-xs">รับส่วนลดแล้ว</span>
-        <span v-else-if="data.quantity === 0" class="text-xs">หมด</span>
-        <span v-else>รับส่วนลด</span>
+        <span v-if="data.claimed">เก็บแล้ว</span>
+        <span v-else-if="data.quantity === 0">หมด</span>
+        <span v-else>เก็บ</span>
       </UButton>
     </div>
   </div>
