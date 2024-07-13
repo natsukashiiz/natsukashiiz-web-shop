@@ -283,4 +283,9 @@ onActivated(() => {
     </div>
     <AProductReviewList :product="product" @load-product="loadData" />
   </div>
+  <div v-else>
+    <div class="flex items-center justify-center h-96">
+      <span class="text-2xl text-gray-500">ไม่พบสินค้า</span>
+    </div>
+  </div>
 </template>
