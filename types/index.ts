@@ -230,7 +230,7 @@ export interface CategoryResponse {
 export interface ProfileResponse {
   id: number;
   email: string;
-  nickName: string;
+  username: string;
   avatar: string;
   createdAt: string;
   socials: AccountSocialResponse[];
@@ -244,7 +244,7 @@ export interface AccountSocialResponse {
 }
 
 export interface UpdateProfileRequest {
-  nickName: string | null;
+  username: string | null;
   avatar: string | null;
 }
 

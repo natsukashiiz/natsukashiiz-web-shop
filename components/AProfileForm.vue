@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ProfileResponse, UpdateProfileRequest } from "~/types";
-import { uploadFile } from "~/api/file";
+import { uploadFile, deleteFile } from "~/api/file";
 import { updateProfile, deleteAvatar } from "~/api/profile";
 import type { FormError, FormSubmitEvent } from "#ui/types";
 
@@ -16,7 +16,7 @@ const emit = defineEmits(["updateProfile"]);
 const toast = useToast();
 const avatar = ref<string | null>(props.profile.avatar);
 const form = reactive<UpdateProfileRequest>({
-  nickName: props.profile.nickName,
+  username: props.profile.username,
   avatar: null,
 });
 const currentFile = ref<File | null>(null);
@@ -68,15 +68,25 @@ const handleUploadFile = async () => {
   }
 };
 
+const handleDeleteFile = async () => {
+  if (props.profile.avatar) {
+    try {
+      await deleteFile(props.profile.avatar);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+};
+
 const validate = (state: UpdateProfileRequest): FormError[] => {
   const errors = [];
   if (
-    !state.nickName ||
-    state.nickName.length < 4 ||
-    state.nickName.length > 20
+    !state.username ||
+    state.username.length < 4 ||
+    state.username.length > 20
   )
     errors.push({
-      path: "nickName",
+      path: "username",
       message: "กรุณากรอกชื่อผู้ใช้งานให้ถูกต้อง",
     });
   return errors;
@@ -86,12 +96,13 @@ const handleUpdateProfile = async (
   event: FormSubmitEvent<UpdateProfileRequest>
 ) => {
   if (currentFile.value) {
+    await handleDeleteFile();
     await handleUploadFile();
   }
 
   try {
     const res = await updateProfile({
-      nickName: event.data.nickName,
+      username: event.data.username,
       avatar: avatar.value,
     });
 
@@ -116,6 +127,7 @@ const handleDeleteAvatar = async () => {
   try {
     const res = await deleteAvatar();
     if (res.status === 200) {
+      await handleDeleteFile();
       emit("updateProfile", res.data);
       avatar.value = null;
       currentFile.value = null;
@@ -142,7 +154,7 @@ const disabledUpdateProfile = computed(() => {
   return (
     validate(form).length > 0 ||
     (avatar.value == props.profile.avatar &&
-      form.nickName == props.profile.nickName)
+      form.username == props.profile.username)
   );
 });
 
@@ -187,7 +199,7 @@ const handleSubmitCropper = (file: File) => {
             <UTooltip text="คลิกเพื่อเลือกรูป" @click="handleFileInput">
               <UAvatar
                 :src="avatar || profile.avatar"
-                :alt="profile.nickName.toUpperCase()"
+                :alt="profile.username.toUpperCase()"
                 size="3xl"
                 class="cursor-pointer outline outline-2 outline-primary-400"
               />
@@ -224,12 +236,12 @@ const handleSubmitCropper = (file: File) => {
         </UFormGroup>
         <UFormGroup
           label="ชื่อผู้ใช้งาน"
-          name="nickName"
+          name="username"
           help="ตัวอักษรหรือตัวเลข 4-20 ตัว"
         >
           <UInput
             icon="i-heroicons-user"
-            v-model="form.nickName"
+            v-model="form.username"
             oninput="this.value=this.value.replace(/[^a-zA-Z0-9]/g,'')"
           />
         </UFormGroup>
