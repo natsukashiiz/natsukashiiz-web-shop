@@ -15,4 +15,7 @@ const uploadFile = (form: FormData): ServerResponse<FileStoreResponse> =>
 
 const fileUrl = (fileName: string) => `${fileBaseUrl}/v1/files/${fileName}`;
 
-export { uploadFile, fileUrl };
+const deleteFile = (url: string) =>
+  client.delete(`/v1/files`, { data: { url } });
+
+export { uploadFile, fileUrl, deleteFile };

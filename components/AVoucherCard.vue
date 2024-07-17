@@ -167,7 +167,7 @@ const handleClaimVoucher = async (voucherId: number) => {
         @click="handleClaimVoucher(voucher.id)"
         :disabled="data.claimed || data.quantity === 0"
         :loading="loading"
-        class="self-end mr-2 md:mr-4 text-xs md:text-sm px-2 md:px-2.5 py-1 md:py-1.5"
+        class="self-end mr-2 md:mr-4"
       >
         <span v-if="data.claimed">เก็บแล้ว</span>
         <span v-else-if="data.quantity === 0">หมด</span>
