@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { OrderResponse } from "~/types";
 import { getAllOrder } from "~/api/order";
+import { OrderStatus } from "~/types/enum";
 
 const loading = useLoading();
 
@@ -13,27 +14,27 @@ const items = [
   },
   {
     label: "รอดำเนินการ",
-    value: "pending",
+    value: OrderStatus.PENDING,
   },
   {
     label: "ชำระเงินแล้ว",
-    value: "paid",
+    value: OrderStatus.PAID,
   },
   {
     label: "สำเร็จ",
-    value: "successful",
+    value: OrderStatus.SUCCESSFUL,
   },
   {
     label: "ยกเลิกด้วยตนเอง",
-    value: "self_canceled",
+    value: OrderStatus.SELF_CANCELED,
   },
   {
     label: "ยกเลิกโดยระบบ",
-    value: "system_canceled",
+    value: OrderStatus.SYSTEM_CANCELED,
   },
   {
     label: "ล้มเหลว",
-    value: "failed",
+    value: OrderStatus.FAILED,
   },
 ];
 
