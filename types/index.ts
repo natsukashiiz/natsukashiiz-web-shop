@@ -1,5 +1,10 @@
 import type { AxiosResponse } from "axios";
-import type { DiscountType, SocialProviders } from "./enum";
+import type {
+  DiscountType,
+  OrderStatus,
+  PayUrlType,
+  SocialProviders,
+} from "./enum";
 
 export type ServerResponse<T> = Promise<AxiosResponse<T>>;
 
@@ -164,7 +169,7 @@ export interface OrderResponse {
   totalPay: number;
   totalDiscount: number;
   actualPay: number;
-  status: string;
+  status: OrderStatus;
   payUrl: string;
   payExpire: number;
   payMethod: string;
@@ -197,7 +202,7 @@ export interface OrderItemResponse {
 
 export interface PayOrderResponse {
   orderId: string;
-  type: "LINK" | "IMAGE";
+  type: PayUrlType;
   url: string;
 }
 

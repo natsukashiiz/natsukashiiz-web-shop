@@ -1,33 +1,33 @@
 <script setup lang="ts">
 import { OrderStatus } from "~/types/enum";
 
-const { status } = defineProps({
+defineProps({
   status: {
-    type: String,
+    type: Object as () => OrderStatus,
     required: true,
   },
 });
 
 const statusMap = new Map([
-  ["PENDING", "รอดำเนินการ"],
-  ["PAID", "ชำระเงินแล้ว"],
-  ["SUCCESSFUL", "สำเร็จ"],
-  ["FAILED", "ล้มเหลว"],
-  ["SELF_CANCELED", "ยกเลิกด้วยตนเอง"],
-  ["SYSTEM_CANCELED", "ยกเลิกโดยระบบ"],
+  [OrderStatus.PENDING, "รอดำเนินการ"],
+  [OrderStatus.PAID, "ชำระเงินแล้ว"],
+  [OrderStatus.SUCCESSFUL, "สำเร็จ"],
+  [OrderStatus.FAILED, "ล้มเหลว"],
+  [OrderStatus.SELF_CANCELED, "ยกเลิกด้วยตนเอง"],
+  [OrderStatus.SYSTEM_CANCELED, "ยกเลิกโดยระบบ"],
 ]);
 
 const statusColorMap = new Map([
-  ["PENDING", "gray-500"],
-  ["PAID", "blue-500"],
-  ["SUCCESSFUL", "green-500"],
-  ["FAILED", "red-500"],
-  ["SELF_CANCELED", "orange-500"],
-  ["SYSTEM_CANCELED", "yellow-500"],
+  [OrderStatus.PENDING, "gray-500"],
+  [OrderStatus.PAID, "blue-500"],
+  [OrderStatus.SUCCESSFUL, "green-500"],
+  [OrderStatus.FAILED, "red-500"],
+  [OrderStatus.SELF_CANCELED, "orange-500"],
+  [OrderStatus.SYSTEM_CANCELED, "yellow-500"],
 ]);
 </script>
 <template>
-  <span :class="`text-${statusColorMap.get(status)}`">{{
-    statusMap.get(status)
-  }}</span>
+  <span :class="`text-${statusColorMap.get(status)}`">
+    {{ statusMap.get(status) }}
+  </span>
 </template>

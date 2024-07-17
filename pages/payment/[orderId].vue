@@ -2,6 +2,7 @@
 import type { OrderResponse, AddressResponse } from "~/types";
 import { cancelOrder, getOneOrder, payOrder } from "~/api/order";
 import { getMainAddress } from "~/api/address";
+import { OrderStatus, PayUrlType } from "~/types/enum";
 
 useHead({
   title: "ชำระเงิน",
@@ -58,7 +59,7 @@ const loadData = async () => {
     if (res.status === 200 && res.data) {
       order.value = res.data;
 
-      if (order.value && order.value.status !== "PENDING") {
+      if (order.value && order.value.status !== OrderStatus.PENDING) {
         router.replace({
           name: "profile-history-orders-orderId",
           params: {
@@ -108,7 +109,7 @@ const handelPay = async () => {
     });
 
     if (res.status === 200 && res.data) {
-      if (res.data.type === "LINK") {
+      if (res.data.type === PayUrlType.LINK) {
         window.location.href = res.data.url;
       } else {
         payImageUrl.value = res.data.url;

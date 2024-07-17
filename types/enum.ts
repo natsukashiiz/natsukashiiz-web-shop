@@ -7,6 +7,11 @@ export enum OrderStatus {
   SYSTEM_CANCELED = "system_canceled",
 }
 
+export enum PayUrlType {
+  LINK = "link",
+  IMAGE = "image",
+}
+
 export enum DiscountType {
   PERCENT = "percent",
   AMOUNT = "amount",

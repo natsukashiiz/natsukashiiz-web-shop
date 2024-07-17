@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { CheckoutResponse, VoucherResponse } from "~/types";
 import { checkout, createOrder } from "~/api/order";
+import { DiscountType } from "~/types/enum";
 
 const toast = useToast();
 const router = useRouter();
@@ -50,7 +51,7 @@ const loadData = async () => {
       ...response.data.vouchers.map((voucher: VoucherResponse) => {
         return {
           name:
-            voucher.discountType === "PERCENT"
+            voucher.discountType === DiscountType.PERCENT
               ? `ลด ${voucher.discount}% สูงสุด ${voucher.maxDiscount} บาท`
               : `ลด ${voucher.discount} บาท`,
           value: voucher.id,
