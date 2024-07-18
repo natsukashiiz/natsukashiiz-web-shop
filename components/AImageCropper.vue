@@ -49,7 +49,7 @@ const handleCancel = () => {
     cropper.value.destroy();
   }
 };
-const handleResetAvatar = () => {
+const handleResetCrop = () => {
   if (cropper.value) {
     cropper.value.reset();
   }
@@ -71,7 +71,7 @@ const handleResetAvatar = () => {
       <div class="flex justify-between">
         <div class="flex space-x-1">
           <UTooltip text="รีเซ็ต">
-            <UButton @click="handleResetAvatar" color="white">
+            <UButton @click="handleResetCrop" color="white">
               <Icon name="i-heroicons-arrow-path" class="w-4 h-4" />
             </UButton>
           </UTooltip>
