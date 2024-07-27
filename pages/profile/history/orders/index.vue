@@ -6,8 +6,9 @@ import { OrderStatus } from "~/types/enum";
 const loading = useLoading();
 
 const orders = ref<OrderResponse[]>([]);
+const currentStatus = ref<OrderStatus>(OrderStatus.PENDING);
 
-const items = [
+const statusOptions = [
   {
     label: "ทั้งหมด",
     value: "all",
@@ -15,6 +16,10 @@ const items = [
   {
     label: "รอดำเนินการ",
     value: OrderStatus.PENDING,
+  },
+  {
+    label: "กำลังจัดส่ง",
+    value: OrderStatus.SHIPPING,
   },
   {
     label: "ชำระเงินแล้ว",
@@ -29,6 +34,10 @@ const items = [
     value: OrderStatus.SELF_CANCELED,
   },
   {
+    label: "ยกเลิกโดยผู้ขาย",
+    value: OrderStatus.SELLER_CANCELED,
+  },
+  {
     label: "ยกเลิกโดยระบบ",
     value: OrderStatus.SYSTEM_CANCELED,
   },
@@ -37,13 +46,6 @@ const items = [
     value: OrderStatus.FAILED,
   },
 ];
-
-const currentStatus = ref(items[0].value);
-const onChange = async (index: number) => {
-  const item = items[index];
-  currentStatus.value = item.value;
-  await loadData();
-};
 
 const loadData = async () => {
   loading.value = true;
@@ -59,6 +61,10 @@ const loadData = async () => {
   loading.value = false;
 };
 
+watch(currentStatus, () => {
+  loadData();
+});
+
 onActivated(() => {
   loadData();
 });
@@ -67,8 +73,15 @@ onActivated(() => {
   <Head>
     <title>ประวัติการสั่งซื้อ</title>
   </Head>
-  <UContainer class="max-w-5xl py-8">
-    <UTabs :items="items" @change="onChange" :default-index="0" />
+  <UContainer class="max-w-5xl py-8 space-y-2">
+    <div class="flex justify-end">
+      <USelect
+        icon="i-heroicons-magnifying-glass-20-solid"
+        v-model="currentStatus"
+        :options="statusOptions"
+        option-attribute="label"
+      />
+    </div>
     <UCard class="py-2" v-if="orders.length > 0">
       <ul class="-my-8">
         <template v-for="(item, index) in orders" :key="index">

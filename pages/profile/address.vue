@@ -266,7 +266,7 @@ onActivated(() => {
       <UTable :columns="columns" :rows="addresses">
         <template #main-data="{ row }">
           <UButton
-            color="pink"
+            color="primary"
             variant="ghost"
             icon="i-heroicons-home-20-solid"
             disabled

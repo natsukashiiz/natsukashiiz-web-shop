@@ -325,7 +325,7 @@ onActivated(async () => {
               {{ address.mobile }} | {{ address.address }}</span
             >
             <ULink
-              to="/address"
+              :to="{ name: 'profile-address' }"
               active-class="text-primary"
               inactive-class="text-blue-500 hover:text-blue-700"
             >

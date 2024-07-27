@@ -40,7 +40,7 @@ watch(
       item: 'basis-full',
       container: 'rounded-lg',
       indicators: {
-        wrapper: 'relative bottom-0 mt-4',
+        wrapper: 'relative bottom-0 mt-4 flex-wrap',
       },
     }"
     :prev-button="{

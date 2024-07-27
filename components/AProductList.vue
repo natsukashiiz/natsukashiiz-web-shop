@@ -10,7 +10,7 @@ const { isMobile } = useDevice();
 const products = ref<ProductResponse[]>([]);
 const pagination = reactive({
   page: 1,
-  limit: isMobile ? 10 : 50,
+  limit: isMobile ? 10 : 20,
   total: 0,
 });
 

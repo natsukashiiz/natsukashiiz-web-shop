@@ -47,7 +47,7 @@ onActivated(() => {
         <div
           class="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border relative"
         >
-          <div class="absolute top-6 right-5">
+          <div class="absolute top-3 md:top-9 right-5">
             <h4 class="sr-only">สถานะ</h4>
             <p class="text-sm font-medium text-gray-900">
               สถานะ: <a-order-status :status="order.status" />
@@ -55,7 +55,7 @@ onActivated(() => {
           </div>
 
           <div
-            class="px-4 py-6 sm:px-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:p-8"
+            class="px-4 py-6 sm:px-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:p-8 mt-4 md:mt-0"
           >
             <div
               class="sm:flex lg:col-span-7 my-1"
@@ -89,7 +89,7 @@ onActivated(() => {
             </div>
           </div>
           <div
-            class="border-t border-gray-200 px-4 py-6 sm:px-6 lg:p-8 flex justify-between"
+            class="border-t border-gray-200 px-4 py-6 sm:px-6 lg:p-8 flex flex-col md:flex-row justify-between space-y-4 md:space-y-0"
           >
             <div>
               <dt class="font-medium text-gray-900">ที่อยู่ในการจัดส่ง</dt>

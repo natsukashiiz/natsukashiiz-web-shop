@@ -1,9 +1,11 @@
 export enum OrderStatus {
   PENDING = "pending",
   PAID = "paid",
+  SHIPPING = "shipping",
   SUCCESSFUL = "successful",
   FAILED = "failed",
   SELF_CANCELED = "self_canceled",
+  SELLER_CANCELED = "seller_canceled",
   SYSTEM_CANCELED = "system_canceled",
 }
 

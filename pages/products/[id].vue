@@ -17,15 +17,27 @@ const currentOption = ref<OptionResponse>();
 const quantity = ref(1);
 const adding = ref(false);
 const currentImage = ref<number>(0);
+const notFound = ref(false);
 
 const loadData = async () => {
-  const res = await getOneProduct(Number((route.params as any).id));
+  try {
+    const res = await getOneProduct(Number((route.params as any).id));
 
-  if (res.status === 200 && res.data) {
-    product.value = res.data;
-    currentOption.value = res.data.options[0];
-  } else {
-    window.alert("เกิดข้อผิดพลาด");
+    if (res.status === 200 && res.data) {
+      product.value = res.data;
+      currentOption.value = res.data.options[0];
+    }
+  } catch (error: any) {
+    if (error.response.status) {
+      const err = error.response.data.error;
+      if (err === "product.invalid") {
+        notFound.value = true;
+      } else {
+        window.alert(error.response.data.error);
+      }
+    } else {
+      window.alert("มีบางอย่างผิดพลาด");
+    }
   }
 };
 
@@ -283,7 +295,7 @@ onActivated(() => {
     </div>
     <AProductReviewList :product="product" @load-product="loadData" />
   </div>
-  <div v-else>
+  <div v-else-if="notFound">
     <div class="flex items-center justify-center h-96">
       <span class="text-2xl text-gray-500">ไม่พบสินค้า</span>
     </div>
